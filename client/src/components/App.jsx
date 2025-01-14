@@ -39,6 +39,7 @@ const App = () => {
   const handleLogout = () => {
     setUserId(undefined);
     post("/api/logout");
+    setUserId(null);
   };
 
   const authContextValue = {
