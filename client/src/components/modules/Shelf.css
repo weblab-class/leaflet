@@ -1,3 +1,18 @@
 .Shelf-container {
-    display: grid;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr); /* 4 equal columns */
+  gap: 20px; /* Space between items */
+  padding: 20px;
+  background-color: #dfc7b0;
+  border: 2px solid #ccc;
+  border-radius: 10px;
+}
+
+.Shelf-item {
+  background-color: #b39a83;
+  padding: 30px;
+  text-align: center;
+  border: 1px solid #dddddd00;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
