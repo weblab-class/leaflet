@@ -1,7 +1,9 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import App from "./components/App";
+import Login from "./components/pages/Login";
 import Home from "./components/pages/Home";
+import BookReader from "./components/pages/BookReader";
 import NotFound from "./components/pages/NotFound";
 
 import {
@@ -19,7 +21,9 @@ const GOOGLE_CLIENT_ID = "78345995388-ad8bd6hrfdn5s9tmu4tdialcmu305qu4.apps.goog
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route errorElement={<NotFound />} element={<App />}>
-      <Route path="/" element={<Home />} />
+      <Route path="/" element={<Login />} />
+      <Route path="/Home" element={<Home />} />
+      <Route path="/BookReader" element={<BookReader />} />
     </Route>
   )
 );
