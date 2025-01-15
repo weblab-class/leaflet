@@ -4,8 +4,8 @@ import { GoogleLogin, googleLogout } from "@react-oauth/google";
 import "../../utilities.css";
 import { UserContext } from "../App";
 
-const Home = () => {
-  const userId = useContext(UserContext);
+const Login = () => {
+  const { userId, handleLogin, handleLogout } = useContext(UserContext);
   return (
     <>
       <>
@@ -22,9 +22,9 @@ const Home = () => {
           <GoogleLogin onSuccess={handleLogin} onError={(err) => console.log(err)} />
         )}
       </>
-      <>Hi! This is the home page :D</>
+      <>Hi! This is the Login page :D</>
     </>
   );
 };
 
-export default Home;
+export default Login;
