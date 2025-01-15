@@ -1,5 +1,5 @@
 {
-  "name": "weblab-skeleton",
+  "name": "weblab-leaflet",
   "version": "1.0.0",
   "description": "",
   "main": "server/server.js",
@@ -11,7 +11,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/weblab-workshops/skeleton.git"
+    "url": "https://github.com/thegoodbagel/leaflet-sophia-regan-abrianna.git"
   },
   "author": "",
   "license": "ISC",
