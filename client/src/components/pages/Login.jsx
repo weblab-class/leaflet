@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
 import { GoogleLogin, googleLogout } from "@react-oauth/google";
-import Shelf from "../modules/Shelf.jsx"
+import Shelf from "../modules/Shelf.jsx";
 
 import "../../utilities.css";
 import { UserContext } from "../App";
