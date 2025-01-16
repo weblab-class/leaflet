@@ -54,6 +54,7 @@ const App = () => {
 
   return (
     <UserContext.Provider value={authContextValue}>
+      {userId && <NavBar />}
       <Outlet />
     </UserContext.Provider>
   );
