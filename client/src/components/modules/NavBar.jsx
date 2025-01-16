@@ -6,7 +6,7 @@ import "./NavBar.css";
 import { UserContext } from "../App";
 
 const NavBar = (props) => {
-  const userId = useContext(UserContext);
+  const { userId, handleLogout } = useContext(UserContext);
 
   return (
     <nav className="NavBar-container">

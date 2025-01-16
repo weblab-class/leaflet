@@ -1,9 +1,20 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import { GoogleLogin, googleLogout } from "@react-oauth/google";
 import { UserContext } from "../App";
+import { useNavigate } from "react-router-dom"; // Import useNavigate
+import "../../utilities.css";
 
 const Login = () => {
   const { userId, handleLogin, handleLogout } = useContext(UserContext);
+  const navigate = useNavigate(); // Initialize the useNavigate hook
+
+  useEffect(() => {
+    // If the user is logged in, redirect to the home page
+    if (userId) {
+      console.log("Redirecting to home!");
+      navigate("/Home");
+    }
+  }, [userId, navigate]); // Run whenever userId changes
 
   return (
     <div>
@@ -17,15 +28,7 @@ const Login = () => {
           Logout
         </button>
       ) : (
-        <GoogleLogin
-          onSuccess={(credentialResponse) => {
-            const user = {
-              id: credentialResponse.clientId, // Replace with actual user data
-            };
-            handleLogin(user);
-          }}
-          onError={() => console.log("Login Failed")}
-        />
+        <GoogleLogin onSuccess={handleLogin} onError={(err) => console.log(err)} />
       )}
       <h1>Welcome to the Login Page</h1>
     </div>
