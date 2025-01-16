@@ -10,38 +10,71 @@
 * 600 for bolding) or are super generic.
 * 
 * This is 𝙉𝙊𝙏 the place to define classes for components or
-* do rigorous styling. You shoud not need to change this file
+* do rigorous styling. You should not need to change this file
 * much after initial creation.
 */
 
-/* TODO: REPLACE WITH YOUR OWN FONT! */
-@import url("https://fonts.googleapis.com/css?family=Roboto&display=swap");
+/* Fonts */
+@import url("https://fonts.googleapis.com/css2?family=Annie+Use+Your+Telescope&family=Josephine+Sans:wght@400;600&family=Crimson+Text:wght@400;600&display=swap");
 
 :root {
-  --primary: #396dff;
-  --primary--dim: #6987db;
-  --darkgrey: #d4d4d4;
-  --medgrey: #e0e0e0;
-  --grey: #f7f7f7;
-  --white: #fff;
+  /* Theme Colors */
+  --aloe-green: #91ccac;
+  --sunset-pink: #ffd1dc;
+  --chestnut-brown: #8b5134;
+  --caramel-orange: #f4a261;
+  --beige: #f8f3e5;
+  --sky-blue: #90a5f1;
 
+  /* Grayscale */
+  --darkgrey: #7a7a7a;
+  --medgrey: #c4c4c4;
+  --lightgrey: #e8e8e8;
+  --white: #ffffff;
+
+  /* Spacing */
   --xs: 4px;
   --s: 8px;
   --m: 16px;
   --l: 24px;
+  --xl: 32px;
+
+  /* Fonts */
+  --font-serif: "Crimson Text", serif;
+  --font-sans-serif: "Josephine Sans", sans-serif;
+  --font-handwritten: "Annie Use Your Telescope", cursive;
 }
 
 body {
   margin: 0;
   padding: 0;
-  font-family: "Roboto", sans-serif;
-  font-weight: 300;
+  font-family: var(--font-handwritten);
+  font-weight: 400;
+  background-color: var(--beige);
+  color: var(--chestnut-brown);
+  line-height: 1.6;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--font-sans-serif);
+  color: var(--aloe-green);
+  margin: var(--m) 0;
+}
+
+p {
+  margin: var(--s) 0;
 }
 
 form {
   flex-grow: 1;
 }
 
+/* Utility Classes */
 .u-flex {
   display: flex;
 }
@@ -80,11 +113,63 @@ form {
 }
 
 .u-link {
-  color: var(--primary);
+  color: var(--sky-blue);
   text-decoration: none;
-  cursor: pointer;
+  font-family: var(--font-handwritten);
 }
 
 .u-link:hover {
-  color: var(--primary--dim);
+  color: var(--caramel-orange);
+}
+
+.u-bg-aloeGreen {
+  background-color: var(--aloe-green);
+}
+
+.u-bg-sunsetPink {
+  background-color: var(--sunset-pink);
+}
+
+.u-bg-chestnutBrown {
+  background-color: var(--chestnut-brown);
+}
+
+.u-bg-caramelOrange {
+  background-color: var(--caramel-orange);
+}
+
+.u-bg-beige {
+  background-color: var(--beige);
+}
+
+.u-bg-skyBlue {
+  background-color: var(--sky-blue);
+}
+
+.u-padding {
+  padding: var(--m);
+}
+
+.u-margin {
+  margin: var(--m);
+}
+
+.u-rounded {
+  border-radius: var(--s);
+}
+
+/* High-Level Elements */
+html,
+body {
+  height: 100%;
+}
+
+a {
+  font-family: var(--font-handwritten);
+  color: var(--sky-blue);
+  text-decoration: none;
+}
+
+a:hover {
+  color: var(--caramel-orange);
 }
