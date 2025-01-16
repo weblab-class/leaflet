@@ -3,8 +3,10 @@ const mongoose = require("mongoose");
 const BookSchema = new mongoose.Schema({
   title: String,
   author: String,
-  progress: Number,
-  link: String,
+  currentPage: Number,
+  totalPages: Number,
+  content: String,
+  plantImage: String,
 });
 
 // compile model from schema
