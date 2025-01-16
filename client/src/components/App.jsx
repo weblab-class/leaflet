@@ -1,5 +1,6 @@
 import React, { useState, useEffect, createContext } from "react";
 import { Outlet } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import NavBar from "./modules/NavBar";
 
 import jwt_decode from "jwt-decode";
@@ -17,6 +18,7 @@ export const UserContext = createContext(null);
  */
 const App = () => {
   const [userId, setUserId] = useState(undefined);
+  const navigate = useNavigate();
 
   useEffect(() => {
     get("/api/whoami").then((user) => {
@@ -41,6 +43,7 @@ const App = () => {
     setUserId(undefined);
     post("/api/logout");
     setUserId(null);
+    navigate("/");
   };
 
   const authContextValue = {
@@ -51,7 +54,6 @@ const App = () => {
 
   return (
     <UserContext.Provider value={authContextValue}>
-      {userId && <NavBar />}
       <Outlet />
     </UserContext.Provider>
   );
