@@ -1,9 +1,7 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { get, post } from "../../utilities";
-import "./NavBar.css";
-
 import { UserContext } from "../App";
+import "./NavBar.css";
 
 const NavBar = (props) => {
   const { userId, handleLogout } = useContext(UserContext);
