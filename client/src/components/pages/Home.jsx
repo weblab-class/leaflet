@@ -1,31 +1,13 @@
 import React, { useContext } from "react";
-import { GoogleLogin, googleLogout } from "@react-oauth/google";
-import Shelf from "../modules/Shelf.jsx";
-
-import "../../utilities.css";
 import { UserContext } from "../App";
 
 const Home = () => {
   const userId = useContext(UserContext);
   return (
-    <>
-      <>
-        {userId ? (
-          <button
-            onClick={() => {
-              googleLogout();
-              handleLogout();
-            }}
-          >
-            Logout
-          </button>
-        ) : (
-          <GoogleLogin onSuccess={handleLogin} onError={(err) => console.log(err)} />
-        )}
-      </>
-      <>Hi! This is the home page :D</>
-      <Shelf />
-    </>
+    <div>
+      <h1>Welcome to the Home Page!</h1>
+      <p>This is where you can explore content after logging in.</p>
+    </div>
   );
 };
 
