@@ -15,8 +15,7 @@ import {
 
 import { GoogleOAuthProvider } from "@react-oauth/google";
 
-//TODO: REPLACE WITH YOUR OWN CLIENT_ID
-const GOOGLE_CLIENT_ID = "78345995388-ad8bd6hrfdn5s9tmu4tdialcmu305qu4.apps.googleusercontent.com";
+const GOOGLE_CLIENT_ID = "807731036638-oabn76ldfqdo79lnujfpun57aeooi6a9.apps.googleusercontent.com";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
