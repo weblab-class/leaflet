@@ -15,15 +15,15 @@
 */
 
 /* Fonts */
-@import url("https://fonts.googleapis.com/css2?family=Annie+Use+Your+Telescope&family=Josephine+Sans:wght@400;600&family=Crimson+Text:wght@400;600&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Nunito:wght@400;700&family=Playwrite+VN:wght@100;400&family=Crimson+Text:wght@400;600&display=swap");
 
 :root {
   /* Theme Colors */
-  --aloe-green: #91ccac;
-  --sunset-pink: #ffd1dc;
-  --chestnut-brown: #8b5134;
-  --caramel-orange: #f4a261;
-  --beige: #f8f3e5;
+  --aloe-green: #6cb78a;
+  --sunset-pink: #fbc5d0;
+  --chestnut-brown: #523324;
+  --caramel-orange: #ef9e5c;
+  --beige: #faf7ee;
   --sky-blue: #90a5f1;
 
   /* Grayscale */
@@ -41,8 +41,8 @@
 
   /* Fonts */
   --font-serif: "Crimson Text", serif;
-  --font-sans-serif: "Josephine Sans", sans-serif;
-  --font-handwritten: "Annie Use Your Telescope", cursive;
+  --font-sans: "Playwrite VN", sans;
+  --font-handwritten: "Nunito", sans-serif;
 }
 
 body {
@@ -61,7 +61,7 @@ h3,
 h4,
 h5,
 h6 {
-  font-family: var(--font-sans-serif);
+  font-family: var(--font-sans);
   color: var(--aloe-green);
   margin: var(--m) 0;
 }
