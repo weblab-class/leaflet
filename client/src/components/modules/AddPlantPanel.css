@@ -1,0 +1,74 @@
+.AddPlantPanel {
+  position: fixed; /* Ensure the panel is positioned above other elements */
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: var(--beige);
+  border: 2px solid var(--chestnut-brown);
+  border-radius: 10px;
+  padding: 20px;
+  width: 300px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+  z-index: 1000;
+}
+
+.AddPlantPanel-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.AddPlantPanel-form h3 {
+  margin: 0;
+  text-align: center;
+  color: var(--aloe-green);
+  font-family: var(--font-sans);
+}
+
+.AddPlantPanel-form label {
+  font-weight: bold;
+  font-family: var(--font-serif);
+  color: var(--chestnut-brown);
+}
+
+.AddPlantPanel-form input {
+  padding: 8px;
+  border: 1px solid var(--medgrey);
+  border-radius: 4px;
+  font-size: 1rem;
+  font-family: var(--font-sans);
+}
+
+.AddPlantPanel-buttons {
+  display: flex;
+  justify-content: space-between;
+}
+
+.AddPlantPanel-submit,
+.AddPlantPanel-cancel {
+  padding: 8px 16px;
+  font-size: 1rem;
+  font-family: var(--font-sans);
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.AddPlantPanel-submit {
+  background-color: var(--aloe-green);
+  color: var(--white);
+}
+
+.AddPlantPanel-submit:hover {
+  background-color: var(--darkgrey);
+}
+
+.AddPlantPanel-cancel {
+  background-color: var(--sunset-pink);
+  color: var(--white);
+}
+
+.AddPlantPanel-cancel:hover {
+  background-color: var(--darkgrey);
+}

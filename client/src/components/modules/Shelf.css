@@ -21,12 +21,13 @@
   box-sizing: border-box; /* Ensure borders are included in size calculations */
   overflow: hidden; /* Prevent any content from spilling outside */
   display: flex; /* Use flexbox for better centering */
+  flex-direction: column;
   justify-content: center; /* Center child elements horizontally */
   align-items: center; /* Center child elements vertically */
 }
 
 .Shelf-item img {
-  height: 100%; /* Fit image to the height of the `.Shelf-item` */
+  height: 80%; /* Fit image to the height of the `.Shelf-item` */
   border-radius: 4px;
   display: block;
 }
