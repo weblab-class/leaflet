@@ -42,10 +42,21 @@ router.post("/initsocket", (req, res) => {
 // |------------------------------|
 // | write your API methods below!|
 // |------------------------------|
+router.post("/createbook", (req, res) => {
+  const newBook = new Book({
+    title: req.body.title,
+    author: req.body.author,
+    currentPage: req.body.currentPage,
+    totalPages: req.body.totalPages,
+    content: req.body.content,
+    plantImage: req.body.plantImage,
+    userId: req.user._id,
+  });
+});
 
 router.get("/allbooks", (req, res) => {
   // get all books
-  Book.find({}).then((books) => {
+  Book.find({ userId: req.user._id }).then((books) => {
     res.send(books);
   });
 });

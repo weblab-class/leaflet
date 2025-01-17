@@ -7,6 +7,7 @@ const BookSchema = new mongoose.Schema({
   totalPages: Number,
   content: String,
   plantImage: String,
+  userId: String,
 });
 
 // compile model from schema
