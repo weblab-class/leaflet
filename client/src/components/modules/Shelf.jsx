@@ -10,7 +10,7 @@ const Shelf = () => {
   const defaultTitle = "Default Title";
   const addPlantButton = "addPlantButton.jpg";
 
-  // Initialize hardcoded plants
+  // Initialize hardcoded plants for now
   useEffect(() => {
     const hardcodedPlants = [
       { plantType: testPlant, title: defaultTitle },
@@ -20,14 +20,18 @@ const Shelf = () => {
     setPlants(hardcodedPlants);
   }, []);
 
+  // Function called on when user clicks on "Add Plant" button, pops up panel/form to add plant (book)
   const addPlant = () => {
     setShowAddPlantPanel(true);
   };
 
+  // Function called on when user decides not to create a plant after all
   const cancelAddPlant = () => {
     setShowAddPlantPanel(false);
+    // API endpoint: add new plant (update database)
   };
 
+  // Function called on when user finishes filling out add Plant (book) form and submits it
   const addPlantOnSubmit = (title) => {
     if (title) {
       const newPlant = { plantType: testPlant, title: title };
@@ -36,9 +40,10 @@ const Shelf = () => {
     setShowAddPlantPanel(false);
   };
 
+  //=========== RENDERING ============//
+  // Dynamically generate shelf items, based on 'plants' state array
   const generateShelfItems = (numVisibleShelfItems) => {
     const shelfItems = [];
-
     for (let i = 0; i < numVisibleShelfItems; i++) {
       if (i < plants.length) {
         shelfItems.push(
