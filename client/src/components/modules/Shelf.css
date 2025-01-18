@@ -13,6 +13,7 @@
 }
 
 .Shelf-item {
+  position: relative;
   width: 100%; /* Take the full width of the grid cell */
   aspect-ratio: 4 / 3; /* Maintain the 4:3 aspect ratio */
   padding: 0px;

@@ -1,4 +1,4 @@
-.AddPlantPanel {
+.EditPlantPanel {
   position: fixed; /* Ensure the panel is positioned above other elements */
   top: 50%;
   left: 50%;
@@ -12,26 +12,26 @@
   z-index: 1000;
 }
 
-.AddPlantPanel-form {
+.EditPlantPanel-form {
   display: flex;
   flex-direction: column;
   gap: 16px;
 }
 
-.AddPlantPanel-form h3 {
+.EditPlantPanel-form h3 {
   margin: 0;
   text-align: center;
   color: var(--aloe-green);
   font-family: var(--font-sans);
 }
 
-.AddPlantPanel-form label {
+.EditPlantPanel-form label {
   font-weight: bold;
   font-family: var(--font-serif);
   color: var(--chestnut-brown);
 }
 
-.AddPlantPanel-form input {
+.EditPlantPanel-form input {
   padding: 8px;
   border: 1px solid var(--medgrey);
   border-radius: 4px;
@@ -39,13 +39,14 @@
   font-family: var(--font-sans);
 }
 
-.AddPlantPanel-buttons {
+.EditPlantPanel-buttons {
   display: flex;
   justify-content: space-between;
 }
 
-.AddPlantPanel-submit,
-.AddPlantPanel-cancel {
+.EditPlantPanel-submit,
+.EditPlantPanel-cancel,
+.EditPlantPanel-delete {
   padding: 8px 16px;
   font-size: 1rem;
   font-family: var(--font-sans);
@@ -55,20 +56,34 @@
   transition: background-color 0.2s ease;
 }
 
-.AddPlantPanel-submit {
+.EditPlantPanel-submit {
   background-color: var(--aloe-green);
   color: var(--white);
 }
 
-.AddPlantPanel-submit:hover {
+.EditPlantPanel-submit:hover,
+.EditPlantPanel-cancel:hover {
   background-color: var(--darkgrey);
 }
 
-.AddPlantPanel-cancel {
+.EditPlantPanel-cancel {
   background-color: var(--sunset-pink);
   color: var(--white);
 }
 
-.AddPlantPanel-cancel:hover {
+.EditPlantPanel-cancel:hover {
   background-color: var(--darkgrey);
+}
+
+.EditPlantPanel-delete-title {
+  color: var(--error-red); /* For headings in DeletePlantPanel */
+}
+
+.EditPlantPanel-delete {
+  background-color: var(--error-red); /* Use an appropriate variable for red */
+  color: var(--white);
+}
+
+.EditPlantPanel-delete:hover {
+  background-color: var(--darkgrey); /* A darker shade for hover effect */
 }

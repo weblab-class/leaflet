@@ -22,7 +22,7 @@ const router = createBrowserRouter(
     <Route errorElement={<NotFound />} element={<App />}>
       <Route path="/" element={<Login />} />
       <Route path="/Home" element={<Home />} />
-      <Route path="/BookReader" element={<BookReader />} />
+      <Route path="/BookReader/:bookID" element={<BookReader />} />
     </Route>
   )
 );

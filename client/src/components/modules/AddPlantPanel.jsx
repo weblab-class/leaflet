@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import "./AddPlantPanel.css";
+import "./EditPlantPanel.css";
 
 const AddPlantPanel = ({ onSubmitFunction, onCancelFunction }) => {
   const [input, setInput] = useState("");
@@ -14,8 +14,8 @@ const AddPlantPanel = ({ onSubmitFunction, onCancelFunction }) => {
   };
 
   return (
-    <div className="AddPlantPanel">
-      <form className="AddPlantPanel-form" onSubmit={handleSubmit}>
+    <div className="EditPlantPanel">
+      <form className="EditPlantPanel-form" onSubmit={handleSubmit}>
         <h3>Add a New Plant</h3>
         <label htmlFor="bookTitle">Book Title:</label>
         <input
@@ -26,11 +26,11 @@ const AddPlantPanel = ({ onSubmitFunction, onCancelFunction }) => {
           placeholder="Enter book title"
           required
         />
-        <div className="AddPlantPanel-buttons">
-          <button type="submit" className="AddPlantPanel-submit">
+        <div className="EditPlantPanel-buttons">
+          <button type="submit" className="EditPlantPanel-submit">
             Add Plant
           </button>
-          <button type="button" className="AddPlantPanel-cancel" onClick={onCancelFunction}>
+          <button type="button" className="EditPlantPanel-cancel" onClick={onCancelFunction}>
             Cancel
           </button>
         </div>
