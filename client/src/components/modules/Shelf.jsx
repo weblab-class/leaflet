@@ -38,7 +38,7 @@ const Shelf = () => {
   // Function called on when user finishes filling out add Plant
   // (book) form and submits it
   const confirmAddPlant = (newBook) => {
-    post("/api/createbook", newBook).then((newPlant) => {
+    post("/api/createbook", newBook).then(({ book: newPlant }) => {
       console.log("newPlant plantType: " + newPlant.plantType);
       setPlants((prevPlants) => [...prevPlants, newPlant]);
       setShowAddPlantPanel(false);

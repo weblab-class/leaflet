@@ -80,10 +80,7 @@ router.post("/createbook", (req, res) => {
       userId: savedBook.userId,
     };
     console.log("plantResponse plantType: " + plantResponse.plantType);
-    res
-      .status(201)
-      .json({ message: "Book created successfully", book: plantResponse })
-      .send(plantResponse);
+    res.status(201).json({ message: "Book created successfully", book: plantResponse });
   });
 });
 
