@@ -3,9 +3,10 @@ const mongoose = require("mongoose");
 const BookSchema = new mongoose.Schema({
   title: String,
   // author: String,
-  // currentPage: Number,
-  // totalPages: Number,
-  // content: String,
+  // **************** NEWLY ADDED *************** //
+  currentPage: Number,
+  totalPages: Number,
+  content: [String],
   plantType: String,
   userId: String,
 });
