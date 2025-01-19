@@ -6,7 +6,6 @@
 | This file defines the routes for your server.
 |
 */
-const slugify = require("slugify");
 const express = require("express");
 
 // import models so we can interact with the database
@@ -29,7 +28,6 @@ router.get("/whoami", (req, res) => {
     // not logged in
     return res.send({});
   }
-
   res.send(req.user);
 });
 
@@ -44,18 +42,6 @@ router.post("/initsocket", (req, res) => {
 // | write your API methods below!|
 // |------------------------------|
 
-router.post("/createbook", (req, res) => {
-  const newBook = new Book({
-    title: req.body.title,
-    author: req.body.author,
-    currentPage: req.body.currentPage,
-    totalPages: req.body.totalPages,
-    content: req.body.content,
-    plantImage: req.body.plantImage,
-    userId: req.user._id,
-  });
-});
-
 // Get all books belonging to a user
 router.get("/getallbooks", (req, res) => {
   Book.find({ userId: req.user._id }).then((books) => {
@@ -63,8 +49,43 @@ router.get("/getallbooks", (req, res) => {
   });
 });
 
+router.post("/createbook", (req, res) => {
+  try {
+    const newBook = new Book({
+      title: req.body.title,
+      // author: req.body.author,
+      // currentPage: req.body.currentPage,
+      // totalPages: req.body.totalPages,
+      // content: req.body.content,
+
+      // **************** TODO *************** //
+      // Choose a random plant image
+      plantType: req.body.plantType,
+      userId: req.user._id,
+    });
+    // Save the book to the database
+    const savedBook = newBook.save();
+    res.status(201).json({ message: "Book created successfully", book: savedBook });
+  } catch (error) {
+    res.status(500).json({ error: "Failed to create book", details: error.message });
+  }
+});
+
 // **************** TODO *************** //
-// Get a single book based off its unique ID -
+// Delete a book
+router.post("/deletebook", (req, res) => {
+  // Delete the book from the database
+  Book.findByIdAndDelete(req.body.bookID).then((deletedBook) => {
+    if (!deletedBook) {
+      return res.status(404).json({ error: "Book not found" });
+    }
+    res.status(200).json({ message: "Book deleted successfully", book: deletedBook });
+  });
+});
+
+// **************** TODO *************** //
+// Get a single book based off its unique ID (Regan, later)
+
 router.get("/book/:bookID", (req, res) => {
   // Get book by bookID
   Book.findOne({ bookID: req.params.bookID })

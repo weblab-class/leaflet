@@ -20,6 +20,10 @@ const App = () => {
   const [userId, setUserId] = useState(undefined);
   const navigate = useNavigate();
 
+  // **************** TODO *************** //
+  // It seems that you get 'logged out' after a while on the website
+  // (idk why), for safety measures, we should 'kick out' people
+  // if they're no longer logged in back onto the Login page
   useEffect(() => {
     get("/api/whoami").then((user) => {
       if (user._id) {

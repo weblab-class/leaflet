@@ -2,15 +2,15 @@ import React, { useState } from "react";
 import "./EditPlantPanel.css";
 
 const AddPlantPanel = ({ onSubmitFunction, onCancelFunction }) => {
-  const [input, setInput] = useState("");
+  const [titleInput, setTitleInput] = useState("");
 
-  const handleChange = (event) => {
-    setInput(event.target.value);
+  const handleTitleChange = (event) => {
+    setTitleInput(event.target.value);
   };
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    onSubmitFunction(input);
+    onSubmitFunction({ title: titleInput });
   };
 
   return (
@@ -21,8 +21,8 @@ const AddPlantPanel = ({ onSubmitFunction, onCancelFunction }) => {
         <input
           type="text"
           id="bookTitle"
-          onChange={handleChange}
-          value={input}
+          onChange={handleTitleChange}
+          value={titleInput}
           placeholder="Enter book title"
           required
         />

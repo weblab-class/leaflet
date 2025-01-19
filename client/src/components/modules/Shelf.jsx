@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { get, post } from "../../utilities";
 import Plant from "./Plant.jsx";
 import AddPlantPanel from "./AddPlantPanel.jsx";
 import DeletePlantPanel from "./DeletePlantPanel.jsx";
@@ -10,24 +11,21 @@ const Shelf = () => {
   const [showAddPlantPanel, setShowAddPlantPanel] = useState(false);
   const [plantToDelete, setPlantToDelete] = useState(null);
   const [showDeletePlantPanel, setShowDeletePlantPanel] = useState(false);
-  const testPlant = "testPlant.jpg";
-  const defaultTitle = "Default Title";
-  const addPlantButton = "addPlantButton.jpg";
+  const addPlantButton = "addPlantButton";
 
   // **************** TODO *************** //
   // When website mounts, get all the books from the user,
   // display them in shelf
   useEffect(() => {
-    const initialPlants = [
-      { plantType: testPlant, title: defaultTitle },
-      { plantType: testPlant, title: defaultTitle },
-      { plantType: testPlant, title: defaultTitle },
-    ];
-    setPlants(initialPlants);
+    console.log("Going to send get all books request");
+    get("/api/getallbooks").then((books) => {
+      setPlants(books);
+    });
   }, []);
 
   // *********** ADDING PLANTS ************ //
-  // Function called on when user clicks on "Add Plant" button, pops up panel/form to add plant (book)
+  // Function called on when user clicks on "Add Plant" button,
+  // pops up panel/form to add plant (book)
   const addPlant = () => {
     setShowAddPlantPanel(true);
   };
@@ -37,13 +35,18 @@ const Shelf = () => {
     setShowAddPlantPanel(false);
   };
 
-  // **************** TODO *************** //
-  // Function called on when user finishes filling out add Plant (book) form and submits it
-  const addPlantOnSubmit = (title) => {
-    if (title) {
-      const newPlant = { plantType: testPlant, title: title };
-      setPlants((prevPlants) => [...prevPlants, newPlant]);
+  // Function called on when user finishes filling out add Plant
+  // (book) form and submits it
+  const confirmAddPlant = (newBook) => {
+    // **************** TODO *************** //
+    // If plantType field is empty, generate random plant type
+    if (!newBook.plantType) {
+      newBook.plantType = "testPlant";
     }
+    // **************** TODO *************** // (Regan)
+    // Create a new id for the plant
+    post("/api/createbook", newBook);
+    setPlants((prevPlants) => [...prevPlants, newBook]);
     setShowAddPlantPanel(false);
   };
 
@@ -53,13 +56,16 @@ const Shelf = () => {
     setShowDeletePlantPanel(true);
   };
 
-  const confirmDeletePlant = () => {
-    setPlants((prevPlants) => prevPlants.filter((p) => p !== plantToDelete));
+  const cancelDeletePlant = () => {
     setPlantToDelete(null);
     setShowDeletePlantPanel(false);
   };
 
-  const cancelDeletePlant = () => {
+  const confirmDeletePlant = (plant) => {
+    // **************** TODO *************** //
+    // filter plant by only bookID
+    setPlants((prevPlants) => prevPlants.filter((p) => p !== plantToDelete));
+    post("/api/deletebook", plantToDelete.bookID);
     setPlantToDelete(null);
     setShowDeletePlantPanel(false);
   };
@@ -93,7 +99,7 @@ const Shelf = () => {
     <div className="Shelf-container">
       {generateShelfItems(9)}
       {showAddPlantPanel && (
-        <AddPlantPanel onSubmitFunction={addPlantOnSubmit} onCancelFunction={cancelAddPlant} />
+        <AddPlantPanel onSubmitFunction={confirmAddPlant} onCancelFunction={cancelAddPlant} />
       )}
       {showDeletePlantPanel && (
         <DeletePlantPanel onConfirmDelete={confirmDeletePlant} onCancelDelete={cancelDeletePlant} />
