@@ -49,33 +49,8 @@ router.get("/getallbooks", (req, res) => {
   });
 });
 
-router.post("/createbook", (req, res) => {
-  try {
-    const newBook = new Book({
-      title: req.body.title,
-      // author: req.body.author,
-      // currentPage: req.body.currentPage,
-      // totalPages: req.body.totalPages,
-      // content: req.body.content,
-
-      // **************** TODO *************** //
-      // Choose a random plant image
-      plantType: req.body.plantType,
-      userId: req.user._id,
-    });
-    // Save the book to the database
-    const savedBook = newBook.save();
-    res.status(201).json({ message: "Book created successfully", book: savedBook });
-  } catch (error) {
-    res.status(500).json({ error: "Failed to create book", details: error.message });
-  }
-});
-
-// **************** TODO *************** //
-// Delete a book
-router.post("/deletebook", (req, res) => {
-  // Delete the book from the database
-  Book.findByIdAndDelete(req.body.bookID).then((deletedBook) => {
+router.get("/numberofbooks", (req, res) => {
+  Book.findByIdAndDelete(req.book._id).then((deletedBook) => {
     if (!deletedBook) {
       return res.status(404).json({ error: "Book not found" });
     }
@@ -83,21 +58,54 @@ router.post("/deletebook", (req, res) => {
   });
 });
 
-// **************** TODO *************** //
-// Get a single book based off its unique ID (Regan, later)
+router.post("/createbook", (req, res) => {
+  const newBook = new Book({
+    title: req.body.title,
+    // author: req.body.author,
+    // currentPage: req.body.currentPage,
+    // totalPages: req.body.totalPages,
+    // content: req.body.content, // This will be saved in the database but excluded in the response
+    plantType: req.body.plantType || "testPlant", // Default to "testPlant" if not provided
+    userId: req.user._id,
+  });
+  const savedBook = newBook.save().then((savedBook) => {
+    // Prepare a response object excluding the `content` field
+    const plantResponse = {
+      _id: savedBook._id,
+      title: savedBook.title,
+      // author: savedBook.author,
+      // currentPage: savedBook.currentPage,
+      // totalPages: savedBook.totalPages,
+      plantType: savedBook.plantType,
+      userId: savedBook.userId,
+    };
+    console.log("plantResponse plantType: " + plantResponse.plantType);
+    res
+      .status(201)
+      .json({ message: "Book created successfully", book: plantResponse })
+      .send(plantResponse);
+  });
+});
+
+// Delete a book
+router.post("/deletebook", (req, res) => {
+  Book.findByIdAndDelete(req.body._id).then((deletedBook) => {
+    // For now, if book not found, return empty
+    // if (!deletedBook) {
+    //   return res.status(404).json({ error: "Book not found" });
+    // }
+    res.status(200).json({ message: "Book deleted successfully", book: deletedBook });
+  });
+});
 
 router.get("/book/:bookID", (req, res) => {
-  // Get book by bookID
-  Book.findOne({ bookID: req.params.bookID })
-    .then((book) => {
-      if (!book) {
-        return res.status(404).send({ message: "Book not found" });
-      }
-      res.send(book);
-    })
-    .catch((error) => {
-      res.status(500).send({ error: "An error occurred" });
-    });
+  Book.findById(req.book._id).then((book) => {
+    // For now, if book not found, return empty
+    // if (!book) {
+    //   return res.status(404).send({ message: "Book not found" });
+    // }
+    res.status(200).json({ message: "Book retrieved successfully", book: book });
+  });
 });
 
 // anything else falls to this "not found" case

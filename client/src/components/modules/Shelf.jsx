@@ -38,16 +38,11 @@ const Shelf = () => {
   // Function called on when user finishes filling out add Plant
   // (book) form and submits it
   const confirmAddPlant = (newBook) => {
-    // **************** TODO *************** //
-    // If plantType field is empty, generate random plant type
-    if (!newBook.plantType) {
-      newBook.plantType = "testPlant";
-    }
-    // **************** TODO *************** // (Regan)
-    // Create a new id for the plant
-    post("/api/createbook", newBook);
-    setPlants((prevPlants) => [...prevPlants, newBook]);
-    setShowAddPlantPanel(false);
+    post("/api/createbook", newBook).then((newPlant) => {
+      console.log("newPlant plantType: " + newPlant.plantType);
+      setPlants((prevPlants) => [...prevPlants, newPlant]);
+      setShowAddPlantPanel(false);
+    });
   };
 
   // *********** DELETING PLANTS ************ //
@@ -61,11 +56,9 @@ const Shelf = () => {
     setShowDeletePlantPanel(false);
   };
 
-  const confirmDeletePlant = (plant) => {
-    // **************** TODO *************** //
-    // filter plant by only bookID
+  const confirmDeletePlant = () => {
     setPlants((prevPlants) => prevPlants.filter((p) => p !== plantToDelete));
-    post("/api/deletebook", plantToDelete.bookID);
+    post("/api/deletebook", plantToDelete);
     setPlantToDelete(null);
     setShowDeletePlantPanel(false);
   };
