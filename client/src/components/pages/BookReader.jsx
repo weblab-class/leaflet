@@ -1,51 +1,62 @@
 import React, { useState, useEffect } from "react";
+import { get, post } from "../../utilities";
 import { useLocation } from "react-router-dom";
 import Book from "../modules/Book";
 
 // **************** NEWLY ADDED *************** //
 const BookReader = () => {
   const location = useLocation();
-  const curBook = location.state?.book; // Retrieve the book from state
-  const [currentPage, setCurrentPage] = useState(curBook.currentPage);
+  const bookID = location.state?.bookID; // Retrieve the book from state
+  const [curPage, setCurPage] = useState(0);
+  const [totalPages, setTotalPages] = useState(2);
+  const [prevSpread, setPrevSpread] = useState([]);
+  const [curSpread, setCurSpread] = useState([]);
+  const [nextSpread, setNextSpread] = useState([]);
 
-  if (!curBook) {
-    return <div>Error: No book data found.</div>; // Handle missing book data
-  }
-
+  // **************** TODO *************** //
+  // Initialize page on mount
   useEffect(() => {
-    if (currentPage === 0) {
-      setCurrentPage(0); // Ensure it stays at the first page
-    }
+    post("/api/getpages", { _id: bookID }).then(
+      ({ curPage, totalPages, prevSpread, curSpread, nextSpread }) => {
+        setCurPage(curPage);
+        setTotalPages(totalPages);
+        setPrevSpread(prevSpread);
+        setCurSpread(curSpread);
+        setNextSpread(nextSpread);
+      }
+    );
   }, []);
 
+  // **************** TODO *************** //
   const getLeftPage = () => {
-    console.log("left page: " + JSON.stringify(curBook.content[curBook.currentPage]));
-    return curBook.content[curBook.currentPage] || "";
+    console.log("left page: " + curSpread[1]);
+    return curSpread[0] || "";
   };
 
+  // **************** TODO *************** //
   const getRightPage = () => {
-    console.log("right page: " + JSON.stringify(curBook.content[curBook.currentPage + 1]));
-    return curBook.content[curBook.currentPage + 1] || "";
+    console.log("right page: " + curSpread[1]);
+    return curSpread[1] || "";
   };
 
   const flipForward = () => {
-    if (currentPage < curBook.totalPages - 2) {
-      setCurrentPage((prev) => prev + 2); // Move forward by two pages
+    if (curPage < totalPages - 2) {
+      setCurPage((prev) => prev + 2); // Move forward by two pages
     }
   };
 
   const flipBackward = () => {
-    if (currentPage > 0) {
-      setCurrentPage((prev) => prev - 2); // Move backward by two pages
+    if (curPage > 0) {
+      setCurPage((prev) => prev - 2); // Move backward by two pages
     }
   };
 
   return (
     <div className="BookReader-container">
-      <button onClick={flipBackward} disabled={currentPage === 0}>
+      <button onClick={flipBackward} disabled={curPage === 0}>
         Previous
       </button>
-      <button onClick={flipForward} disabled={currentPage >= curBook.totalPages.length - 2}>
+      <button onClick={flipForward} disabled={curPage >= totalPages.length - 2}>
         Next
       </button>
       <Book leftPage={getLeftPage()} rightPage={getRightPage()} />

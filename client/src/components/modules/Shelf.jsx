@@ -67,11 +67,8 @@ const Shelf = () => {
   // ============ OPENING BOOK ============ //
   // **************** NEWLY ADDED *************** //
   const openBook = (plant) => {
-    console.log("getting book by id:", plant._id);
-    post("/api/getbook?", plant).then(({ book: book }) => {
-      navigate("/BookReader", {
-        state: { book: book },
-      });
+    navigate("/BookReader", {
+      state: { bookID: plant._id },
     });
   };
 

@@ -56,6 +56,7 @@ router.get("/getallbooks", (req, res) => {
 // Middleware to parse content
 // --> get totalpages
 // --> split content into string array of pages
+// MAKE SURE EVEN NUMBER OF PAGES! (Add blank page at end if not blank)
 function parseBook(req, res, next) {
   // if (req.body.content) {
   //   function parseContent() {
@@ -72,7 +73,7 @@ function parseBook(req, res, next) {
 // Middleware to set default values for book creation request fields
 function setDefaultBookFields(req, res, next) {
   req.body.title = req.body.title || ""; // Default to empty string
-  req.body.currentPage = 0; // Default to 0
+  req.body.curPage = 0; // Default to 0
   req.body.totalPages = req.body.totalPages || 4; // Default to 2
   // **************** TODO *************** //
   // Later set body content default to [] (empty array) for physical books
@@ -84,7 +85,7 @@ function setDefaultBookFields(req, res, next) {
 router.post("/createbook", parseBook, setDefaultBookFields, (req, res) => {
   const newBook = new Book({
     title: req.body.title,
-    currentPage: req.body.currentPage,
+    curPage: req.body.curPage,
     totalPages: req.body.totalPages,
     content: req.body.content, // This will be saved in the database but excluded in the response
     plantType: req.body.plantType,
@@ -94,11 +95,11 @@ router.post("/createbook", parseBook, setDefaultBookFields, (req, res) => {
   newBook
     .save()
     .then((savedBook) => {
-      // Prepare a response object excluding the `content` field
+      // Prepare a response plant object excluding the `content` field
       const plantResponse = {
         _id: savedBook._id,
         title: savedBook.title,
-        currentPage: savedBook.currentPage,
+        curPage: savedBook.curPage,
         totalPages: savedBook.totalPages,
         plantType: savedBook.plantType,
         userId: savedBook.userId,
@@ -114,25 +115,48 @@ router.post("/createbook", parseBook, setDefaultBookFields, (req, res) => {
 // Delete a book
 router.post("/deletebook", (req, res) => {
   Book.findByIdAndDelete(req.body._id).then((deletedBook) => {
-    // For now, if book not found, return empty
-    // if (!deletedBook) {
-    //   return res.status(404).json({ error: "Book not found" });
-    // }
     res.status(200).json({ message: "Book deleted successfully", book: deletedBook });
   });
 });
 
-// **************** NEWLY ADDED *************** //
-// Test it works, tweak functionality
-router.post("/getbook", (req, res) => {
-  Book.findById(req.body._id).then((book) => {
-    // For now, if book not found, return empty
-    if (!book) {
-      return res.status(404).send({ message: "Book not found" });
-    }
-    res.status(200).json({ message: "Book retrieved successfully", book: book });
+// **************** TODO *************** //
+// Instead of retrieving whole book, get & return specific page of book
+router.post("/getpages", async (req, res) => {
+  const cursor = Book.find({ _id: req.body._id }, { curPage: 1, totalPages: 1 }).cursor();
+  const pageInfo = await cursor.next();
+  if (!pageInfo) {
+    return res.status(404).json({ message: "Book not found" });
+  }
+  const curPage = pageInfo.curPage;
+  const totalPages = pageInfo.totalPages;
+  // use curPage and totalPages to find needed spreads
+  const curSpread = (
+    await Book.find({ _id: req.body._id }, { curPage: 0, content: { $slice: [curPage, 2] } })
+  )[0].content;
+  let prevSpread = [];
+  if (curPage >= 2) {
+    prevSpread = (
+      await Book.find({ _id: req.body._id }, { curPage: 0, content: { $slice: [curPage - 2, 2] } })
+    )[0].content;
+  }
+  let nextSpread = [];
+  if (curPage < totalPages - 2) {
+    nextSpread = (
+      await Book.find({ _id: req.body._id }, { curPage: 0, content: { $slice: [curPage - 2, 2] } })
+    )[0].content;
+  }
+  res.status(200).json({
+    message: "Pages retrieved successfully",
+    curPage: curPage,
+    totalPages: totalPages,
+    prevSpread: prevSpread,
+    curSpread: curSpread,
+    nextSpread: nextSpread,
   });
 });
+
+// **************** TODO *************** //
+// Instead of retrieving whole book (findbyid), get & return specific page of book
 
 // anything else falls to this "not found" case
 router.all("*", (req, res) => {
