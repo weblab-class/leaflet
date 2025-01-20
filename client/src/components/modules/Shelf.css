@@ -5,7 +5,7 @@
   grid-template-columns: repeat(3, 1fr); /* 3 equal columns */
   gap: 20px; /* Space between items */
   padding: 20px;
-  border: 2px solid #000000;
+  border: 2px solid var(--chestnut-brown);
   border-radius: 10px;
   align-items: stretch; /* Ensure all items stretch to match the grid cell */
   justify-content: center; /* Center the grid items within the container */
@@ -17,7 +17,7 @@
   width: 100%; /* Take the full width of the grid cell */
   aspect-ratio: 4 / 3; /* Maintain the 4:3 aspect ratio */
   padding: 0px;
-  border: 2px solid #000000;
+  border: 2px solid var(--chestnut-brown);
   border-radius: 8px;
   box-sizing: border-box; /* Ensure borders are included in size calculations */
   overflow: hidden; /* Prevent any content from spilling outside */
