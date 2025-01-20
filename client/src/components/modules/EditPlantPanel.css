@@ -4,11 +4,11 @@
   left: 50%;
   transform: translate(-50%, -50%);
   background-color: var(--beige);
-  border: 2px solid var(--chestnut-brown);
+  border: 5px solid var(--sunset-pink);
   border-radius: 10px;
   padding: 20px;
   width: 300px;
-  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.2);
   z-index: 1000;
 }
 
@@ -37,6 +37,12 @@
   border-radius: 4px;
   font-size: 1rem;
   font-family: var(--font-sans);
+}
+
+.EditPlantPanel-fileinput {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
 }
 
 .EditPlantPanel-buttons {

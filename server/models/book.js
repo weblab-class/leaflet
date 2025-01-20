@@ -7,9 +7,9 @@ const BookSchema = new mongoose.Schema({
   // curPage is EVEN, page numbers start from 0...
   curPage: Number,
   totalPages: Number,
-  content: [String],
   plantType: String,
   userId: String,
+  content: [String],
 });
 
 // compile model from schema

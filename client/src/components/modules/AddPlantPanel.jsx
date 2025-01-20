@@ -3,14 +3,19 @@ import "./EditPlantPanel.css";
 
 const AddPlantPanel = ({ onSubmitFunction, onCancelFunction }) => {
   const [titleInput, setTitleInput] = useState("");
+  const [fileInput, setFileInput] = useState(null);
 
   const handleTitleChange = (event) => {
     setTitleInput(event.target.value);
   };
 
+  const handleFileChange = (event) => {
+    setFileInput(event.target.files[0]);
+  };
+
   const handleSubmit = (event) => {
     event.preventDefault();
-    onSubmitFunction({ title: titleInput });
+    onSubmitFunction({ title: titleInput, file: fileInput });
   };
 
   return (
@@ -24,8 +29,12 @@ const AddPlantPanel = ({ onSubmitFunction, onCancelFunction }) => {
           onChange={handleTitleChange}
           value={titleInput}
           placeholder="Enter book title"
-          required
         />
+        <div className="EditPlantPanel-fileinput">
+          {/***************** TODO ****************/
+          /* accept other file types */}
+          <input type="file" accept=".txt" onChange={handleFileChange} />
+        </div>
         <div className="EditPlantPanel-buttons">
           <button type="submit" className="EditPlantPanel-submit">
             Add Plant

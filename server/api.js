@@ -153,7 +153,7 @@ router.post("/spreads", async (req, res) => {
     await Book.find({ _id: bookID }, { curPage: 0, content: { $slice: [curPage, 2] } })
   )[0].content;
   let prevSpread = [];
-  if (curPage >= 2) {
+  if (curPage > 2) {
     prevSpread = (
       await Book.find({ _id: bookID }, { curPage: 0, content: { $slice: [curPage - 2, 2] } })
     )[0].content;
@@ -191,7 +191,7 @@ router.post("/nextspread", async (req, res) => {
 router.post("/prevspread", async (req, res) => {
   const bookID = req.body._id;
   const curPage = req.body.curPage;
-  if (curPage < 2) {
+  if (curPage <= 2) {
     res.status(400).json({ message: "Previous spread doesn't exist" });
   }
   const prevSpread = (

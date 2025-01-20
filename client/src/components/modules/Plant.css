@@ -1,0 +1,14 @@
+.Plant-book-title {
+    white-space: nowrap; /* Prevent text from wrapping */
+    overflow: hidden;    /* Hide any text that overflows */
+    text-overflow: ellipsis; /* Add ellipses */
+    max-width: 175px;    /* Limit width */
+}
+
+.Plant-image {
+    display: flex;        /* Use flexbox for alignment */
+    justify-content: center; /* Center horizontally */
+    align-items: center;  /* Center vertically */
+    text-align: center;   /* Fallback for inline elements */
+    height: 100%;         /* Ensure container height matches parent */
+}
