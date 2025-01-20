@@ -7,16 +7,18 @@ import Book from "../modules/Book";
 const BookReader = () => {
   const location = useLocation();
   const bookID = location.state?.bookID; // Retrieve the book from state
+  // **************** TODO *************** // (Regan)
+  // Consider passing in more props than bookID, (like curPage, totalPages)
   const [curPage, setCurPage] = useState(0);
   const [totalPages, setTotalPages] = useState(2);
   const [prevSpread, setPrevSpread] = useState([]);
   const [curSpread, setCurSpread] = useState([]);
   const [nextSpread, setNextSpread] = useState([]);
 
-  // **************** TODO *************** //
   // Initialize page on mount
   useEffect(() => {
-    post("/api/getpages", { _id: bookID }).then(
+    // **************** NEWLY ADDED *************** //
+    post("/api/spreads", { _id: bookID }).then(
       ({ curPage, totalPages, prevSpread, curSpread, nextSpread }) => {
         setCurPage(curPage);
         setTotalPages(totalPages);
@@ -29,7 +31,7 @@ const BookReader = () => {
 
   // **************** TODO *************** //
   const getLeftPage = () => {
-    console.log("left page: " + curSpread[1]);
+    console.log("left page: " + curSpread[0]);
     return curSpread[0] || "";
   };
 
@@ -41,13 +43,23 @@ const BookReader = () => {
 
   const flipForward = () => {
     if (curPage < totalPages - 2) {
-      setCurPage((prev) => prev + 2); // Move forward by two pages
+      setCurPage((prev) => prev + 2);
+      setPrevSpread(curSpread);
+      setCurSpread(nextSpread);
+      setNextSpread(
+        post("/api/nextspread", { _id: bookID, curPage: curPage, totalPages: totalPages })
+      );
     }
   };
 
   const flipBackward = () => {
     if (curPage > 0) {
-      setCurPage((prev) => prev - 2); // Move backward by two pages
+      setCurPage((prev) => prev - 2);
+      setNextSpread(curSpread);
+      setCurSpread(PrevSpread);
+      setPrevSpread(
+        post("/api/prevspread", { _id: bookID, curPage: curPage, totalPages: totalPages })
+      );
     }
   };
 

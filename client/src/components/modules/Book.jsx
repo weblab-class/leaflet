@@ -10,7 +10,7 @@ const Book = ({ leftPage, rightPage }) => {
     setFlipping(true);
     const timer = setTimeout(() => setFlipping(false), 500); // Animation duration
     return () => clearTimeout(timer);
-  }, [leftPage, rightPage]);
+  }, []);
 
   return (
     <div className={`Book-container ${flipping ? "flipping" : ""}`}>

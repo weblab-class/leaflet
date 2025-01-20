@@ -52,6 +52,7 @@ router.get("/getallbooks", (req, res) => {
   });
 });
 
+//=========== ADDING BOOKS ============//
 // **************** TODO *************** //
 // Middleware to parse content
 // --> get totalpages
@@ -112,6 +113,7 @@ router.post("/createbook", parseBook, setDefaultBookFields, (req, res) => {
     });
 });
 
+//=========== DELETING BOOKS ============//
 // Delete a book
 router.post("/deletebook", (req, res) => {
   Book.findByIdAndDelete(req.body._id).then((deletedBook) => {
@@ -119,10 +121,12 @@ router.post("/deletebook", (req, res) => {
   });
 });
 
+//=========== GETTING PAGES ============//
 // **************** TODO *************** //
-// Instead of retrieving whole book, get & return specific page of book
-router.post("/getpages", async (req, res) => {
-  const cursor = Book.find({ _id: req.body._id }, { curPage: 1, totalPages: 1 }).cursor();
+// Instead of retrieving whole book, get & return specific pages of book
+router.post("/spreads", async (req, res) => {
+  const bookID = req.body._id;
+  const cursor = Book.find({ _id: bookID }, { curPage: 1, totalPages: 1 }).cursor();
   const pageInfo = await cursor.next();
   if (!pageInfo) {
     return res.status(404).json({ message: "Book not found" });
@@ -131,18 +135,18 @@ router.post("/getpages", async (req, res) => {
   const totalPages = pageInfo.totalPages;
   // use curPage and totalPages to find needed spreads
   const curSpread = (
-    await Book.find({ _id: req.body._id }, { curPage: 0, content: { $slice: [curPage, 2] } })
+    await Book.find({ _id: bookID }, { curPage: 0, content: { $slice: [curPage, 2] } })
   )[0].content;
   let prevSpread = [];
   if (curPage >= 2) {
     prevSpread = (
-      await Book.find({ _id: req.body._id }, { curPage: 0, content: { $slice: [curPage - 2, 2] } })
+      await Book.find({ _id: bookID }, { curPage: 0, content: { $slice: [curPage - 2, 2] } })
     )[0].content;
   }
   let nextSpread = [];
   if (curPage < totalPages - 2) {
     nextSpread = (
-      await Book.find({ _id: req.body._id }, { curPage: 0, content: { $slice: [curPage - 2, 2] } })
+      await Book.find({ _id: bookID }, { curPage: 0, content: { $slice: [curPage + 2, 2] } })
     )[0].content;
   }
   res.status(200).json({
@@ -155,13 +159,37 @@ router.post("/getpages", async (req, res) => {
   });
 });
 
-// **************** TODO *************** //
-// Instead of retrieving whole book (findbyid), get & return specific page of book
+router.post("/nextspread", async (req, res) => {
+  const bookID = req.body._id;
+  const curPage = req.body.curPage;
+  const totalPages = req.body.totalPages;
+  if (curPage >= totalPages - 2) {
+    res.status(400).json({ message: "Next spread doesn't exist" });
+  }
+  const nextSpread = (
+    await Book.find({ _id: bookID }, { curPage: 0, content: { $slice: [curPage + 2, 2] } })
+  )[0].content;
+  Book.updateOne({ _id: bookID }, { $set: { curPage: curPage + 2 } });
+  res.status(200).json({ message: "Next spread retrieved successfully", nextSpread });
+});
+
+router.post("/prevspread", async (req, res) => {
+  const bookID = req.body._id;
+  const curPage = req.body.curPage;
+  if (curPage < 2) {
+    res.status(400).json({ message: "Previous spread doesn't exist" });
+  }
+  const prevSpread = (
+    await Book.find({ _id: bookID }, { curPage: 0, content: { $slice: [curPage - 2, 2] } })
+  )[0].content;
+  Book.updateOne({ _id: bookID }, { $set: { curPage: curPage - 2 } });
+  res.status(200).json({ message: "Previous spread retrieved successfully", prevSpread });
+});
 
 // anything else falls to this "not found" case
 router.all("*", (req, res) => {
   console.log(`API route not found: ${req.method} ${req.url}`);
-  res.status(404).send({ msg: "API route not found" });
+  res.status(404).send({ message: "API route not found" });
 });
 
 module.exports = router;

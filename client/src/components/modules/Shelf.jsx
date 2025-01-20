@@ -68,6 +68,8 @@ const Shelf = () => {
   // **************** NEWLY ADDED *************** //
   const openBook = (plant) => {
     navigate("/BookReader", {
+      // **************** TODO *************** // (Regan)
+      // Consider passing in more props than bookID, (like curPage, totalPages)
       state: { bookID: plant._id },
     });
   };
