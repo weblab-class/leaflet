@@ -1,10 +1,14 @@
 .Plant-book-title {
-    display: -webkit-box;
-    -webkit-box-orient: vertical; /* Sets the box's orientation */
-    max-width: 200px; /* Limits the width */
-    overflow: hidden; /* Hides the overflowing content */
-    text-overflow: ellipsis; /* Adds ellipsis (...) */
-    line-height: 1.5; /* Adjusts spacing between lines */
-    height: calc(1.5em * 3); /* Dynamically sets height for 3 lines */
-    font-size: 16px; /* Adjust as per your design */
+    white-space: nowrap; /* Prevent text from wrapping */
+    overflow: hidden;    /* Hide any text that overflows */
+    text-overflow: ellipsis; /* Add ellipses */
+    max-width: 175px;    /* Limit width */
+}
+
+.Plant-image {
+    display: flex;        /* Use flexbox for alignment */
+    justify-content: center; /* Center horizontally */
+    align-items: center;  /* Center vertically */
+    text-align: center;   /* Fallback for inline elements */
+    height: 100%;         /* Ensure container height matches parent */
 }

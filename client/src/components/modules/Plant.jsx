@@ -1,5 +1,5 @@
 import React from "react";
-
+import "./Plant.css";
 const Plant = ({ plantType, title }) => {
   console.log("Rendering a plant with plantType " + plantType.toString());
   return (
