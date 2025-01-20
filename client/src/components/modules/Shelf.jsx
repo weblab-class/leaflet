@@ -83,9 +83,16 @@ const Shelf = () => {
         shelfItems.push(
           // **************** NEWLY ADDED *************** //
           // Make sure it doesn't open book when delete button is clicked
-          <div className="Shelf-item" key={`shelf-item-${i}`} onClick={() => openBook(plants[i])}>
-            <Plant plantType={plants[i].plantType} title={plants[i].title} />
-            <DeletePlantButton onDelete={() => deletePlant(plants[i])} />
+          <div className="Shelf-item" key={`shelf-item-${i}`}>
+            <div className="column left"></div>
+            <div className="column middle" onClick={() => openBook(plants[i])}>
+              <div className="plant-container">
+                <Plant plantType={plants[i].plantType} title={plants[i].title} />
+              </div>
+            </div>
+            <div className="column right">
+              <DeletePlantButton onDelete={() => deletePlant(plants[i])} />
+            </div>
           </div>
         );
       } else if (i === plants.length) {

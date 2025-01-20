@@ -1,0 +1,10 @@
+.Plant-book-title {
+    display: -webkit-box;
+    -webkit-box-orient: vertical; /* Sets the box's orientation */
+    max-width: 200px; /* Limits the width */
+    overflow: hidden; /* Hides the overflowing content */
+    text-overflow: ellipsis; /* Adds ellipsis (...) */
+    line-height: 1.5; /* Adjusts spacing between lines */
+    height: calc(1.5em * 3); /* Dynamically sets height for 3 lines */
+    font-size: 16px; /* Adjust as per your design */
+}

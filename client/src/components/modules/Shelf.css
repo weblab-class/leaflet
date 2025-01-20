@@ -28,7 +28,29 @@
 }
 
 .Shelf-item img {
-  height: 80%; /* Fit image to the height of the `.Shelf-item` */
+  height: 175px; /* Fit image to the height of the `.Shelf-item` */
   border-radius: 4px;
   display: block;
+}
+
+.column {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex: 1; /* Ensures equal column width */
+}
+
+.left, .right {
+  flex: 0.5; /* Adjust based on desired size for left and right columns */
+}
+
+.middle {
+  flex: 2; /* Middle column takes more space */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.plant-container {
+  text-align: center; /* Ensure the plant content is centered within its container */
 }
