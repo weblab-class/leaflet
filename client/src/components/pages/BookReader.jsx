@@ -56,7 +56,7 @@ const BookReader = () => {
     if (curPage > 0) {
       setCurPage((prev) => prev - 2);
       setNextSpread(curSpread);
-      setCurSpread(PrevSpread);
+      setCurSpread(prevSpread);
       setPrevSpread(
         post("/api/prevspread", { _id: bookID, curPage: curPage, totalPages: totalPages })
       );
