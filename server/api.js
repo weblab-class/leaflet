@@ -59,14 +59,29 @@ router.get("/getallbooks", (req, res) => {
 // --> split content into string array of pages
 // MAKE SURE EVEN NUMBER OF PAGES! (Add blank page at end if not blank)
 function parseBook(req, res, next) {
-  // if (req.body.content) {
-  //   function parseContent() {
-  //     return;
-  //   }
-  // const parsedBookArray = parseContent(req.body.content);
-  // req.body.content = parsedBookArray;
-  // req.body.totalPages = parsedBookArray.length;
-  // }
+  if (req.body.content) {
+    pageArray = [];
+    charIndex = 0;
+    ogIncrement = 200; //change both increments to desired chunk size
+    increment = 200;
+    while (charIndex < req.body.content.length) {
+      if (charIndex + increment > req.body.content.length) {
+        pageArray.push(req.body.content.slice(charIndex, req.body.content.length));
+        console.log(pageArray);
+      } else {
+        while (req.body.content[charIndex + increment] !== " ") {
+          charIndex--;
+        }
+        pageArray.push(req.body.content.slice(charIndex, charIndex + increment));
+        console.log(pageArray);
+      }
+      charIndex += increment;
+      increment = ogIncrement;
+    }
+    const parsedBookArray = pageArray;
+    req.body.content = pageArray;
+    req.body.totalPages = pageArray.length;
+  }
   next();
 }
 
