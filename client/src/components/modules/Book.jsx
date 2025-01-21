@@ -4,13 +4,19 @@ import "./Book.css";
 // **************** NEWLY ADDED *************** //
 const Book = ({ leftPage, rightPage }) => {
   const [flipping, setFlipping] = useState(false);
+  const [initialRender, setInitialRender] = useState(true);
+
 
   useEffect(() => {
-    // Trigger flip animation whenever pages change
+    // Trigger flip animation only when pages change
+    if (initialRender) {
+      setInitialRender(false);
+      return;
+    }
     setFlipping(true);
     const timer = setTimeout(() => setFlipping(false), 500); // Animation duration
     return () => clearTimeout(timer);
-  }, []);
+  }, [leftPage, rightPage]);
 
   return (
     <div className={`Book-container ${flipping ? "flipping" : ""}`}>
