@@ -14,8 +14,9 @@ const AddPlantPanel = ({ onSubmitFunction, onCancelFunction }) => {
   };
 
   const handleSubmit = (event) => {
+    console.log("submitting");
     event.preventDefault();
-    onSubmitFunction({ title: titleInput, file: fileInput });
+    onSubmitFunction({ title: titleInput, content: fileInput });
   };
 
   return (
@@ -35,6 +36,7 @@ const AddPlantPanel = ({ onSubmitFunction, onCancelFunction }) => {
           /* accept other file types */}
           <input type="file" accept=".txt" onChange={handleFileChange} />
         </div>
+        {/* file upload div ^ */}
         <div className="EditPlantPanel-buttons">
           <button type="submit" className="EditPlantPanel-submit">
             Add Plant

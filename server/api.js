@@ -60,6 +60,7 @@ router.get("/getallbooks", (req, res) => {
 // MAKE SURE EVEN NUMBER OF PAGES! (Add blank page at end if not blank)
 function parseBook(req, res, next) {
   if (req.body.content) {
+    console.log(req.body.content);
     pageArray = [];
     charIndex = 0;
     ogIncrement = 200; //change both increments to desired chunk size
