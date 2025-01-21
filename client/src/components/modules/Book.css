@@ -3,13 +3,13 @@
   position: relative;
   width: 60%;
   height: 70vh;
-  perspective: 1000px;
+  perspective: 2000px;
 }
 
 .Book-page {
   width: 50%;
   height: 100%;
-  padding: 10px;
+  padding: 0px;
   background: var(--beige);
   border: 1px solid black;
   overflow-wrap: break-word;
@@ -17,24 +17,26 @@
   font-size: 16px;
   position: absolute;
   backface-visibility: hidden;
+  transition: transform 0.5s ease-in-out;
 }
 
 .Book-left {
   left: 0;
   border-radius: 10px 0px 0px 10px;
+  transform-origin: top right;
 }
 
 .Book-right {
   right: 0;
   border-radius: 0px 10px 10px 0px;
+  transform-origin: top left;
 }
 
-.flipping .Book-right {
-  transform: rotateY(-180deg);
-  transition: transform 0.5s ease-in-out;
-}
-
-.flipping .Book-left {
+/* Independent flipping animations */
+.flipping-left {
   transform: rotateY(180deg);
-  transition: transform 0.5s ease-in-out;
+}
+
+.flipping-right {
+  transform: rotateY(-180deg);
 }

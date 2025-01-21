@@ -14,6 +14,8 @@ const BookReader = () => {
   const [prevSpread, setPrevSpread] = useState([]);
   const [curSpread, setCurSpread] = useState([]);
   const [nextSpread, setNextSpread] = useState([]);
+  // NEW: -1 = no flip, 0 = left page, 1 = right page
+  const [flippedPage, setFlippedPage] = useState(-1);
 
   // Initialize page on mount
   useEffect(() => {
@@ -49,6 +51,7 @@ const BookReader = () => {
       setNextSpread(
         post("/api/nextspread", { _id: bookID, curPage: curPage, totalPages: totalPages })
       );
+      setFlippedPage(1);
     }
   };
 
@@ -60,6 +63,7 @@ const BookReader = () => {
       setPrevSpread(
         post("/api/prevspread", { _id: bookID, curPage: curPage, totalPages: totalPages })
       );
+      setFlippedPage(0);
     }
   };
 
@@ -68,10 +72,10 @@ const BookReader = () => {
       <button onClick={flipBackward} disabled={curPage === 0}>
         Previous
       </button>
-      <button onClick={flipForward} disabled={curPage >= totalPages.length - 2}>
+      <button onClick={flipForward} disabled={curPage >= totalPages - 2}>
         Next
       </button>
-      <Book leftPage={getLeftPage()} rightPage={getRightPage()} />
+      <Book leftPage={getLeftPage()} rightPage={getRightPage()} flippedPage={flippedPage} />
     </div>
   );
 };
