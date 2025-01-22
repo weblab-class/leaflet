@@ -195,17 +195,6 @@ a:hover {
   align-items: center;  /* Center content vertically */
 }
 
-.background::before {
-  content: ""; /* Creates the pseudo-element */
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(0, 0, 0, 0.5); /* Adds a semi-transparent black overlay to dim the background */
-  z-index: -1; /* Ensures the overlay stays behind the content */
-}
-
 /* Content container */
 .content {
   text-align: center;  /* Center the text inside the content div */
