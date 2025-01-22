@@ -19,7 +19,7 @@ const Shelf = () => {
 
   // Display user's existing plants in shelf
   useEffect(() => {
-    console.log("Going to send get all books request");
+    console.info("Going to send get all books request");
     get("/api/getallbooks").then(({ books: books }) => {
       setPlants(books);
     });
@@ -40,7 +40,7 @@ const Shelf = () => {
   // Function called on when user finishes filling out add Plant
   // (book) form and submits it
   const confirmAddPlant = ({ title: titleInput, content: file_text }) => {
-    console.log("Adding new plant");
+    console.info("Adding new plant");
     setShowAddPlantPanel(false);
     post("/api/createbook", { title: titleInput, content: file_text }).then(
       ({ book: newPlant }) => {

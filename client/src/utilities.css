@@ -185,27 +185,27 @@ a:hover {
 
 .background {
   position: relative;
-  background-image: url("./public/background.png"); /* Replace with the path to your background image */
-  background-size: cover;  /* Ensure the background covers the full page */
-  background-position: center;  /* Center the background image */
-  height: 100vh;  /* Full height of the viewport */
+  background-image: url("../assets/background.png");
+  background-size: cover;
+  background-position: center;
+  height: 100vh;
   width: 100%;
   display: flex;
-  justify-content: center;  /* Center content horizontally */
-  align-items: center;  /* Center content vertically */
+  justify-content: center;
+  align-items: center;
 }
 
 /* Content container */
 .content {
-  text-align: center;  /* Center the text inside the content div */
-  color: white;  /* Set text color to white for contrast against background */
+  text-align: center; /* Center the text inside the content div */
+  color: white; /* Set text color to white for contrast against background */
   padding: 20px;
-  border-radius: 10px;  /* Optional: rounded corners for the background box */
+  border-radius: 10px; /* Optional: rounded corners for the background box */
 }
 
 /* Styling for the text */
 .text {
-  font-size: 3rem;  /* Larger text size */
+  font-size: 3rem; /* Larger text size */
   font-weight: bold;
 }
 /* Position the header text at the top */

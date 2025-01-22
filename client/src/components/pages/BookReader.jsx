@@ -1,10 +1,14 @@
-import React, { useState, useEffect } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import { get, post } from "../../utilities";
+import { UserContext } from "../App";
+import { useNavigate } from "react-router-dom";
 import { useLocation } from "react-router-dom";
 import Book from "../modules/Book";
 
 // **************** NEWLY ADDED *************** //
 const BookReader = () => {
+  const { userId } = useContext(UserContext);
+  const navigate = useNavigate();
   const location = useLocation();
   const bookID = location.state?.bookID; // Retrieve the book from state
   // **************** TODO *************** // (Regan)
@@ -16,6 +20,13 @@ const BookReader = () => {
   const [nextSpread, setNextSpread] = useState([]);
   // NEW: -1 = no flip, 0 = left page, 1 = right page
   const [flippedPage, setFlippedPage] = useState(-1);
+
+  useEffect(() => {
+    if (!userId) {
+      console.info("Redirecting to Login!");
+      navigate("/");
+    }
+  }, [userId, navigate]);
 
   // Initialize page on mount
   useEffect(() => {
@@ -33,13 +44,13 @@ const BookReader = () => {
 
   // **************** TODO *************** //
   const getLeftPage = () => {
-    console.log("left page: " + curSpread[0]);
+    console.info("left page: " + curSpread[0]);
     return curSpread[0] || "";
   };
 
   // **************** TODO *************** //
   const getRightPage = () => {
-    console.log("right page: " + curSpread[1]);
+    console.info("right page: " + curSpread[1]);
     return curSpread[1] || "";
   };
 

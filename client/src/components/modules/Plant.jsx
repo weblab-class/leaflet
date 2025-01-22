@@ -4,7 +4,7 @@ const Plant = ({ plantType, title }) => {
   console.log("Rendering a plant with plantType " + plantType.toString());
   return (
     <>
-      <img src={`../../public/${plantType}.png`} alt="Plant" className="Plant-image" />
+      <img src={`../../../assets/${plantType}.png`} alt="Plant" className="Plant-image" />
       <p className="Plant-book-title"> {title} </p>
     </>
   );
