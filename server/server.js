@@ -55,6 +55,10 @@ mongoose
 const app = express();
 app.use(validator.checkRoutes);
 
+// **************** NEWLY ADDED *************** //
+const bodyParser = require("body-parser");
+app.use(bodyParser.json({ limit: "20mb" })); // Adjust as needed
+
 // allow us to process POST requests
 app.use(express.json());
 
@@ -98,7 +102,6 @@ app.use((err, req, res, next) => {
     console.log("The server errored when processing a request!");
     console.log(err);
   }
-
   res.status(status);
   res.send({
     status: status,

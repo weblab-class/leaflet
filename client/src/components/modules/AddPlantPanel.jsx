@@ -4,24 +4,45 @@ import "./EditPlantPanel.css";
 const AddPlantPanel = ({ onSubmitFunction, onCancelFunction }) => {
   const [titleInput, setTitleInput] = useState("");
   const [fileInput, setFileInput] = useState(null);
+  const [latestFileChangeEvent, setLatestFileChangeEvent] = useState(null);
 
   const handleTitleChange = (event) => {
     setTitleInput(event.target.value);
   };
 
   const handleFileChange = (event) => {
-    setFileInput(event.target.files[0]);
+    console.info("file changing");
+    const file = event.target.files[0]; // Get the file from the input
+    setFileInput(file); // Update state
+    setLatestFileChangeEvent(event);
   };
 
-  const handleSubmit = (event) => {
-    console.log("submitting");
+  function getFileText(fileEvent) {
+    return new Promise((resolve, reject) => {
+      let file = fileEvent.target.files[0];
+      let reader = new FileReader();
+      reader.onload = (e) => {
+        const file_text = e.target.result;
+        resolve(file_text);
+      };
+      reader.readAsText(file);
+    });
+  }
+
+  const handleSubmit = async (event) => {
+    console.info("Submitting form");
     event.preventDefault();
-    onSubmitFunction({ title: titleInput, content: fileInput });
+    let file_text = "";
+    if (latestFileChangeEvent) {
+      file_text = await getFileText(latestFileChangeEvent);
+    }
+    console.info("file text: ", file_text.substring(0, 50));
+    onSubmitFunction({ title: titleInput, content: file_text });
   };
 
   return (
     <div className="EditPlantPanel">
-      <form className="EditPlantPanel-form" onSubmit={handleSubmit}>
+      <form className="EditPlantPanel-form" onSubmit={handleSubmit} encType="multipart/form-data">
         <h3>Add a New Plant</h3>
         <label htmlFor="bookTitle">Book Title:</label>
         <input
@@ -34,7 +55,13 @@ const AddPlantPanel = ({ onSubmitFunction, onCancelFunction }) => {
         <div className="EditPlantPanel-fileinput">
           {/***************** TODO ****************/
           /* accept other file types */}
-          <input type="file" accept=".txt" onChange={handleFileChange} />
+          <input
+            id="file_upload_input"
+            type="file"
+            accept=".txt"
+            onChange={handleFileChange}
+            name="files"
+          />
         </div>
         {/* file upload div ^ */}
         <div className="EditPlantPanel-buttons">

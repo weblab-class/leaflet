@@ -39,12 +39,14 @@ const Shelf = () => {
 
   // Function called on when user finishes filling out add Plant
   // (book) form and submits it
-  const confirmAddPlant = (newBook) => {
+  const confirmAddPlant = ({ title: titleInput, content: file_text }) => {
     console.log("Adding new plant");
-    post("/api/createbook", newBook).then(({ book: newPlant }) => {
-      setPlants((prevPlants) => [...prevPlants, newPlant]);
-      setShowAddPlantPanel(false);
-    });
+    setShowAddPlantPanel(false);
+    post("/api/createbook", { title: titleInput, content: file_text }).then(
+      ({ book: newPlant }) => {
+        setPlants((prevPlants) => [...prevPlants, newPlant]);
+      }
+    );
   };
 
   // ============ DELETING PLANTS ============ //
