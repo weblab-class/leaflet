@@ -21,9 +21,6 @@ const router = express.Router();
 //initialize socket
 const socketManager = require("./server-socket");
 
-// **************** NEWLY ADDED *************** //
-const ObjectId = require("mongodb").ObjectId;
-
 router.post("/login", auth.login);
 router.post("/logout", auth.logout);
 router.get("/whoami", (req, res) => {
@@ -61,7 +58,7 @@ router.get("/getallbooks", (req, res) => {
 
 function parseBook(req, res, next) {
   if (req.body.content) {
-    console.log(req.body.content);
+    // console.log(req.body.content);
     pageArray = [];
     charIndex = 0;
     ogIncrement = 200; //change both increments to desired chunk size
@@ -69,13 +66,13 @@ function parseBook(req, res, next) {
     while (charIndex < req.body.content.length) {
       if (charIndex + increment > req.body.content.length) {
         pageArray.push(req.body.content.slice(charIndex, req.body.content.length));
-        console.log(pageArray);
+        // console.log(pageArray);
       } else {
         while (req.body.content[charIndex + increment] !== " ") {
           charIndex--;
         }
         pageArray.push(req.body.content.slice(charIndex, charIndex + increment));
-        console.log(pageArray);
+        // console.log(pageArray);
       }
       charIndex += increment;
       increment = ogIncrement;
