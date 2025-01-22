@@ -10,6 +10,7 @@ const BookSchema = new mongoose.Schema({
   plantType: String,
   userId: String,
   content: [String],
+  contentURL: String,
 });
 
 // compile model from schema
