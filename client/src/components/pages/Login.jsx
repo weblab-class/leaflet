@@ -16,20 +16,22 @@ const Login = () => {
   }, [userId, navigate]);
 
   return (
-    <div>
-      {userId ? (
-        <button
-          onClick={() => {
-            googleLogout();
-            handleLogout();
-          }}
-        >
-          Logout
-        </button>
-      ) : (
-        <GoogleLogin onSuccess={handleLogin} onError={(err) => console.log(err)} />
-      )}
-      <h1>Welcome to the Login Page</h1>
+    <div className="background">
+      <div className="content">
+        {userId ? (
+          <button
+            onClick={() => {
+              googleLogout();
+              handleLogout();
+            }}
+          >
+            Logout
+          </button>
+        ) : (
+          <GoogleLogin onSuccess={handleLogin} onError={(err) => console.log(err)} />
+        )}
+        <h1>Welcome to the Login Page</h1>
+      </div>
     </div>
   );
 };
