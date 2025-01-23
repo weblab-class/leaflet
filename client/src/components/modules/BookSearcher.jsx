@@ -1,16 +1,17 @@
 import React, { useState } from "react";
 import "./BookSearcher.css";
 
-const BookSearcher = ({ onBookSelect, initialTitle }) => {
-  const [query, setQuery] = useState(initialTitle || "");
+const BookSearcher = ({ onBookSelect }) => {
+  const [title, setTitle] = useState("");
   const [suggestions, setSuggestions] = useState([]);
   const [loading, setLoading] = useState(false);
 
-  const handleSearch = async (e) => {
-    const value = e.target.value;
-    setQuery(value);
+  // triggers when user enters/deletes something in search bar
+  const handleSearchChange = async (inputChangeEvent) => {
+    const titeInput = inputChangeEvent.target.value;
+    setTitle(titeInput);
 
-    if (!value) {
+    if (!titeInput) {
       setSuggestions([]);
       return;
     }
@@ -36,11 +37,11 @@ const BookSearcher = ({ onBookSelect, initialTitle }) => {
 
   const handleSelect = (book) => {
     if (onBookSelect) onBookSelect(book);
-    setQuery(book.title);
+    setTitle(book.title);
     setSuggestions([]);
   };
 
-  // Function to hide suggestions when clicking outside or blurring the input
+  // triggers when user clicks out of title input field
   const handleBlur = () => {
     setSuggestions([]); // Hide suggestions on blur
   };
@@ -52,8 +53,8 @@ const BookSearcher = ({ onBookSelect, initialTitle }) => {
         id="bookTitleInput"
         type="text"
         placeholder="Search for a book..."
-        value={query}
-        onChange={handleSearch}
+        value={title}
+        onChange={handleSearchChange}
         onBlur={handleBlur} // Hide suggestions on blur
       />
       {loading && <div className="loading">Loading...</div>}

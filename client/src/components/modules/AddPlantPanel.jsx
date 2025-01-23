@@ -112,7 +112,7 @@ const AddPlantPanel = ({ parentOnSubmitFunction, onCancelFunction }) => {
           <h3>Add a New Plant</h3>
 
           {/****************** BOOK SEARCH/TITLE INPUT ******************/}
-          <BookSearcher onBookSelect={handleBookSearchSelect} initialValue={bookData.title} />
+          <BookSearcher onBookSelect={handleBookSearchSelect} />
 
           {/****************** BOOK TYPE BAR SELECTION ******************/}
           <div className="upload-options">
