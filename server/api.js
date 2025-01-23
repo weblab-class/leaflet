@@ -49,37 +49,29 @@ router.get("/getallbooks", (req, res) => {
   });
 });
 
-//=========== ADDING BOOKS ============//
+const multer = require("multer");
+const upload = multer({ storage: multer.memoryStorage() }); // Stores file in memory
+const axios = require("axios"); // For fetching content from URLs if needed
 
-// **************** NEWLY ADDED *************** //
-// Middleware to set default values for book creation request fields
-function handleDifferentBookTypes(req, res, next) {
-  req.body.title = req.body.title || ""; // Default to empty string
-  req.body.curPage = 0; // Default to 0
-  req.body.totalPages = req.body.totalPages || 4; // Default to 2
-  // **************** TODO *************** //
-  // Later set body content default to [] (empty array) for physical books
-  req.body.content = req.body.content || ["first page", "second page", "third page", "fourth page"]; // Default content
-  req.body.plantType = req.body.plantType || "testPlant"; // Default to "testPlant"
-  next();
-}
-
-// req.body includes following fields:
-// {
-//  title,
-//  bookType, (among ["search", "upload", "physical"])
-//  file,
-//  url,
-//  currentPage,
-//  totalPages
-// }
-router.post("/createbook", async (req, res) => {
+// formData fields: { title, bookType, file, url, currentPage, totalPages }
+router.post("/createbook", upload.single("file"), async (req, res) => {
+  console.log("Creating a book");
+  const { title, bookType, url, currentPage, totalPages } = req.body;
+  console.log("Extracted fields:", { title, bookType, url, currentPage, totalPages });
+  const file = req.file;
+  if (file) {
+    console.log("Uploaded file:", {
+      originalname: file.originalname,
+      mimetype: file.mimetype,
+      size: file.size,
+    });
+  }
   const newBook = new Book({
     userId: req.user._id,
-    title: req.body.title,
-    bookType: req.body.bookType,
-    currentPage: req.body.currentPage,
-    totalPages: req.body.totalPages,
+    title,
+    bookType,
+    currentPage: parseInt(currentPage, 10) || 0,
+    totalPages: parseInt(totalPages, 10) || 0,
     content: [],
   });
 
@@ -88,11 +80,34 @@ router.post("/createbook", async (req, res) => {
   // ==== BOOK URL GIVEN ==== //
   if (bookType === "search") {
     // title, bookType, url fields only
+    // **************** NEW: NEEDS TESTING/FIXING *************** // (REGAN)
+    if (!url) {
+      return res.status(400).json({ message: "URL is required for bookType 'search'" });
+    }
+    try {
+      const response = await axios.get(url); // Fetch content from URL
+      const contentString = response.data; // Assume the response contains plain text
+      newBook.content = parseBook(contentString); // Convert to an array of pages
+    } catch (error) {
+      console.error("Error fetching content from URL:", error);
+      return res.status(500).json({ message: "Failed to fetch book content from URL" });
+    }
   }
 
   // ==== BOOK FILE GIVEN ==== //
   else if (bookType === "upload") {
     // title, bookType, file fields only
+    // **************** NEW: NEEDS TESTING/FIXING *************** // (REGAN)
+    if (!file) {
+      return res.status(400).json({ message: "File is required for bookType 'upload'" });
+    }
+    try {
+      const contentString = file.buffer.toString("utf-8"); // Convert file buffer to a string
+      newBook.content = parseBook(contentString); // Convert to an array of pages
+    } catch (error) {
+      console.error("Error processing uploaded file:", error);
+      return res.status(500).json({ message: "Failed to process uploaded file" });
+    }
   }
 
   // ==== NOTHING GIVEN ==== //
@@ -101,13 +116,6 @@ router.post("/createbook", async (req, res) => {
     // nothing left to do
   }
   await newBook.save();
-  // Prepare a response plant object excluding the `content` field
-  // Plant = lightweight representation of Book schema/object:
-  // _id: corresponding book id
-  // title: String
-  // bookType: String among ["search", "upload", "physical"]
-  // currentPage: Number
-  // totalPages: Number
   const newPlant = {
     userId: savedBook.userId,
     _id: savedBook._id,

@@ -47,14 +47,27 @@ const Shelf = () => {
   // (book) form and submits it
 
   // Arguments passed in from AddPlantPanel.jsx --> localOnSubmitFunction
-  const submitAddPlant = ({ title, bookType, file, url, currentPage, totalpages }) => {
+  const submitAddPlant = ({ title, bookType, file, url, currentPage, totalPages }) => {
     console.info("Adding new plant");
     setShowAddPlantPanel(false);
-    post("/api/createbook", { title, bookType, file, url, currentPage, totalPages }).then(
-      ({ newPlant }) => {
-        setPlants((prevPlants) => [...prevPlants, newPlant]);
-      }
-    );
+    const formData = new FormData();
+    formData.append("title", title);
+    formData.append("bookType", bookType);
+    formData.append("file", file);
+    formData.append("url", url);
+    formData.append("currentPage", currentPage);
+    formData.append("totalPages", totalPages);
+
+    // Can't use get/post from utilities because formdata is passed in
+    fetch("/api/createbook", {
+      method: "POST",
+      body: formData, // Send FormData directly
+    })
+      .then((response) => response.json())
+      .then(({ newPlant }) => {
+        setPlants((prevPlants) => [...prevPlants, newPlant]); // Update UI with the new book
+      })
+      .catch((error) => console.error("Error creating book:", error));
   };
 
   // ============ DELETING PLANTS ============ //
