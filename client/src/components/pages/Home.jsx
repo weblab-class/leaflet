@@ -13,7 +13,7 @@ const Home = () => {
       console.info("Redirecting to Login!");
       navigate("/");
     }
-    console.log("Loading the home page");
+    console.info("Loading the home page");
   }, [userId, navigate]);
 
   return (

@@ -2,149 +2,230 @@ import React, { useState } from "react";
 import "./EditPlantPanel.css";
 import BookSearcher from "./BookSearcher.jsx";
 
-const AddPlantPanel = ({ onSubmitFunction, onCancelFunction }) => {
-  const [titleInput, setTitleInput] = useState("");
-  const [fileInput, setFileInput] = useState(null);
-  const [latestFileChangeEvent, setLatestFileChangeEvent] = useState(null);
-  const [selectedOption, setSelectedOption] = useState("none"); // "gutenberg", "upload", "none"
+const AddPlantPanel = ({ parentOnSubmitFunction, onCancelFunction }) => {
+  // ============ BOOK REPRESENTATION ============ //
+
+  // *Lightweight* (*cough*) frontend representation of Book schema
+  const [bookType, setBookType] = useState("physical"); // "search", "upload", "physical"
   const [bookData, setBookData] = useState({
     title: "",
-    contentURL: "",
+    url: "",
     cover: "",
-    uploadedFile: null,
+    file: null,
+    currentPage: 0,
+    totalPages: 0,
   });
-
-  const handleTitleChange = (event) => {
-    const value = event.target.value;
-    setTitleInput(value);
-    setBookData((prev) => ({ ...prev, title: value }));
-  };
-
-  const handleFileChange = (event) => {
-    const file = event.target.files[0]; // Get the file from the input
-    setFileInput(file); // Update state
-    setLatestFileChangeEvent(event);
-    setBookData((prev) => ({ ...prev, uploadedFile: file, contentURL: "" }));
-    setSelectedOption("upload");
-  };
-
-  function getFileText(fileEvent) {
-    return new Promise((resolve, reject) => {
-      const file = fileEvent.target.files[0];
-      const reader = new FileReader();
-      reader.onload = (e) => resolve(e.target.result);
-      reader.onerror = reject;
-      reader.readAsText(file);
-    });
-  }
-
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-    let file_text = "";
-    if (latestFileChangeEvent) {
-      file_text = await getFileText(latestFileChangeEvent);
+  // ============ BOOK INPUT TYPE SELECT ============ //
+  const handleBookTypeChange = (selectedType) => {
+    setBookType(selectedType);
+    setFileError(false);
+    setPhysicalBookError(false);
+    if (selectedType === "upload") {
+      setBookData({ url: "" });
     }
-    onSubmitFunction({
-      title: titleInput,
-      content: selectedOption === "upload" ? file_text : null,
-      contentURL: selectedOption === "gutenberg" ? bookData.contentURL : "",
-      uploadOption: selectedOption,
-    });
-  };
-
-  const handleOptionChange = (option) => {
-    setSelectedOption(option);
-    if (option === "none") {
-      setBookData({ title: "", contentURL: "", uploadedFile: null });
+    if (selectedType === "physical") {
+      setBookData({ url: "", file: null });
     }
   };
 
-  const handleBookSelect = (book) => {
+  // ============ BOOK SEARCH ============ //
+  const handleBookSearchSelect = (book) => {
     setBookData((prev) => ({
       ...prev,
       title: book.title,
-      contentURL: book.link,
+      url: book.link,
       cover: book.cover,
     }));
-    setTitleInput(book.title); // Sync with title input
-    setSelectedOption("gutenberg");
+    setBookType("search");
+  };
+
+  // ============ BOOK UPLOAD ============ //
+
+  const [latestFileChangeEvent, setLatestFileChangeEvent] = useState(null);
+  const [fileError, setFileError] = useState(false); // Tracks whether the file error message is displayed
+
+  const handleFileChange = (event) => {
+    setLatestFileChangeEvent(event);
+    setBookType("upload");
+    setFileError(false);
+  };
+
+  // function getTextFromFile(fileEvent) {
+  //   return new Promise((resolve, reject) => {
+  //     const file = fileEvent.target.files[0];
+  //     const reader = new FileReader();
+  //     reader.onload = (e) => resolve(e.target.result);
+  //     reader.onerror = reject;
+  //     reader.readAsText(file);
+  //   });
+  // }
+
+  // ============ PHYSICAL BOOK ============ //
+  const [physicalBookError, setPhysicalBookError] = useState(false); // Tracks whether physical book fields are missing
+
+  const handlePhysicalInputChange = (field, value) => {
+    setBookData((prev) => ({ ...prev, [field]: value }));
+    setPhysicalBookError(false);
+  };
+
+  // ============ BOOK SUBMIT ============ //
+
+  const localOnSubmitFunction = async (event) => {
+    event.preventDefault();
+    // let file_text = "";
+    if (bookType === "upload") {
+      if (!latestFileChangeEvent) {
+        // Don't submit, let 'no file uploaded' span pop up
+        setFileError(true);
+        return;
+      } else {
+        setBookData((prev) => ({
+          ...prev,
+          file: latestFileChangeEvent.target.files[0],
+        }));
+        // file_text = await getTextFromFile(latestFileChangeEvent);
+      }
+    } else if (bookType === "physical" && (!bookData.currentPage || !bookData.totalPages)) {
+      setPhysicalBookError(true);
+      return;
+    }
+    // pass data back to parent --> Shelf.jsx submitAddPlant
+    parentOnSubmitFunction({
+      title: bookData.title,
+      file: bookData.file,
+      url: bookData.url,
+      bookType: bookType,
+      // account for array style
+      currentPage: bookData.currentPage - 1,
+      totalPages: bookData.totalPages,
+    });
   };
 
   return (
-    <div className="EditPlantPanel">
-      <form className="EditPlantPanel-form" onSubmit={handleSubmit} encType="multipart/form-data">
-        <h3>Add a New Plant</h3>
-        <label htmlFor="bookTitle">Book Title:</label>
-        <BookSearcher onBookSelect={handleBookSelect} initialValue={titleInput} />
-        <div className="selected-book-display">
-          {bookData.title && (
-            <div className="selected-book-info">
-              <img
-                src={bookData.cover || "https://via.placeholder.com/80"}
-                alt={bookData.title}
-                className="book-cover"
-              />
-              <div className="book-details">
-                <strong>{bookData.title}</strong>
-                <p>{bookData.author}</p>
-              </div>
-            </div>
-          )}
-        </div>
-        <div className="upload-options">
-          <label>
-            <input
-              type="radio"
-              name="uploadOption"
-              value="gutenberg"
-              checked={selectedOption === "gutenberg"}
-              onChange={() => handleOptionChange("gutenberg")}
-            />
-            Use Project Gutenberg Book
-            {selectedOption === "gutenberg" && !bookData.contentURL && (
-              <span className="warning">No book selected.</span>
-            )}
-          </label>
-          <label>
-            <input
-              type="radio"
-              name="uploadOption"
-              value="upload"
-              checked={selectedOption === "upload"}
-              onChange={() => handleOptionChange("upload")}
-            />
-            Upload Your Own TXT File
-            {selectedOption === "upload" && (
+    <div className="disable-outside-clicks">
+      <div className="EditPlantPanel">
+        <form
+          className="EditPlantPanel-form"
+          onSubmit={localOnSubmitFunction}
+          encType="multipart/form-data"
+        >
+          <h3>Add a New Plant</h3>
+
+          {/****************** BOOK SEARCH/TITLE INPUT ******************/}
+          <BookSearcher onBookSelect={handleBookSearchSelect} initialValue={bookData.title} />
+
+          {/****************** BOOK TYPE BAR SELECTION ******************/}
+          <div className="upload-options">
+            {/* GUTENBERG BOOK SEARCH OPTION */}
+            <label>
               <input
-                id="file_upload_input"
-                type="file"
-                accept=".txt"
-                onChange={handleFileChange}
-                name="files"
-                style={{ display: "block", marginTop: "8px" }}
+                type="radio"
+                name="bookTypeOption"
+                value="search"
+                checked={bookType === "search"}
+                onChange={() => handleBookTypeChange("search")}
               />
+              Use Book from Project Gutenberg
+              {bookType === "search" && !bookData.url && (
+                <span className="warning">No book selected.</span>
+              )}
+              {/* Displays selected book */}
+              <div className="selected-book-display">
+                {bookData.title && (
+                  <div className="selected-book-info">
+                    <img src={bookData.cover} alt={bookData.title} className="book-cover" />
+                    <div className="book-details">
+                      <strong>{bookData.title}</strong>
+                      <p>{bookData.author}</p>
+                    </div>
+                  </div>
+                )}
+              </div>
+            </label>
+
+            {/* UPLOAD BOOK OPTION */}
+            <label>
+              <input
+                type="radio"
+                name="bookTypeOption"
+                value="upload"
+                checked={bookType === "upload"}
+                onChange={() => handleBookTypeChange("upload")}
+              />
+              Upload Your Own TXT File
+              {bookType === "upload" && (
+                <>
+                  <input
+                    id="file_upload_input"
+                    type="file"
+                    accept=".txt"
+                    onChange={handleFileChange}
+                    name="files"
+                    size="10mb"
+                    style={{ display: "block", marginTop: "8px" }}
+                  />
+                  {/* Display error if no file uploaded */}
+                  {fileError && <span className="warning">No file uploaded.</span>}
+                </>
+              )}
+            </label>
+
+            <label>
+              {/* PHYSICAL BOOK OPTION */}
+              <input
+                type="radio"
+                name="bookTypeOption"
+                value="physical"
+                checked={bookType === "physical"}
+                onChange={() => handleBookTypeChange("physical")}
+              />
+              I Have a Physical Book (No Upload)
+            </label>
+            {bookType === "physical" && (
+              <>
+                <div style={{ marginTop: "8px" }}>
+                  <label>
+                    Current Page:
+                    <input
+                      type="number"
+                      min="1"
+                      value={bookData.currentPage}
+                      onChange={(e) => handlePhysicalInputChange("currentPage", e.target.value)}
+                    />
+                  </label>
+                  <label>
+                    Total Pages:
+                    <input
+                      type="number"
+                      min="1"
+                      value={bookData.totalPages}
+                      onChange={(e) => handlePhysicalInputChange("totalPages", e.target.value)}
+                    />
+                  </label>
+                </div>
+                {physicalBookError && <span className="warning">Please fill in both fields.</span>}
+              </>
             )}
-          </label>
-          <label>
-            <input
-              type="radio"
-              name="uploadOption"
-              value="none"
-              checked={selectedOption === "none"}
-              onChange={() => handleOptionChange("none")}
-            />
-            I Have a Physical Book (No Upload)
-          </label>
-        </div>
-        <div className="EditPlantPanel-buttons">
-          <button type="submit" className="EditPlantPanel-submit">
-            Add Plant
-          </button>
-          <button type="button" className="EditPlantPanel-cancel" onClick={onCancelFunction}>
-            Cancel
-          </button>
-        </div>
-      </form>
+          </div>
+
+          {/****************** SUBMIT/CANCEL BUTTONS ******************/}
+          <div className="EditPlantPanel-buttons">
+            <button
+              type="submit"
+              className="EditPlantPanel-submit"
+              disabled={
+                (bookType === "upload" && !latestFileChangeEvent) ||
+                (bookType === "physical" && (!bookData.currentPage || !bookData.totalPages))
+              }
+            >
+              Add Plant
+            </button>
+            <button type="button" className="EditPlantPanel-cancel" onClick={onCancelFunction}>
+              Cancel
+            </button>
+          </div>
+        </form>
+      </div>
     </div>
   );
 };

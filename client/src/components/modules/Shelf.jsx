@@ -6,10 +6,16 @@ import DeletePlantPanel from "./DeletePlantPanel.jsx";
 import DeletePlantButton from "./DeletePlantButton.jsx";
 import { useNavigate } from "react-router-dom";
 import "./Shelf.css";
+// for file uploads
+// import axios from "axios";
 
 const Shelf = () => {
-  // Plant is same as its book object (in the database) EXCEPT
-  // it doesn't have a content field (but ObjectID is the same)
+  // Plant = lightweight representation of Book schema/object:
+  // _id: corresponding book id
+  // title: String
+  // bookType: String among ["search", "upload", "physical"]
+  // currentPage: Number
+  // totalPages: Number
   const [plants, setPlants] = useState([]);
   const [showAddPlantPanel, setShowAddPlantPanel] = useState(false);
   const [plantToDelete, setPlantToDelete] = useState(null);
@@ -19,7 +25,7 @@ const Shelf = () => {
 
   // Display user's existing plants in shelf
   useEffect(() => {
-    console.info("Going to send get all books request");
+    console.info("Getting all books from backend");
     get("/api/getallbooks").then(({ books: books }) => {
       setPlants(books);
     });
@@ -39,11 +45,13 @@ const Shelf = () => {
 
   // Function called on when user finishes filling out add Plant
   // (book) form and submits it
-  const confirmAddPlant = ({ title: titleInput, content: file_text }) => {
+
+  // Arguments passed in from AddPlantPanel.jsx --> localOnSubmitFunction
+  const submitAddPlant = ({ title, bookType, file, url, currentPage, totalpages }) => {
     console.info("Adding new plant");
     setShowAddPlantPanel(false);
-    post("/api/createbook", { title: titleInput, content: file_text }).then(
-      ({ book: newPlant }) => {
+    post("/api/createbook", { title, bookType, file, url, currentPage, totalPages }).then(
+      ({ newPlant }) => {
         setPlants((prevPlants) => [...prevPlants, newPlant]);
       }
     );
@@ -115,7 +123,7 @@ const Shelf = () => {
     <div className="Shelf-container">
       {generateShelfItems(9)}
       {showAddPlantPanel && (
-        <AddPlantPanel onSubmitFunction={confirmAddPlant} onCancelFunction={cancelAddPlant} />
+        <AddPlantPanel onSubmitFunction={submitAddPlant} onCancelFunction={cancelAddPlant} />
       )}
       {showDeletePlantPanel && (
         <DeletePlantPanel onConfirmDelete={confirmDeletePlant} onCancelDelete={cancelDeletePlant} />

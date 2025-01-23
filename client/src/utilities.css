@@ -217,7 +217,7 @@ a:hover {
   color: white;
   font-size: 2rem; /* Adjust as needed */
   font-weight: bold;
-  z-index: 2; /* Ensure it stays above the background overlay */
+  z-index: 1; /* Ensure it stays above the background overlay */
 }
 
 /* Center the content (shelf) in the middle */
@@ -231,5 +231,4 @@ a:hover {
   background: rgba(0, 0, 0, 0.5); /* Optional: darken the background behind the content */
   border-radius: 10px; /* Optional: rounded corners */
   color: white; /* Text color for contrast */
-  z-index: 1;
 }

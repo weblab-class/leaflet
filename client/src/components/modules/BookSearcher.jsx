@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import "./BookSearcher.css";
 
-const BookSearcher = ({ onBookSelect, initialValue }) => {
-  const [query, setQuery] = useState(initialValue || "");
+const BookSearcher = ({ onBookSelect, initialTitle }) => {
+  const [query, setQuery] = useState(initialTitle || "");
   const [suggestions, setSuggestions] = useState([]);
   const [loading, setLoading] = useState(false);
 
@@ -47,7 +47,9 @@ const BookSearcher = ({ onBookSelect, initialValue }) => {
 
   return (
     <div className="book-searcher">
+      <label htmlFor="bookTitleInput">Book Title:</label>
       <input
+        id="bookTitleInput"
         type="text"
         placeholder="Search for a book..."
         value={query}

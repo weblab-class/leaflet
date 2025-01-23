@@ -50,43 +50,10 @@ router.get("/getallbooks", (req, res) => {
 });
 
 //=========== ADDING BOOKS ============//
-// **************** TODO *************** //
-// Middleware to parse content
-// --> get totalpages
-// --> split content into string array of pages
-// MAKE SURE EVEN NUMBER OF PAGES! (Add blank page at end if not blank)
-
-function parseBook(req, res, next) {
-  if (req.body.content) {
-    // console.log(req.body.content);
-    pageArray = [];
-    charIndex = 0;
-    ogIncrement = 200; //change both increments to desired chunk size
-    increment = 200;
-    while (charIndex < req.body.content.length) {
-      if (charIndex + increment > req.body.content.length) {
-        pageArray.push(req.body.content.slice(charIndex, req.body.content.length));
-        // console.log(pageArray);
-      } else {
-        while (req.body.content[charIndex + increment] !== " ") {
-          charIndex--;
-        }
-        pageArray.push(req.body.content.slice(charIndex, charIndex + increment));
-        // console.log(pageArray);
-      }
-      charIndex += increment;
-      increment = ogIncrement;
-    }
-    const parsedBookArray = pageArray;
-    req.body.content = pageArray;
-    req.body.totalPages = pageArray.length;
-  }
-  next();
-}
 
 // **************** NEWLY ADDED *************** //
 // Middleware to set default values for book creation request fields
-function setDefaultBookFields(req, res, next) {
+function handleDifferentBookTypes(req, res, next) {
   req.body.title = req.body.title || ""; // Default to empty string
   req.body.curPage = 0; // Default to 0
   req.body.totalPages = req.body.totalPages || 4; // Default to 2
@@ -97,35 +64,96 @@ function setDefaultBookFields(req, res, next) {
   next();
 }
 
-router.post("/createbook", parseBook, setDefaultBookFields, (req, res) => {
+// req.body includes following fields:
+// {
+//  title,
+//  bookType, (among ["search", "upload", "physical"])
+//  file,
+//  url,
+//  currentPage,
+//  totalPages
+// }
+router.post("/createbook", async (req, res) => {
   const newBook = new Book({
-    title: req.body.title,
-    curPage: req.body.curPage,
-    totalPages: req.body.totalPages,
-    content: req.body.content, // This will be saved in the database but excluded in the response
-    plantType: req.body.plantType,
     userId: req.user._id,
+    title: req.body.title,
+    bookType: req.body.bookType,
+    currentPage: req.body.currentPage,
+    totalPages: req.body.totalPages,
+    content: [],
   });
 
-  newBook
-    .save()
-    .then((savedBook) => {
-      // Prepare a response plant object excluding the `content` field
-      const plantResponse = {
-        _id: savedBook._id,
-        title: savedBook.title,
-        curPage: savedBook.curPage,
-        totalPages: savedBook.totalPages,
-        plantType: savedBook.plantType,
-        userId: savedBook.userId,
-      };
-      res.status(201).json({ message: "Book created successfully", book: plantResponse });
-    })
-    .catch((error) => {
-      console.error("Error creating book:", error);
-      res.status(500).json({ message: "Failed to create book", error: error.message });
-    });
+  // GET CONTENT IF SEARCHED OR UPLOADED
+
+  // ==== BOOK URL GIVEN ==== //
+  if (bookType === "search") {
+    // title, bookType, url fields only
+  }
+
+  // ==== BOOK FILE GIVEN ==== //
+  else if (bookType === "upload") {
+    // title, bookType, file fields only
+  }
+
+  // ==== NOTHING GIVEN ==== //
+  else if (bookType === "physical") {
+    // title, bookType, currentPage, totalPages fields only
+    // nothing left to do
+  }
+  await newBook.save();
+  // Prepare a response plant object excluding the `content` field
+  // Plant = lightweight representation of Book schema/object:
+  // _id: corresponding book id
+  // title: String
+  // bookType: String among ["search", "upload", "physical"]
+  // currentPage: Number
+  // totalPages: Number
+  const newPlant = {
+    userId: savedBook.userId,
+    _id: savedBook._id,
+    title: savedBook.title,
+    curPage: savedBook.curPage,
+    totalPages: savedBook.totalPages,
+    plantType: savedBook.plantType,
+  };
+  res.status(201).json({ message: "Book created successfully", newPlant });
 });
+
+// Helper function for parsing string into book array:
+// Given non-empty string, parse into array of different pages
+// MAKE SURE EVEN NUMBER OF PAGES! (Add blank page at end if not even)
+// **************** TODO: Format pages nicely? (REGAN)                       //
+// ****************       Like, if line contains 'chapter', skip to new page //
+function parseBook(contentString) {
+  const pageArray = [];
+  const chunkSize = 1000; // Desired chunk size
+  let charIndex = 0;
+
+  while (charIndex < contentString.length) {
+    let endIndex = charIndex + chunkSize;
+    // Ensure we don't exceed the content length
+    if (endIndex > contentString.length) {
+      endIndex = contentString.length;
+    } else {
+      // Find the nearest space before the chunk ends
+      while (endIndex > charIndex && contentString[endIndex] !== " ") {
+        endIndex--;
+      }
+      // If no space is found, just break at chunkSize
+      if (endIndex === charIndex) {
+        endIndex = charIndex + chunkSize;
+      }
+    }
+    // Add the chunk to the page array
+    pageArray.push(contentString.slice(charIndex, endIndex).trim());
+    charIndex = endIndex;
+  }
+  // Ensure an even number of pages by adding a blank page if needed
+  if (pageArray.length % 2 !== 0) {
+    pageArray.push("");
+  }
+  return pageArray;
+}
 
 //=========== DELETING BOOKS ============//
 // Delete a book
