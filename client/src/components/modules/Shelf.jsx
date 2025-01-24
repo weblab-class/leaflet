@@ -6,8 +6,6 @@ import DeletePlantPanel from "./DeletePlantPanel.jsx";
 import DeletePlantButton from "./DeletePlantButton.jsx";
 import { useNavigate } from "react-router-dom";
 import "./Shelf.css";
-// for file uploads
-// import axios from "axios";
 
 const Shelf = () => {
   // Plant = lightweight representation of Book schema/object:
@@ -25,7 +23,7 @@ const Shelf = () => {
 
   // Display user's existing plants in shelf
   useEffect(() => {
-    console.log("Going to send get all books request");
+    console.log("Sending get all books request");
     get("/api/getallbooks").then(({ books: books }) => {
       setPlants(books);
     });
