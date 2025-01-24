@@ -15,7 +15,7 @@ const Plant = ({ title, plantType }) => {
   return (
     <>
       <img src={`../../../assets/${plantType}.png`} alt="Plant" className="Plant-image" />
-      <p className="Plant-book-title"> {title} </p>
+      {title && <p className="Plant-book-title"> {title} </p>}
     </>
   );
 };

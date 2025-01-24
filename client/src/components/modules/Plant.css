@@ -6,7 +6,7 @@
   background-color: var(--peach);
   border-radius: var(--s);
   box-sizing: border-box;
-  border: 2px solid var(--caramel-orange);
+  border: 0px solid var(--caramel-orange);
   margin: 0;
   z-index: 2;
 }

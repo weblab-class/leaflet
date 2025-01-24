@@ -32,23 +32,24 @@
   font-size: var(--xl); /* Larger text for arrows */
   cursor: pointer;
   background-color: var(--cotton-pink);
-  border: 4px solid var(--sunset-pink);
   border-radius: var(--m); /* Circular buttons */
   color: white;
-  transition: background-color 0.2s ease, transform 0.2s ease; /* Smooth hover effect */
+  transition: background-color 0.1s ease, transform 0.1s ease; /* Smooth hover effect */
   z-index: 10;
+  border: 4px solid var(--sunset-pink);
 }
 
 .BookReader-button:hover {
   opacity: 0.5;
-  transform: scale(1.01);
+  transform: scale(1.05);
 }
 
 .BookReader-button:disabled {
   opacity: 0.5;
   cursor: not-allowed;
-  background-color: #e1e1e1; /* Grey when disabled */
-  color: #ccc;
+  background-color: var(--lightgrey); /* Grey when disabled */
+  color: var(--medgrey);
+  border: 4px solid var(--medgrey);
 }
 
 .BookReader-button:focus {
