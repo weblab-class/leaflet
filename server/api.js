@@ -49,86 +49,119 @@ router.get("/getallbooks", (req, res) => {
   });
 });
 
-//=========== ADDING BOOKS ============//
-// **************** TODO *************** //
-// Middleware to parse content
-// --> get totalpages
-// --> split content into string array of pages
-// MAKE SURE EVEN NUMBER OF PAGES! (Add blank page at end if not blank)
+const multer = require("multer");
+const upload = multer({ storage: multer.memoryStorage() }); // Stores file in memory
+const axios = require("axios"); // For fetching content from URLs if needed
 
-function parseBook(req, res, next) {
-  console.log("parsing the new book");
-  console.log("req body content: ", req.body.content.substring(0, 100));
-  console.log("req body content length", req.body.content.length);
-  if (req.body.content) {
-    // console.log(req.body.content);
-    pageArray = [];
-    charIndex = 0;
-    ogIncrement = 200; //change both increments to desired chunk size
-    increment = 200;
-    while (charIndex < req.body.content.length) {
-      if (charIndex + increment > req.body.content.length) {
-        pageArray.push(req.body.content.slice(charIndex, req.body.content.length));
-        // console.log(pageArray);
-      } else {
-        while (req.body.content[charIndex + increment] !== " ") {
-          charIndex--;
-        }
-        pageArray.push(req.body.content.slice(charIndex, charIndex + increment));
-        // console.log(pageArray);
-      }
-      charIndex += increment;
-      increment = ogIncrement;
-    }
-    const parsedBookArray = pageArray;
-    req.body.content = pageArray;
-    req.body.totalPages = pageArray.length;
+// formData fields: { title, bookType, file, url, currentPage, totalPages }
+router.post("/createbook", upload.single("file"), async (req, res) => {
+  console.log("Creating a book");
+  const { title, bookType, url, currentPage, totalPages } = req.body;
+  console.log("Extracted fields:", { title, bookType, url, currentPage, totalPages });
+  const file = req.file;
+  if (file) {
+    console.log("Uploaded file:", {
+      originalname: file.originalname,
+      mimetype: file.mimetype,
+      size: file.size,
+    });
   }
-  next();
-}
-
-// **************** NEWLY ADDED *************** //
-// Middleware to set default values for book creation request fields
-function setDefaultBookFields(req, res, next) {
-  req.body.title = req.body.title || ""; // Default to empty string
-  req.body.curPage = 0; // Default to 0
-  req.body.totalPages = req.body.totalPages || 4; // Default to 2 //Regan TODO
-  // **************** TODO *************** //
-  // Later set body content default to [] (empty array) for physical books
-  req.body.content = req.body.content || ["first page", "second page", "third page", "fourth page"]; // Default content
-  req.body.plantType = req.body.plantType || "testPlant"; // Default to "testPlant"
-  next();
-}
-
-router.post("/createbook", parseBook, setDefaultBookFields, (req, res) => {
   const newBook = new Book({
-    title: req.body.title,
-    curPage: req.body.curPage,
-    totalPages: req.body.totalPages,
-    content: req.body.content, // This will be saved in the database but excluded in the response
-    plantType: req.body.plantType,
     userId: req.user._id,
+    title,
+    bookType,
+    currentPage: parseInt(currentPage, 10) || 0,
+    totalPages: parseInt(totalPages, 10) || 0,
+    content: [],
   });
 
-  newBook
-    .save()
-    .then((savedBook) => {
-      // Prepare a response plant object excluding the `content` field
-      const plantResponse = {
-        _id: savedBook._id,
-        title: savedBook.title,
-        curPage: savedBook.curPage,
-        totalPages: savedBook.totalPages,
-        plantType: savedBook.plantType,
-        userId: savedBook.userId,
-      };
-      res.status(201).json({ message: "Book created successfully", book: plantResponse });
-    })
-    .catch((error) => {
-      console.error("Error creating book:", error);
-      res.status(500).json({ message: "Failed to create book", error: error.message });
-    });
+  // GET CONTENT IF SEARCHED OR UPLOADED
+
+  // ==== BOOK URL GIVEN ==== //
+  if (bookType === "search") {
+    // title, bookType, url fields only
+    // **************** NEW: NEEDS TESTING/FIXING *************** // (REGAN)
+    if (!url) {
+      return res.status(400).json({ message: "URL is required for bookType 'search'" });
+    }
+    try {
+      const response = await axios.get(url); // Fetch content from URL
+      const contentString = response.data; // Assume the response contains plain text
+      newBook.content = parseBook(contentString); // Convert to an array of pages
+    } catch (error) {
+      console.error("Error fetching content from URL:", error);
+      return res.status(500).json({ message: "Failed to fetch book content from URL" });
+    }
+  }
+
+  // ==== BOOK FILE GIVEN ==== //
+  else if (bookType === "upload") {
+    // title, bookType, file fields only
+    // **************** NEW: NEEDS TESTING/FIXING *************** // (REGAN)
+    if (!file) {
+      return res.status(400).json({ message: "File is required for bookType 'upload'" });
+    }
+    try {
+      const contentString = file.buffer.toString("utf-8"); // Convert file buffer to a string
+      newBook.content = parseBook(contentString); // Convert to an array of pages
+    } catch (error) {
+      console.error("Error processing uploaded file:", error);
+      return res.status(500).json({ message: "Failed to process uploaded file" });
+    }
+  }
+
+  // ==== NOTHING GIVEN ==== //
+  else if (bookType === "physical") {
+    // title, bookType, currentPage, totalPages fields only
+    // nothing left to do
+  }
+  await newBook.save();
+  const newPlant = {
+    userId: savedBook.userId,
+    _id: savedBook._id,
+    title: savedBook.title,
+    curPage: savedBook.curPage,
+    totalPages: savedBook.totalPages,
+    plantType: savedBook.plantType,
+  };
+  res.status(201).json({ message: "Book created successfully", newPlant });
 });
+
+// Helper function for parsing string into book array:
+// Given non-empty string, parse into array of different pages
+// MAKE SURE EVEN NUMBER OF PAGES! (Add blank page at end if not even)
+// **************** TODO: Format pages nicely? (REGAN)                       //
+// ****************       Like, if line contains 'chapter', skip to new page //
+function parseBook(contentString) {
+  const pageArray = [];
+  const chunkSize = 1000; // Desired chunk size
+  let charIndex = 0;
+
+  while (charIndex < contentString.length) {
+    let endIndex = charIndex + chunkSize;
+    // Ensure we don't exceed the content length
+    if (endIndex > contentString.length) {
+      endIndex = contentString.length;
+    } else {
+      // Find the nearest space before the chunk ends
+      while (endIndex > charIndex && contentString[endIndex] !== " ") {
+        endIndex--;
+      }
+      // If no space is found, just break at chunkSize
+      if (endIndex === charIndex) {
+        endIndex = charIndex + chunkSize;
+      }
+    }
+    // Add the chunk to the page array
+    pageArray.push(contentString.slice(charIndex, endIndex).trim());
+    charIndex = endIndex;
+  }
+  // Ensure an even number of pages by adding a blank page if needed
+  if (pageArray.length % 2 !== 0) {
+    pageArray.push("");
+  }
+  return pageArray;
+}
 
 //=========== DELETING BOOKS ============//
 // Delete a book

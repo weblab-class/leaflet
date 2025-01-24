@@ -1,15 +1,25 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import { UserContext } from "../App";
-import NavBar from "../modules/NavBar";
+// import NavBar from "../modules/NavBar";
+import { useNavigate } from "react-router-dom";
 import Shelf from "../modules/Shelf";
 
 const Home = () => {
   const { userId } = useContext(UserContext);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!userId) {
+      console.info("Redirecting to Login!");
+      navigate("/");
+    }
+    console.info("Loading the home page");
+  }, [userId, navigate]);
+
   return (
-    <div>
-      <h1>Welcome to the Home Page!</h1>
-      <p>This is where you can explore content after logging in.</p>
-      <Shelf />
+    <div className="background">
+      <h1 className="top-text">Welcome to the Home Page!</h1>
+      <Shelf className="shelf" />
     </div>
   );
 };

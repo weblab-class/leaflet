@@ -1,39 +1,44 @@
+/* Shelf Container */
 .Shelf-container {
   display: grid;
-  height: 70%;
-  width: 70%;
+  height: 63%; /* Adjust as needed */
+  width: 59%; /* Adjust as needed */
   grid-template-columns: repeat(3, 1fr); /* 3 equal columns */
-  gap: 20px; /* Space between items */
-  padding: 20px;
-  border: 2px solid var(--chestnut-brown);
-  border-radius: 10px;
-  align-items: stretch; /* Ensure all items stretch to match the grid cell */
-  justify-content: center; /* Center the grid items within the container */
+  gap: 0px; /* Space between items */
+  padding: 0px;
+  border: 0px solid var(--chestnut-brown);
+  border-radius: 0px;
   box-sizing: border-box; /* Include padding and borders in size calculations */
+  margin-left: 20%; /* Push the shelf to the right by leaving 60% of space on the left */
+  margin-right: 15%; /* Leave 5% of space on the right side */
+  margin-bottom: 4%;
 }
 
+/* Shelf Item */
 .Shelf-item {
   position: relative;
-  width: 100%; /* Take the full width of the grid cell */
+  width: 100%; /* Full width of grid cell */
   aspect-ratio: 4 / 3; /* Maintain the 4:3 aspect ratio */
   padding: 0px;
-  border: 2px solid var(--chestnut-brown);
-  border-radius: 8px;
-  box-sizing: border-box; /* Ensure borders are included in size calculations */
-  overflow: hidden; /* Prevent any content from spilling outside */
-  display: flex; /* Use flexbox for better centering */
-  flex-direction: column;
+  border: 0px solid var(--chestnut-brown);
+  border-radius: 0px;
+  box-sizing: border-box; /* Include borders in size calculations */
+  overflow: hidden; /* Prevent content from overflowing */
+  display: flex; /* Use flexbox to center content */
   justify-content: center; /* Center child elements horizontally */
   align-items: center; /* Center child elements vertically */
 }
 
+/* Image inside Shelf Item */
 .Shelf-item img {
-  height: 175px; /* Fit image to the height of the `.Shelf-item` */
-  border-radius: 4px;
-  display: block;
-  text-align: center;
+  max-width: 50%; /* Set the image to be smaller than the container (80% of the container width) */
+  max-height: 50%; /* Ensure the image does not exceed 80% of the container height */
+  object-fit: contain; /* Maintain the image aspect ratio */
+  display: block; /* Remove any inline block spacing issues */
+  margin: 0 auto; /* Ensure the image is centered within the container */
 }
 
+/* Column Layout */
 .column {
   display: flex;
   justify-content: center;
@@ -52,6 +57,7 @@
   align-items: center;
 }
 
+/* Plant Container */
 .plant-container {
   text-align: center; /* Ensure the plant content is centered within its container */
 }

@@ -4,11 +4,11 @@
 * and can be used to add general styles; variable definitions
 * for colors; and styles to html, body, and other high level
 * DOMs.
-* 
+*
 * All utility classes start with a `u-` and all do
 * one basic CSS thing (for example, making the font-weight
 * 600 for bolding) or are super generic.
-* 
+*
 * This is 𝙉𝙊𝙏 the place to define classes for components or
 * do rigorous styling. You should not need to change this file
 * much after initial creation.
@@ -181,4 +181,54 @@ a {
 
 a:hover {
   color: var(--caramel-orange);
+}
+
+.background {
+  position: relative;
+  background-image: url("../assets/background.png");
+  background-size: cover;
+  background-position: center;
+  height: 100vh;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Content container */
+.content {
+  text-align: center; /* Center the text inside the content div */
+  color: white; /* Set text color to white for contrast against background */
+  padding: 20px;
+  border-radius: 10px; /* Optional: rounded corners for the background box */
+}
+
+/* Styling for the text */
+.text {
+  font-size: 3rem; /* Larger text size */
+  font-weight: bold;
+}
+/* Position the header text at the top */
+.top-text {
+  position: absolute;
+  top: 20px; /* Adjust this value for spacing from the top */
+  width: 100%;
+  text-align: center;
+  color: white;
+  font-size: 2rem; /* Adjust as needed */
+  font-weight: bold;
+  z-index: 1; /* Ensure it stays above the background overlay */
+}
+
+/* Center the content (shelf) in the middle */
+.shelf {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%; /* Adjust as needed */
+  padding: 0px;
+  background: rgba(0, 0, 0, 0.5); /* Optional: darken the background behind the content */
+  border-radius: 10px; /* Optional: rounded corners */
+  color: white; /* Text color for contrast */
 }
