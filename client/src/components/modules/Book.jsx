@@ -1,27 +1,33 @@
 import React, { useEffect, useState } from "react";
 import "./Book.css";
 
-const Book = ({ leftPage, rightPage, flippedPage }) => {
+const Book = ({ prevSpread, curSpread, nextSpread, flippedPage }) => {
   const [leftFlipping, setLeftFlipping] = useState(false);
   const [rightFlipping, setRightFlipping] = useState(false);
-  const [initialRender, setInitialRender] = useState(true);
 
   useEffect(() => {
-    if (initialRender) {
-      setInitialRender(false);
+    console.info("Book component rendered");
+    if (flippedPage == -1) {
       return;
-    }
-
-    if (flippedPage === 0) {
+    } else if (flippedPage === 0) {
+      console.log("Left page flips");
       setLeftFlipping(true);
       const timer = setTimeout(() => setLeftFlipping(false), 500); // Animation duration
-      return () => clearTimeout(timer);
+      return () => {
+        clearTimeout(timer);
+        setLeftFlipping(false);
+      };
     } else if (flippedPage === 1) {
+      console.log("Right page flips");
       setRightFlipping(true);
       const timer = setTimeout(() => setRightFlipping(false), 500); // Animation duration
-      return () => clearTimeout(timer);
+      return () => {
+        clearTimeout(timer);
+        setLeftFlipping(false);
+        setRightFlipping(false);
+      };
     }
-  }, [flippedPage]);
+  }, []);
 
   const leftStyle = {
     zIndex: leftFlipping ? 2 : 1, // Higher z-index when flipping
@@ -37,13 +43,13 @@ const Book = ({ leftPage, rightPage, flippedPage }) => {
         className={`Book-page Book-left ${leftFlipping ? "flipping-left" : ""}`}
         style={leftStyle}
       >
-        <p>{leftPage}</p>
+        <p>{curSpread[0]}</p>
       </div>
       <div
         className={`Book-page Book-right ${rightFlipping ? "flipping-right" : ""}`}
         style={rightStyle}
       >
-        <p>{rightPage}</p>
+        <p>{curSpread[1]}</p>
       </div>
     </div>
   );

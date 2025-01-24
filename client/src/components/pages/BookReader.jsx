@@ -49,11 +49,9 @@ const BookReader = () => {
       setPrevSpread(curSpread);
       setCurSpread(nextSpread);
       console.log("Posting request for next spread");
-      post("/api/nextspread", { _id: bookID, curPage: curPage, totalPages: totalPages }).then(
-        (spreadResult) => {
-          setNextSpread(spreadResult.nextSpread);
-        }
-      );
+      post("/api/nextspread", { _id: bookID, curPage, totalPages }).then((spreadResult) => {
+        setNextSpread(spreadResult.nextSpread);
+      });
       setFlippedPage(1);
     }
   };
@@ -64,11 +62,9 @@ const BookReader = () => {
       setNextSpread(curSpread);
       setCurSpread(prevSpread);
       console.log("Posting request for previous spread");
-      post("/api/prevspread", { _id: bookID, curPage: curPage, totalPages: totalPages }).then(
-        (spreadResult) => {
-          setNextSpread(spreadResult.prevSpread);
-        }
-      );
+      post("/api/prevspread", { _id: bookID, curPage, totalPages }).then((spreadResult) => {
+        setPrevSpread(spreadResult.prevSpread);
+      });
       setFlippedPage(0);
     }
   };
@@ -82,7 +78,12 @@ const BookReader = () => {
       <button onClick={flipForward} disabled={curPage >= totalPages - 2}>
         Next
       </button>
-      <Book leftPage={curSpread[0]} rightPage={curSpread[1]} flippedPage={flippedPage} />
+      <Book
+        prevSpread={prevSpread}
+        curSpread={curSpread}
+        nextSpread={nextSpread}
+        flippedPage={flippedPage}
+      />
     </div>
   );
 };
