@@ -44,6 +44,7 @@ const AddPlantPanel = ({ parentOnSubmitFunction, onCancelFunction }) => {
 
   const [latestFileChangeEvent, setLatestFileChangeEvent] = useState(null);
   const [fileError, setFileError] = useState(false); // Tracks whether the file error message is displayed
+  const [titleError, setTitleError] = useState(false); // Tracks whether the title error message is displayed
 
   const handleFileChange = (event) => {
     setLatestFileChangeEvent(event);
@@ -73,30 +74,55 @@ const AddPlantPanel = ({ parentOnSubmitFunction, onCancelFunction }) => {
 
   const localOnSubmitFunction = async (event) => {
     event.preventDefault();
-    // let file_text = "";
+    console.info("Submitting new book...");
+
     if (bookType === "upload") {
       if (!latestFileChangeEvent) {
-        // Don't submit, let 'no file uploaded' span pop up
+        console.error("No file uploaded for 'upload' book type.");
         setFileError(true);
         return;
+      } else if (!bookData.title) {
+        console.error("No file uploaded for 'upload' book type.");
+        setTitleError(true);
+        return;
       } else {
+        console.info("File uploaded:", latestFileChangeEvent.target.files[0].name);
         setBookData((prev) => ({
           ...prev,
           file: latestFileChangeEvent.target.files[0],
         }));
-        // file_text = await getTextFromFile(latestFileChangeEvent);
       }
-    } else if (bookType === "physical" && (!bookData.currentPage || !bookData.totalPages)) {
-      setPhysicalBookError(true);
+    } else if (bookType === "physical") {
+      if (!bookData.currentPage || !bookData.totalPages) {
+        console.warn("Missing required fields for 'physical' book type:", {
+          currentPage: bookData.currentPage,
+          totalPages: bookData.totalPages,
+        });
+        setPhysicalBookError(true);
+        return;
+      }
+    }
+
+    if (!bookData.title || !bookType) {
+      console.error("Missing required fields 'title' or 'bookType'.");
       return;
     }
-    // pass data back to parent --> Shelf.jsx submitAddPlant
+
+    // Log the submission payload
+    console.info("Book data to be submitted:", {
+      title: bookData.title,
+      file: bookData.file,
+      url: bookData.url,
+      bookType: bookType,
+      currentPage: bookData.currentPage,
+      totalPages: bookData.totalPages,
+    });
+
     parentOnSubmitFunction({
       title: bookData.title,
       file: bookData.file,
       url: bookData.url,
       bookType: bookType,
-      // account for array style
       currentPage: bookData.currentPage - 1,
       totalPages: bookData.totalPages,
     });
@@ -113,7 +139,7 @@ const AddPlantPanel = ({ parentOnSubmitFunction, onCancelFunction }) => {
           <h3>Add a New Plant</h3>
 
           {/****************** BOOK SEARCH/TITLE INPUT ******************/}
-          <BookSearcher onBookSelect={handleBookSearchSelect} />
+          <BookSearcher onBookSelect={handleBookSearchSelect} titleInput={bookData.title} />
 
           {/****************** BOOK TYPE BAR SELECTION ******************/}
           <div className="upload-options">
@@ -167,6 +193,7 @@ const AddPlantPanel = ({ parentOnSubmitFunction, onCancelFunction }) => {
                   />
                   {/* Display error if no file uploaded */}
                   {fileError && <span className="warning">No file uploaded.</span>}
+                  {titleError && <span className="warning">Title not uploaded.</span>}
                 </>
               )}
             </label>
@@ -215,7 +242,7 @@ const AddPlantPanel = ({ parentOnSubmitFunction, onCancelFunction }) => {
               type="submit"
               className="EditPlantPanel-submit"
               disabled={
-                (bookType === "upload" && !latestFileChangeEvent) ||
+                (bookType === "upload" && (!latestFileChangeEvent || !bookData.title)) ||
                 (bookType === "physical" && (!bookData.currentPage || !bookData.totalPages))
               }
             >

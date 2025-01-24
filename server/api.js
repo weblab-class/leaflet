@@ -56,6 +56,18 @@ const axios = require("axios"); // For fetching content from URLs if needed
 // formData fields: { title, bookType, file, url, currentPage, totalPages }
 router.post("/createbook", upload.single("file"), async (req, res) => {
   console.log("Creating a book");
+  if (!title || !bookType) {
+    return res.status(400).json({ message: "Missing required fields: title or bookType" });
+  }
+
+  if (bookType === "upload" && !req.file) {
+    return res.status(400).json({ message: "File is required for bookType 'upload'" });
+  }
+
+  if (bookType === "search" && !url) {
+    return res.status(400).json({ message: "URL is required for bookType 'search'" });
+  }
+
   const { title, bookType, url, currentPage, totalPages } = req.body;
   console.log("Extracted fields:", { title, bookType, url, currentPage, totalPages });
   const file = req.file;
@@ -115,7 +127,7 @@ router.post("/createbook", upload.single("file"), async (req, res) => {
     // title, bookType, currentPage, totalPages fields only
     // nothing left to do
   }
-  await newBook.save();
+  const savedBook = await newBook.save();
   const newPlant = {
     userId: savedBook.userId,
     _id: savedBook._id,
