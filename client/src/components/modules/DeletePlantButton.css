@@ -2,7 +2,7 @@
   position: absolute; /* Position relative to .Shelf-item */
   top: 5px;
   right: 5px;
-  background-color: red;
+  background-color: rgb(250, 80, 80);
   color: white;
   border: none;
   border-radius: 50%;

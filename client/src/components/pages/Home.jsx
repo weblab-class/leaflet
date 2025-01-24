@@ -3,7 +3,7 @@ import { UserContext } from "../App";
 // import NavBar from "../modules/NavBar";
 import { useNavigate } from "react-router-dom";
 import Shelf from "../modules/Shelf";
-import NavBar from "../modules/NavBarHome"
+import NavBarHome from "../modules/NavBarHome";
 
 const Home = () => {
   const { userId } = useContext(UserContext);
@@ -19,7 +19,7 @@ const Home = () => {
 
   return (
     <div className="background">
-      <NavBar />
+      <NavBarHome />
       <Shelf className="shelf" />
     </div>
   );

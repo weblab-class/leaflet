@@ -15,15 +15,18 @@
 */
 
 /* Fonts */
-@import url("https://fonts.googleapis.com/css2?family=Nunito:wght@400;700&family=Playwrite+VN:wght@100;400&family=Crimson+Text:wght@400;600&display=swap");
-
+@import url("https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,600;0,700;1,400;1,600;1,700&family=Nunito:ital,wght@0,200..1000;1,200..1000&family=Playwrite+VN:wght@100..400&display=swap");
 :root {
   /* Theme Colors */
+  --bright-green: #d4f9b8;
+  --spring-green: #95cf82;
   --aloe-green: #6cb78a;
-  --sunset-pink: #fbc5d0;
+  --cotton-pink: #fbc5d0;
+  --sunset-pink: #f49595;
   --chestnut-brown: #835741;
-  --caramel-orange: #ef9e5c;
-  --beige: #faf7ee;
+  --caramel-orange: #d48f57;
+  --cream: #faf7ee;
+  --peach: #f0e5cd;
   --sky-blue: #90a5f1;
   /* Error Button */
   --error-red: rgb(247, 104, 111);
@@ -38,13 +41,15 @@
   --xs: 4px;
   --s: 8px;
   --m: 16px;
+  --ml: 20px;
   --l: 24px;
   --xl: 32px;
+  --xxl: 48px;
 
   /* Fonts */
-  --font-serif: "Crimson Text", serif;
-  --font-sans: "Playwrite VN", sans;
-  --font-handwritten: "Nunito", sans-serif;
+  --font-formal: "Crimson Text", serif;
+  --font-fancy: "Playwrite VN", fantasy;
+  --font-small: "Nunito", sans-serif;
 }
 
 #root {
@@ -57,9 +62,8 @@
 body {
   margin: 0;
   padding: 0;
-  font-family: var(--font-handwritten);
+  font-family: var(--font-small);
   font-weight: 400;
-  background-color: var(--beige);
   color: var(--chestnut-brown);
   line-height: 1.6;
 }
@@ -70,7 +74,7 @@ h3,
 h4,
 h5,
 h6 {
-  font-family: var(--font-sans);
+  font-family: var(--font-fancy);
   color: var(--aloe-green);
   margin: var(--m) 0;
 }
@@ -124,7 +128,7 @@ form {
 .u-link {
   color: var(--sky-blue);
   text-decoration: none;
-  font-family: var(--font-handwritten);
+  font-family: var(--font-small);
 }
 
 .u-link:hover {
@@ -136,7 +140,7 @@ form {
 }
 
 .u-bg-sunsetPink {
-  background-color: var(--sunset-pink);
+  background-color: var(--cotton-pink);
 }
 
 .u-bg-chestnutBrown {
@@ -148,7 +152,7 @@ form {
 }
 
 .u-bg-beige {
-  background-color: var(--beige);
+  background-color: var(--cream);
 }
 
 .u-bg-skyBlue {
@@ -174,7 +178,7 @@ body {
 }
 
 a {
-  font-family: var(--font-handwritten);
+  font-family: var(--font-small);
   color: var(--sky-blue);
   text-decoration: none;
 }

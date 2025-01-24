@@ -1,39 +1,46 @@
-.NavBar-container {
-  padding: var(--s) var(--m);
+.NavBarBook-container {
+  box-sizing: border-box;
+  margin: 0;
+  padding: var(--m) var(--m);
+  z-index: 10000;
   position: fixed;
-  top: 0; /* Aligns the element to the top of the page */
-  left: 0; /* Aligns the element to the left */
+  top: 0;
+  left: 0;
   width: 100%;
-  height: 60px;
-  z-index: -1;
+  height: calc(1.2 * var(--xxl));
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: var(--l);
+  background-color: var(--cotton-pink);
+  border-bottom: 3px solid var(--sunset-pink);
+  border-radius: 0px 0px var(--m) var(--m);
 }
 
-.NavBar-title {
+.NavBarBook-link {
+  all: unset; /* Reset all styles */
+  display: inline-flex; /* Consistent with flex behavior */
+  justify-content: center;
+  align-items: center;
+  height: 30px;
+  font-weight: bold;
   color: white;
-  font-size: 20px;
-  z-index: 10;
-}
-
-.NavBar-linkContainer {
-  margin-left: var(--l);
-}
-
-.NavBar-link,
-.NavBar-link:visited {
-  color: white;
-  opacity: 0.6;
   text-decoration: none;
+  font-size: var(--l);
+  cursor: pointer;
+  transition: opacity 0.3s ease, color 0.3s ease;
+  box-sizing: border-box;
 }
 
-.NavBar-link:hover {
-  opacity: 0.8;
+.NavBarBook-link:hover {
+  opacity: 0.9;
+  color: var(--spring-green);
 }
 
-.NavBar-link.NavBar-login {
-  opacity: 1;
-  color: black;
+.NavBarBook-link:focus {
+  outline: none;
 }
 
-.NavBar-link + .NavBar-link {
-  margin-left: var(--m);
+button.NavBarBook-link {
+  padding: 0;
 }

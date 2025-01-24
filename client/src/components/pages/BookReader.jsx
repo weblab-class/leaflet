@@ -4,7 +4,8 @@ import { UserContext } from "../App";
 import { useNavigate } from "react-router-dom";
 import { useLocation } from "react-router-dom";
 import Book from "../modules/Book";
-import NavBar from "../modules/NavBarBook";
+import NavBarBook from "../modules/NavBarBook";
+import "./BookReader.css";
 
 // **************** NEWLY ADDED *************** //
 const BookReader = () => {
@@ -71,12 +72,10 @@ const BookReader = () => {
 
   return (
     <div className="BookReader-container">
-      <NavBar />
-      <button onClick={flipBackward} disabled={curPage === 0}>
-        Previous
-      </button>
-      <button onClick={flipForward} disabled={curPage >= totalPages - 2}>
-        Next
+      <div className="BookReader-overlay"></div> {/* Add this div for the dark overlay */}
+      <NavBarBook />
+      <button className="BookReader-button" onClick={flipBackward} disabled={curPage === 0}>
+        ◀
       </button>
       <Book
         prevSpread={prevSpread}
@@ -84,6 +83,13 @@ const BookReader = () => {
         nextSpread={nextSpread}
         flippedPage={flippedPage}
       />
+      <button
+        className="BookReader-button"
+        onClick={flipForward}
+        disabled={curPage >= totalPages - 2}
+      >
+        ▶
+      </button>
     </div>
   );
 };

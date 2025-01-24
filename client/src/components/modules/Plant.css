@@ -1,14 +1,17 @@
 .Plant-book-title {
-    white-space: nowrap; /* Prevent text from wrapping */
-    overflow: hidden;    /* Hide any text that overflows */
-    text-overflow: ellipsis; /* Add ellipses */
-    max-width: 175px;    /* Limit width */
+  white-space: nowrap; /* Prevent text from wrapping */
+  overflow: hidden; /* Hide any text that overflows */
+  text-overflow: ellipsis; /* Add ellipses */
+  max-width: 175px; /* Limit width */
+  background-color: var(--peach);
+  border-radius: var(--s);
+  box-sizing: border-box;
+  border: 2px solid var(--caramel-orange);
+  margin: 0;
+  z-index: 2;
 }
 
 .Plant-image {
-    display: flex;        /* Use flexbox for alignment */
-    justify-content: center; /* Center horizontally */
-    align-items: center;  /* Center vertically */
-    text-align: center;   /* Fallback for inline elements */
-    height: 100%;         /* Ensure container height matches parent */
+  bottom: -10px;
+  z-index: 1;
 }

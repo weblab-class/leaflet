@@ -1,18 +1,56 @@
 .BookReader-container {
   display: flex;
+  flex-direction: row;
   align-items: center;
   justify-content: center;
+  position: absolute;
+  margin: 0;
+  top: 0;
   width: 100%;
   height: 100%;
+  padding: 0px;
+  gap: var(--l);
+  background-image: url("../../assets/background.png");
+  background-size: cover;
+  background-position: center;
+  overflow: hidden; /* Ensures nothing overflows the container */
 }
 
-.BookReader button {
-  padding: 10px 20px;
-  font-size: 16px;
+.BookReader-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #836c5143; /* Semi-transparent black */
+  z-index: 1; /* Ensures it covers the background but not the content */
+  pointer-events: none; /* Ensures it doesn't block interactions with buttons or other elements */
+}
+
+.BookReader-button {
+  padding: var(--xl) var(--m);
+  font-size: var(--xl); /* Larger text for arrows */
   cursor: pointer;
+  background-color: var(--cotton-pink);
+  border: 4px solid var(--sunset-pink);
+  border-radius: var(--m); /* Circular buttons */
+  color: white;
+  transition: background-color 0.2s ease, transform 0.2s ease; /* Smooth hover effect */
+  z-index: 10;
 }
 
-.BookReader button:disabled {
+.BookReader-button:hover {
+  opacity: 0.5;
+  transform: scale(1.01);
+}
+
+.BookReader-button:disabled {
   opacity: 0.5;
   cursor: not-allowed;
+  background-color: #e1e1e1; /* Grey when disabled */
+  color: #ccc;
+}
+
+.BookReader-button:focus {
+  outline: none;
 }

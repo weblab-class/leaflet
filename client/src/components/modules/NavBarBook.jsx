@@ -1,25 +1,22 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext } from "react";
 import { Link } from "react-router-dom";
 import { UserContext } from "../App";
 import "./NavBarBook.css";
 
-const NavBar = (props) => {
+const NavBarBook = (props) => {
   const { userId, handleLogout } = useContext(UserContext);
 
   return (
-    <nav className="NavBar-container">
-      <div className="NavBar-background"></div>
-      <div className="NavBar-title">Leaflet</div>
-      <div className="NavBar-linkContainer">
-        <Link to="/Home" className="NavBar-link">
-          Home
-        </Link>
-        <button onClick={handleLogout}>
-          Sign out
-        </button>
-      </div>
+    <nav className="NavBarBook-container">
+      <div className="NavBarBook-background"></div>
+      <Link to="/Home" className="NavBarBook-link">
+        Home
+      </Link>
+      <button onClick={handleLogout} className="NavBarBook-link">
+        Sign out
+      </button>
     </nav>
   );
 };
 
-export default NavBar;
+export default NavBarBook;

@@ -1,17 +1,17 @@
 /* Shelf Container */
 .Shelf-container {
   display: grid;
-  height: 63%; /* Adjust as needed */
-  width: 59%; /* Adjust as needed */
   grid-template-columns: repeat(3, 1fr); /* 3 equal columns */
   gap: 0px; /* Space between items */
   padding: 0px;
   border: 0px solid var(--chestnut-brown);
   border-radius: 0px;
-  box-sizing: border-box; /* Include padding and borders in size calculations */
-  margin-left: 20%; /* Push the shelf to the right by leaving 60% of space on the left */
-  margin-right: 15%; /* Leave 5% of space on the right side */
-  margin-bottom: 4%;
+  position: fixed;
+  margin: 0px;
+  top: 18%;
+  left: 30%;
+  height: 60%; /* Adjust as needed */
+  width: 48%; /* Adjust as needed */
 }
 
 /* Shelf Item */
@@ -46,7 +46,8 @@
   flex: 1; /* Ensures equal column width */
 }
 
-.left, .right {
+.left,
+.right {
   flex: 0.5; /* Adjust based on desired size for left and right columns */
 }
 
