@@ -4,6 +4,7 @@ import { UserContext } from "../App";
 import { useNavigate } from "react-router-dom";
 import { useLocation } from "react-router-dom";
 import Book from "../modules/Book";
+import NavBar from "../modules/NavBarBook";
 
 // **************** NEWLY ADDED *************** //
 const BookReader = () => {
@@ -80,6 +81,7 @@ const BookReader = () => {
 
   return (
     <div className="BookReader-container">
+      <NavBar />
       <button onClick={flipBackward} disabled={curPage === 0}>
         Previous
       </button>
