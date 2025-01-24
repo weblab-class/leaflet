@@ -241,6 +241,7 @@ router.post("/spreads", async (req, res) => {
 });
 
 router.post("/nextspread", async (req, res) => {
+  console.log("request for next spread received");
   const bookID = req.body._id;
   const curPage = req.body.curPage;
   const totalPages = req.body.totalPages;
@@ -255,6 +256,7 @@ router.post("/nextspread", async (req, res) => {
 });
 
 router.post("/prevspread", async (req, res) => {
+  console.log("request for previous spread received");
   const bookID = req.body._id;
   const curPage = req.body.curPage;
 

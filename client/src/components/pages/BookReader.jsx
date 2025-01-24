@@ -22,6 +22,8 @@ const BookReader = () => {
   const [nextSpread, setNextSpread] = useState([]);
   // NEW: -1 = no flip, 0 = left page, 1 = right page
   const [flippedPage, setFlippedPage] = useState(-1);
+  // Apparently, react is having issues detecting changes to cur, prev, and next spread...
+  const [boolFlippedPage, setBoolFlippedPage] = useState(false);
 
   useEffect(() => {
     if (!userId) {
@@ -54,6 +56,8 @@ const BookReader = () => {
         setNextSpread(spreadResult.nextSpread);
       });
       setFlippedPage(1);
+      setBoolFlippedPage(!boolFlippedPage);
+      console.log("Finished setting states for flipping forward");
     }
   };
 
@@ -67,6 +71,8 @@ const BookReader = () => {
         setPrevSpread(spreadResult.prevSpread);
       });
       setFlippedPage(0);
+      setBoolFlippedPage(!boolFlippedPage);
+      console.log("Finished setting states for flipping backward");
     }
   };
 
@@ -82,6 +88,7 @@ const BookReader = () => {
         curSpread={curSpread}
         nextSpread={nextSpread}
         flippedPage={flippedPage}
+        boolFlippedPage={boolFlippedPage}
       />
       <button
         className="BookReader-button"
