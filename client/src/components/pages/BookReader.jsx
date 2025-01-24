@@ -43,19 +43,23 @@ const BookReader = () => {
     );
   }, []);
 
+  useEffect(() => {
+    console.log("curSpread: " + curSpread);
+    console.log("prevSpread: " + prevSpread);
+    console.log("nextSpread: " + nextSpread);
+    console.log("flippedPage: " + flippedPage);
+  }, [nextSpread]);
+
   const flipForward = () => {
     if (curPage < totalPages - 2) {
       setCurPage((prev) => prev + 2);
       setPrevSpread(curSpread);
       setCurSpread(nextSpread);
-      // setNextSpread(
-      //   post("/api/nextspread", { _id: bookID, curPage: curPage, totalPages: totalPages })
-      // );
       console.log("post req reached");
       post("/api/nextspread", { _id: bookID, curPage: curPage, totalPages: totalPages }).then(
         (spreadResult) => {
           console.log("Spread Result: " + JSON.stringify(spreadResult));
-          setNextSpread(spreadResult);
+          setNextSpread(spreadResult.nextSpread);
         }
       );
       setFlippedPage(1);
@@ -67,8 +71,12 @@ const BookReader = () => {
       setCurPage((prev) => prev - 2);
       setNextSpread(curSpread);
       setCurSpread(prevSpread);
-      setPrevSpread(
-        post("/api/prevspread", { _id: bookID, curPage: curPage, totalPages: totalPages })
+      console.log("prev post req reached");
+      post("/api/prevspread", { _id: bookID, curPage: curPage, totalPages: totalPages }).then(
+        (spreadResult) => {
+          console.log("Spread Result: " + JSON.stringify(spreadResult));
+          setNextSpread(spreadResult.prevSpread);
+        }
       );
       setFlippedPage(0);
     }
