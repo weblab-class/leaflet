@@ -6,16 +6,10 @@ import DeletePlantPanel from "./DeletePlantPanel.jsx";
 import DeletePlantButton from "./DeletePlantButton.jsx";
 import { useNavigate } from "react-router-dom";
 import "./Shelf.css";
-// for file uploads
-// import axios from "axios";
 
 const Shelf = () => {
-  // Plant = lightweight representation of Book schema/object:
-  // _id: corresponding book id
-  // title: String
-  // bookType: String among ["search", "upload", "physical"]
-  // currentPage: Number
-  // totalPages: Number
+  // Plant is same as its book object (in the database) EXCEPT
+  // it doesn't have a content field (but ObjectID is the same)
   const [plants, setPlants] = useState([]);
   const [showAddPlantPanel, setShowAddPlantPanel] = useState(false);
   const [plantToDelete, setPlantToDelete] = useState(null);
@@ -25,7 +19,7 @@ const Shelf = () => {
 
   // Display user's existing plants in shelf
   useEffect(() => {
-    console.info("Getting all books from backend");
+    console.log("Going to send get all books request");
     get("/api/getallbooks").then(({ books: books }) => {
       setPlants(books);
     });
@@ -45,29 +39,15 @@ const Shelf = () => {
 
   // Function called on when user finishes filling out add Plant
   // (book) form and submits it
-
-  // Arguments passed in from AddPlantPanel.jsx --> localOnSubmitFunction
-  const submitAddPlant = ({ title, bookType, file, url, currentPage, totalPages }) => {
-    console.info("Adding new plant");
+  // Called on from child component AddPlantPanel.jsx: passed in as parentOnSubmitFunction
+  const confirmAddPlant = ({ title: titleInput, content: file_text }) => {
+    console.log("Adding new plant");
     setShowAddPlantPanel(false);
-    const formData = new FormData();
-    formData.append("title", title);
-    formData.append("bookType", bookType);
-    formData.append("file", file);
-    formData.append("url", url);
-    formData.append("currentPage", currentPage);
-    formData.append("totalPages", totalPages);
-
-    // Can't use get/post from utilities because formdata is passed in
-    fetch("/api/createbook", {
-      method: "POST",
-      body: formData, // Send FormData directly
-    })
-      .then((response) => response.json())
-      .then(({ newPlant }) => {
-        setPlants((prevPlants) => [...prevPlants, newPlant]); // Update UI with the new book
-      })
-      .catch((error) => console.error("Error creating book:", error));
+    post("/api/createbook", { title: titleInput, content: file_text }).then(
+      ({ book: newPlant }) => {
+        setPlants((prevPlants) => [...prevPlants, newPlant]);
+      }
+    );
   };
 
   // ============ DELETING PLANTS ============ //
@@ -136,7 +116,7 @@ const Shelf = () => {
     <div className="Shelf-container">
       {generateShelfItems(9)}
       {showAddPlantPanel && (
-        <AddPlantPanel onSubmitFunction={submitAddPlant} onCancelFunction={cancelAddPlant} />
+        <AddPlantPanel parentOnSubmitFunction={confirmAddPlant} onCancelFunction={cancelAddPlant} />
       )}
       {showDeletePlantPanel && (
         <DeletePlantPanel onConfirmDelete={confirmDeletePlant} onCancelDelete={cancelDeletePlant} />
