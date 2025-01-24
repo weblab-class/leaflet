@@ -2,7 +2,7 @@ import React from "react";
 import "./Plant.css";
 // title: String
 // plantType: String
-// currentPage: Number
+// curPage: Number
 // totalPages: Number
 // **************** TODO *************** //
 // On hover, show reading progress in bars to the right of the plant image

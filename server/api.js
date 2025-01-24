@@ -44,22 +44,28 @@ router.post("/initsocket", (req, res) => {
 
 // Get all books belonging to a user
 router.get("/getallbooks", (req, res) => {
-  Book.find({ userId: req.user._id }).then((books) => {
-    res.status(201).json({ message: "Book created successfully", books: books });
-  });
+  Book.find({ userId: req.user._id })
+    .select("_id title bookType curPage totalPages plantType") // Only include these fields
+    .then((books) => {
+      res.status(200).json({ message: "Books fetched successfully", books });
+    })
+    .catch((err) => {
+      console.error("Error fetching books:", err);
+      res.status(500).json({ message: "Failed to fetch books", error: err });
+    });
 });
 
 const multer = require("multer");
 const upload = multer({ storage: multer.memoryStorage() }); // Stores file in memory
 const axios = require("axios"); // For fetching content from URLs if needed
 
-// formData fields: { title, bookType, file, url, currentPage, totalPages }
+// formData fields: { title, bookType, file, url, curPage, totalPages }
 router.post("/createbook", upload.single("file"), async (req, res) => {
   console.log("Creating a book");
 
-  const { title, bookType, url, currentPage, totalPages } = req.body;
+  const { title, bookType, url, curPage, totalPages } = req.body;
   const file = req.file;
-  console.log("Extracted fields:", { title, bookType, url, currentPage, totalPages });
+  console.log("Extracted fields:", { title, bookType, url, curPage, totalPages });
 
   if (!bookType) {
     console.log("Missing required field: bookType");
@@ -88,43 +94,44 @@ router.post("/createbook", upload.single("file"), async (req, res) => {
     userId: req.user._id,
     title,
     bookType,
-    currentPage: parseInt(currentPage, 10) || 0,
-    totalPages: parseInt(totalPages, 10) || 0,
+    curPage: parseInt(curPage, 10) || 0,
+    totalPages: parseInt(totalPages, 10) || 2,
     content: [],
+    plantType: "testPlant",
   });
 
   // GET CONTENT IF SEARCHED OR UPLOADED
 
   // ==== BOOK URL GIVEN ==== //
   if (bookType === "search") {
+    console.log("Getting book content from url");
     // title, bookType, url fields only
     // **************** NEW: NEEDS TESTING/FIXING *************** // (REGAN)
-    if (!url) {
-      return res.status(400).json({ message: "URL is required for bookType 'search'" });
-    }
-    try {
-      const response = await axios.get(url); // Fetch content from URL
-      const contentString = response.data; // Assume the response contains plain text
-      newBook.content = parseBook(contentString); // Convert to an array of pages
-    } catch (error) {
-      console.error("Error fetching content from URL:", error);
-      return res.status(500).json({ message: "Failed to fetch book content from URL" });
-    }
+    const response = await axios.get(url); // Fetch content from URL
+    const contentString = response.data; // Assume the response contains plain text
+    console.log("contentString: ", contentString.substring(0, 100));
+    newBook.content = parseBook(contentString);
+    console.log("newBook.content, tenth page: ", newBook.content[9].toString().substring(0, 100));
+    newBook.curPage = 0;
+    newBook.totalPages = newBook.content.length;
   }
 
   // ==== BOOK FILE GIVEN ==== //
   else if (bookType === "upload") {
+    console.log("Getting book content from uploaded file");
     // title, bookType, file fields only
     // **************** NEW: NEEDS TESTING/FIXING *************** // (REGAN)
     const contentString = file.buffer.toString("utf-8"); // Convert file buffer to a string
     console.log("contentString: ", contentString.substring(0, 100));
-    newBook.content = parseBook(contentString); // Convert to an array of pages
-    console.log("newBook.content, tenth page: ", newBook.content[9].toString());
+    newBook.content = parseBook(contentString);
+    console.log("newBook.content, tenth page: ", newBook.content[9].toString().substring(0, 100));
+    newBook.curPage = 0;
+    newBook.totalPages = newBook.content.length;
   }
 
   // ==== NOTHING GIVEN ==== //
   else if (bookType === "physical") {
-    // title, bookType, currentPage, totalPages fields only
+    // title, bookType, curPage, totalPages fields only
     // nothing left to do
   }
   const savedBook = await newBook.save();
@@ -136,6 +143,8 @@ router.post("/createbook", upload.single("file"), async (req, res) => {
     totalPages: savedBook.totalPages,
     plantType: "testPlant",
   };
+
+  console.log("newPlant: ", newPlant);
   res.status(201).json({ message: "Book created successfully", newPlant });
 });
 
@@ -187,30 +196,40 @@ router.post("/deletebook", (req, res) => {
 // **************** TODO *************** //
 // Instead of retrieving whole book, get & return specific pages of book
 router.post("/spreads", async (req, res) => {
+  console.log("Getting current spread");
   const bookID = req.body._id;
   const cursor = Book.find({ _id: bookID }, { curPage: 1, totalPages: 1 }).cursor();
   const pageInfo = await cursor.next();
+  console.log("Page Info:", pageInfo);
   if (!pageInfo) {
+    console.log("Can't find current book");
     return res.status(404).json({ message: "Book not found" });
   }
   const curPage = pageInfo.curPage;
   const totalPages = pageInfo.totalPages;
+
   // use curPage and totalPages to find needed spreads
+  console.log("Searching database for current two pages");
   const curSpread = (
     await Book.find({ _id: bookID }, { curPage: 0, content: { $slice: [curPage, 2] } })
   )[0].content;
+  console.info("curSpread: ", curSpread[0].substring(0, 10), curSpread[1].substring(0, 10));
   let prevSpread = [];
-  if (curPage > 2) {
+  console.log("Searching database for previous two pages");
+  if (curPage >= 2) {
     prevSpread = (
       await Book.find({ _id: bookID }, { curPage: 0, content: { $slice: [curPage - 2, 2] } })
     )[0].content;
+    console.log("prevSpread: ", prevSpread[0].substring(0, 10), prevSpread[1].substring(0, 10));
   }
   let nextSpread = [];
-  if (curPage < totalPages - 2) {
+  console.log("Searching database for next two pages");
+  if (curPage <= totalPages - 4) {
     nextSpread = (
       await Book.find({ _id: bookID }, { curPage: 0, content: { $slice: [curPage + 2, 2] } })
     )[0].content;
   }
+  console.info("nextSpread: ", nextSpread[0].substring(0, 10), nextSpread[1].substring(0, 10));
   res.status(200).json({
     message: "Pages retrieved successfully",
     curPage: curPage,
@@ -225,7 +244,7 @@ router.post("/nextspread", async (req, res) => {
   const bookID = req.body._id;
   const curPage = req.body.curPage;
   const totalPages = req.body.totalPages;
-  if (curPage >= totalPages - 2) {
+  if (curPage > totalPages - 4) {
     res.status(400).json({ message: "Next spread doesn't exist" });
   }
   const nextSpread = (

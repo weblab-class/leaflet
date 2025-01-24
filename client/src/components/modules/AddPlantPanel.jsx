@@ -13,7 +13,7 @@ const AddPlantPanel = ({ parentOnSubmitFunction, onCancelFunction }) => {
     url: "",
     cover: "",
     file: null,
-    currentPage: 0,
+    curPage: 0,
     totalPages: 0,
   });
   // ============ BOOK INPUT TYPE SELECT ============ //
@@ -98,9 +98,9 @@ const AddPlantPanel = ({ parentOnSubmitFunction, onCancelFunction }) => {
         console.info("File uploaded:", bookData.file.name);
       }
     } else if (bookType === "physical") {
-      if (!bookData.currentPage || !bookData.totalPages) {
+      if (!bookData.curPage || !bookData.totalPages) {
         console.warn("Missing required fields for 'physical' book type:", {
-          currentPage: bookData.currentPage,
+          curPage: bookData.curPage,
           totalPages: bookData.totalPages,
         });
         setPhysicalBookError(true);
@@ -119,7 +119,7 @@ const AddPlantPanel = ({ parentOnSubmitFunction, onCancelFunction }) => {
       file: bookData.file,
       url: bookData.url,
       bookType: bookType,
-      currentPage: bookData.currentPage,
+      curPage: bookData.curPage,
       totalPages: bookData.totalPages,
     });
 
@@ -128,7 +128,7 @@ const AddPlantPanel = ({ parentOnSubmitFunction, onCancelFunction }) => {
       file: bookData.file,
       url: bookData.url,
       bookType: bookType,
-      currentPage: bookData.currentPage - 1,
+      curPage: bookData.curPage - 1,
       totalPages: bookData.totalPages,
     });
   };
@@ -222,8 +222,8 @@ const AddPlantPanel = ({ parentOnSubmitFunction, onCancelFunction }) => {
                     <input
                       type="number"
                       min="1"
-                      value={bookData.currentPage}
-                      onChange={(e) => handlePhysicalInputChange("currentPage", e.target.value)}
+                      value={bookData.curPage}
+                      onChange={(e) => handlePhysicalInputChange("curPage", e.target.value)}
                     />
                   </label>
                   <label className="EditPlantPanel-page-input">

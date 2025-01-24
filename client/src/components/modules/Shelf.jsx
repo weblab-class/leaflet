@@ -12,7 +12,7 @@ const Shelf = () => {
   // _id: corresponding book id
   // title: String
   // bookType: String among ["search", "upload", "physical"]
-  // currentPage: Number
+  // curPage: Number
   // totalPages: Number
   const [plants, setPlants] = useState([]);
   const [showAddPlantPanel, setShowAddPlantPanel] = useState(false);
@@ -45,7 +45,7 @@ const Shelf = () => {
   // (book) form and submits it
 
   // Arguments passed in from AddPlantPanel.jsx --> localOnSubmitFunction
-  const submitAddPlant = ({ title, bookType, file, url, currentPage, totalPages }) => {
+  const submitAddPlant = ({ title, bookType, file, url, curPage, totalPages }) => {
     console.info("Adding new plant");
 
     // Validate input based on bookType
@@ -69,7 +69,7 @@ const Shelf = () => {
     formData.append("bookType", bookType);
     formData.append("file", file);
     formData.append("url", url);
-    formData.append("currentPage", currentPage);
+    formData.append("curPage", curPage);
     formData.append("totalPages", totalPages);
 
     // Log the FormData object to ensure it's created correctly
