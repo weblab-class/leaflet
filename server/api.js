@@ -57,6 +57,9 @@ router.get("/getallbooks", (req, res) => {
 // MAKE SURE EVEN NUMBER OF PAGES! (Add blank page at end if not blank)
 
 function parseBook(req, res, next) {
+  console.log("parsing the new book");
+  console.log("req body content: ", req.body.content.substring(0, 100));
+  console.log("req body content length", req.body.content.length);
   if (req.body.content) {
     // console.log(req.body.content);
     pageArray = [];
@@ -89,7 +92,7 @@ function parseBook(req, res, next) {
 function setDefaultBookFields(req, res, next) {
   req.body.title = req.body.title || ""; // Default to empty string
   req.body.curPage = 0; // Default to 0
-  req.body.totalPages = req.body.totalPages || 4; // Default to 2
+  req.body.totalPages = req.body.totalPages || 4; // Default to 2 //Regan TODO
   // **************** TODO *************** //
   // Later set body content default to [] (empty array) for physical books
   req.body.content = req.body.content || ["first page", "second page", "third page", "fourth page"]; // Default content
