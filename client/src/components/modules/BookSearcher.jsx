@@ -18,7 +18,7 @@ const BookSearcher = ({ onBookSelect }) => {
 
     setLoading(true);
     try {
-      const response = await fetch(`https://gutendex.com/books?search=${value}`);
+      const response = await fetch(`https://gutendex.com/books?search=${title}`);
       const data = await response.json();
       const bookOptions = data.results
         .map((book) => ({

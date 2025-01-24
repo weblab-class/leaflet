@@ -25,7 +25,7 @@ const Shelf = () => {
 
   // Display user's existing plants in shelf
   useEffect(() => {
-    console.info("Getting all books from backend");
+    console.log("Going to send get all books request");
     get("/api/getallbooks").then(({ books: books }) => {
       setPlants(books);
     });
@@ -136,7 +136,7 @@ const Shelf = () => {
     <div className="Shelf-container">
       {generateShelfItems(9)}
       {showAddPlantPanel && (
-        <AddPlantPanel onSubmitFunction={submitAddPlant} onCancelFunction={cancelAddPlant} />
+        <AddPlantPanel parentOnSubmitFunction={submitAddPlant} onCancelFunction={cancelAddPlant} />
       )}
       {showDeletePlantPanel && (
         <DeletePlantPanel onConfirmDelete={confirmDeletePlant} onCancelDelete={cancelDeletePlant} />
