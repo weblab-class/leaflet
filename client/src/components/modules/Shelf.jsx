@@ -47,6 +47,22 @@ const Shelf = () => {
   // Arguments passed in from AddPlantPanel.jsx --> localOnSubmitFunction
   const submitAddPlant = ({ title, bookType, file, url, currentPage, totalPages }) => {
     console.info("Adding new plant");
+
+    // Validate input based on bookType
+    if (bookType === "search" && !url) {
+      console.error("Validation Error: 'search' book type requires a non-empty 'url'.");
+    }
+
+    if (bookType === "upload" && !file) {
+      console.error("Validation Error: 'upload' book type requires a file to be uploaded.");
+    }
+
+    if (bookType === "physical" && !totalPages) {
+      console.error(
+        "Validation Error: 'physical' book type requires 'totalPages' to be specified."
+      );
+    }
+
     setShowAddPlantPanel(false);
     const formData = new FormData();
     formData.append("title", title);
@@ -55,6 +71,13 @@ const Shelf = () => {
     formData.append("url", url);
     formData.append("currentPage", currentPage);
     formData.append("totalPages", totalPages);
+
+    // Log the FormData object to ensure it's created correctly
+    console.group("FormData Object");
+    for (const pair of formData.entries()) {
+      console.log(`${pair[0]}:`, pair[1]);
+    }
+    console.groupEnd();
 
     // Can't use get/post from utilities because formdata is passed in
     fetch("/api/createbook", {

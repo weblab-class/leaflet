@@ -1,17 +1,18 @@
 import React, { useState } from "react";
 import "./BookSearcher.css";
 
-const BookSearcher = ({ onBookSelect }) => {
+const BookSearcher = ({ onBookSelect, onTitleChange }) => {
   const [title, setTitle] = useState("");
   const [suggestions, setSuggestions] = useState([]);
   const [loading, setLoading] = useState(false);
 
   // triggers when user enters/deletes something in search bar
   const handleSearchChange = async (inputChangeEvent) => {
-    const titeInput = inputChangeEvent.target.value;
-    setTitle(titeInput);
+    const titleInput = inputChangeEvent.target.value;
+    setTitle(titleInput);
+    onTitleChange(titleInput);
 
-    if (!titeInput) {
+    if (!titleInput) {
       setSuggestions([]);
       return;
     }

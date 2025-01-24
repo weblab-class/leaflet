@@ -7,7 +7,11 @@ import "./Plant.css";
 // **************** TODO *************** //
 // On hover, show reading progress in bars to the right of the plant image
 const Plant = ({ title, plantType }) => {
-  console.info("Rendering a plant with plantType " + plantType.toString());
+  if (!plantType) {
+    console.error("plantType not provided, default to testPlant");
+    plantType = "testPlant";
+  }
+  console.info("Rendering a plant with plantType " + plantType);
   return (
     <>
       <img src={`../../../assets/${plantType}.png`} alt="Plant" className="Plant-image" />

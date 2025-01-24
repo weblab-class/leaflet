@@ -56,21 +56,26 @@ const axios = require("axios"); // For fetching content from URLs if needed
 // formData fields: { title, bookType, file, url, currentPage, totalPages }
 router.post("/createbook", upload.single("file"), async (req, res) => {
   console.log("Creating a book");
-  if (!title || !bookType) {
-    return res.status(400).json({ message: "Missing required fields: title or bookType" });
+
+  const { title, bookType, url, currentPage, totalPages } = req.body;
+  const file = req.file;
+  console.log("Extracted fields:", { title, bookType, url, currentPage, totalPages });
+
+  if (!bookType) {
+    console.log("Missing required field: bookType");
+    return res.status(400).json({ message: "Missing required field: bookType" });
   }
 
-  if (bookType === "upload" && !req.file) {
+  if (bookType === "upload" && !file) {
+    console.log("File is required for bookType 'upload'");
     return res.status(400).json({ message: "File is required for bookType 'upload'" });
   }
 
   if (bookType === "search" && !url) {
+    console.log("URL is required for bookType 'search'");
     return res.status(400).json({ message: "URL is required for bookType 'search'" });
   }
 
-  const { title, bookType, url, currentPage, totalPages } = req.body;
-  console.log("Extracted fields:", { title, bookType, url, currentPage, totalPages });
-  const file = req.file;
   if (file) {
     console.log("Uploaded file:", {
       originalname: file.originalname,
@@ -78,6 +83,7 @@ router.post("/createbook", upload.single("file"), async (req, res) => {
       size: file.size,
     });
   }
+
   const newBook = new Book({
     userId: req.user._id,
     title,
@@ -110,16 +116,10 @@ router.post("/createbook", upload.single("file"), async (req, res) => {
   else if (bookType === "upload") {
     // title, bookType, file fields only
     // **************** NEW: NEEDS TESTING/FIXING *************** // (REGAN)
-    if (!file) {
-      return res.status(400).json({ message: "File is required for bookType 'upload'" });
-    }
-    try {
-      const contentString = file.buffer.toString("utf-8"); // Convert file buffer to a string
-      newBook.content = parseBook(contentString); // Convert to an array of pages
-    } catch (error) {
-      console.error("Error processing uploaded file:", error);
-      return res.status(500).json({ message: "Failed to process uploaded file" });
-    }
+    const contentString = file.buffer.toString("utf-8"); // Convert file buffer to a string
+    console.log("contentString: ", contentString.substring(0, 100));
+    newBook.content = parseBook(contentString); // Convert to an array of pages
+    console.log("newBook.content, tenth page: ", newBook.content[9].toString());
   }
 
   // ==== NOTHING GIVEN ==== //
@@ -134,7 +134,7 @@ router.post("/createbook", upload.single("file"), async (req, res) => {
     title: savedBook.title,
     curPage: savedBook.curPage,
     totalPages: savedBook.totalPages,
-    plantType: savedBook.plantType,
+    plantType: "testPlant",
   };
   res.status(201).json({ message: "Book created successfully", newPlant });
 });

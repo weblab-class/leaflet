@@ -42,14 +42,22 @@ const AddPlantPanel = ({ parentOnSubmitFunction, onCancelFunction }) => {
 
   // ============ BOOK UPLOAD ============ //
 
-  const [latestFileChangeEvent, setLatestFileChangeEvent] = useState(null);
   const [fileError, setFileError] = useState(false); // Tracks whether the file error message is displayed
   const [titleError, setTitleError] = useState(false); // Tracks whether the title error message is displayed
 
   const handleFileChange = (event) => {
-    setLatestFileChangeEvent(event);
+    console.info("Different file uploaded");
+    setBookData((prev) => ({
+      ...prev,
+      file: event.target.files[0],
+    }));
     setBookType("upload");
     setFileError(false);
+  };
+
+  const handleTitleChange = (newTitle) => {
+    setBookData((prev) => ({ ...prev, title: newTitle }));
+    if (titleError) setTitleError(false);
   };
 
   // function getTextFromFile(fileEvent) {
@@ -63,6 +71,7 @@ const AddPlantPanel = ({ parentOnSubmitFunction, onCancelFunction }) => {
   // }
 
   // ============ PHYSICAL BOOK ============ //
+
   const [physicalBookError, setPhysicalBookError] = useState(false); // Tracks whether physical book fields are missing
 
   const handlePhysicalInputChange = (field, value) => {
@@ -77,20 +86,16 @@ const AddPlantPanel = ({ parentOnSubmitFunction, onCancelFunction }) => {
     console.info("Submitting new book...");
 
     if (bookType === "upload") {
-      if (!latestFileChangeEvent) {
-        console.error("No file uploaded for 'upload' book type.");
+      if (!bookData.file) {
+        console.warn("No file uploaded for 'upload' book type.");
         setFileError(true);
         return;
       } else if (!bookData.title) {
-        console.error("No file uploaded for 'upload' book type.");
+        console.warn("Title empty for 'upload' book type.");
         setTitleError(true);
         return;
       } else {
-        console.info("File uploaded:", latestFileChangeEvent.target.files[0].name);
-        setBookData((prev) => ({
-          ...prev,
-          file: latestFileChangeEvent.target.files[0],
-        }));
+        console.info("File uploaded:", bookData.file.name);
       }
     } else if (bookType === "physical") {
       if (!bookData.currentPage || !bookData.totalPages) {
@@ -139,7 +144,7 @@ const AddPlantPanel = ({ parentOnSubmitFunction, onCancelFunction }) => {
           <h3>Add a New Plant</h3>
 
           {/****************** BOOK SEARCH/TITLE INPUT ******************/}
-          <BookSearcher onBookSelect={handleBookSearchSelect} titleInput={bookData.title} />
+          <BookSearcher onBookSelect={handleBookSearchSelect} onTitleChange={handleTitleChange} />
 
           {/****************** BOOK TYPE BAR SELECTION ******************/}
           <div className="upload-options">
@@ -212,7 +217,7 @@ const AddPlantPanel = ({ parentOnSubmitFunction, onCancelFunction }) => {
             {bookType === "physical" && (
               <>
                 <div style={{ marginTop: "8px" }}>
-                  <label>
+                  <label className="EditPlantPanel-page-input">
                     Current Page:
                     <input
                       type="number"
@@ -221,7 +226,7 @@ const AddPlantPanel = ({ parentOnSubmitFunction, onCancelFunction }) => {
                       onChange={(e) => handlePhysicalInputChange("currentPage", e.target.value)}
                     />
                   </label>
-                  <label>
+                  <label className="EditPlantPanel-page-input">
                     Total Pages:
                     <input
                       type="number"
@@ -238,14 +243,7 @@ const AddPlantPanel = ({ parentOnSubmitFunction, onCancelFunction }) => {
 
           {/****************** SUBMIT/CANCEL BUTTONS ******************/}
           <div className="EditPlantPanel-buttons">
-            <button
-              type="submit"
-              className="EditPlantPanel-submit"
-              disabled={
-                (bookType === "upload" && (!latestFileChangeEvent || !bookData.title)) ||
-                (bookType === "physical" && (!bookData.currentPage || !bookData.totalPages))
-              }
-            >
+            <button type="submit" className="EditPlantPanel-submit">
               Add Plant
             </button>
             <button type="button" className="EditPlantPanel-cancel" onClick={onCancelFunction}>

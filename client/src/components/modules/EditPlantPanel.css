@@ -101,6 +101,10 @@
   color: var(--white);
 }
 
+.EditPlantPanel-page-input {
+  display: block;
+}
+
 .EditPlantPanel-delete:hover {
   background-color: var(--darkgrey); /* A darker shade for hover effect */
 }
