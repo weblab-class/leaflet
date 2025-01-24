@@ -43,25 +43,20 @@ const BookReader = () => {
     );
   }, []);
 
-  // **************** TODO *************** //
-  const getLeftPage = () => {
-    console.info("left page: " + curSpread[0]);
-    return curSpread[0] || "";
-  };
-
-  // **************** TODO *************** //
-  const getRightPage = () => {
-    console.info("right page: " + curSpread[1]);
-    return curSpread[1] || "";
-  };
-
   const flipForward = () => {
     if (curPage < totalPages - 2) {
       setCurPage((prev) => prev + 2);
       setPrevSpread(curSpread);
       setCurSpread(nextSpread);
-      setNextSpread(
-        post("/api/nextspread", { _id: bookID, curPage: curPage, totalPages: totalPages })
+      // setNextSpread(
+      //   post("/api/nextspread", { _id: bookID, curPage: curPage, totalPages: totalPages })
+      // );
+      console.log("post req reached");
+      post("/api/nextspread", { _id: bookID, curPage: curPage, totalPages: totalPages }).then(
+        (spreadResult) => {
+          console.log("Spread Result: " + JSON.stringify(spreadResult));
+          setNextSpread(spreadResult);
+        }
       );
       setFlippedPage(1);
     }
@@ -88,7 +83,7 @@ const BookReader = () => {
       <button onClick={flipForward} disabled={curPage >= totalPages - 2}>
         Next
       </button>
-      <Book leftPage={getLeftPage()} rightPage={getRightPage()} flippedPage={flippedPage} />
+      <Book leftPage={curSpread[0]} rightPage={curSpread[1]} flippedPage={flippedPage} />
     </div>
   );
 };

@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import "./EditPlantPanel.css";
 import BookSearcher from "./BookSearcher.jsx";
 
+// parentOnSubmitFunction is submitAddPlant in Shelf.jsx
 const AddPlantPanel = ({ parentOnSubmitFunction, onCancelFunction }) => {
   // ============ BOOK REPRESENTATION ============ //
 
