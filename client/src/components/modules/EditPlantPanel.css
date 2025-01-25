@@ -101,8 +101,15 @@
   color: var(--white);
 }
 
+.EditPlantPanel-page-label {
+  display: block;
+  width: 100%;
+}
+
 .EditPlantPanel-page-input {
   display: block;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .EditPlantPanel-delete:hover {

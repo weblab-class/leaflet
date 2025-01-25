@@ -215,29 +215,30 @@ const AddPlantPanel = ({ parentOnSubmitFunction, onCancelFunction }) => {
               I Have a Physical Book (No Upload)
             </label>
             {bookType === "physical" && (
-              <>
-                <div style={{ marginTop: "8px" }}>
-                  <label className="EditPlantPanel-page-input">
-                    Current Page:
-                    <input
-                      type="number"
-                      min="1"
-                      value={bookData.curPage}
-                      onChange={(e) => handlePhysicalInputChange("curPage", e.target.value)}
-                    />
-                  </label>
-                  <label className="EditPlantPanel-page-input">
-                    Total Pages:
-                    <input
-                      type="number"
-                      min="1"
-                      value={bookData.totalPages}
-                      onChange={(e) => handlePhysicalInputChange("totalPages", e.target.value)}
-                    />
-                  </label>
-                </div>
+              <div style={{ marginTop: "8px" }}>
+                <label className="EditPlantPanel-page-label">
+                  Current Page:
+                  <input
+                    className="EditPlantPanel-page-input"
+                    type="number"
+                    min="1"
+                    value={bookData.curPage}
+                    onChange={(e) => handlePhysicalInputChange("curPage", e.target.value)}
+                  />
+                </label>
+                <label className="EditPlantPanel-page-label">
+                  Total Pages:
+                  <input
+                    className="EditPlantPanel-page-input"
+                    type="number"
+                    min="1"
+                    value={bookData.totalPages}
+                    onChange={(e) => handlePhysicalInputChange("totalPages", e.target.value)}
+                  />
+                </label>
+
                 {physicalBookError && <span className="warning">Please fill in both fields.</span>}
-              </>
+              </div>
             )}
           </div>
 
