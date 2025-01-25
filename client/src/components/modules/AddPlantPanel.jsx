@@ -1,4 +1,7 @@
 import React, { useState, useEffect } from "react";
+// **************** TODO *************** // Custom icons
+import { Search } from "lucide-react"; // Use lucide-react for icons
+
 import "./EditPlantPanel.css";
 import Booksuggest from "./BookSuggest.jsx";
 
@@ -153,15 +156,26 @@ const AddPlantPanel = ({ parentOnSubmitFunction, onCancelFunction }) => {
         >
           {/****************** BOOK TITLE INPUT ******************/}
           <h3>Add a New Plant</h3>
-          <label htmlFor="bookTitleInput">Book Title:</label>
-          <input
-            id="bookTitleInput"
-            type="text"
-            placeholder="Search for a book..."
-            value={bookData.title}
-            onChange={handleTitleChange}
-            onBlur={handleBlur} // Hide suggestions on blur
-          />
+          <label htmlFor="AddPlantPanel-bookTitleInput">Book Title:</label>
+          <div className="bookTitleInput-wrapper">
+            <input
+              className="bookTitleInput"
+              id="AddPlantPanel-bookTitleInput"
+              type="text"
+              placeholder="Search for a book..."
+              value={bookData.title}
+              onChange={handleTitleChange}
+              onBlur={handleBlur}
+              style={{ flex: 1 }}
+            />
+            <button
+              className="bookTitleInput-search-icon"
+              type="button"
+              // onClick={handleSearchToggle}
+            >
+              <Search size={24} />
+            </button>
+          </div>
           {/****************** BOOK SEARCH ******************/}
           {showSuggestions && (
             <Booksuggest onBookSelect={handleBookSearchSelect} title={bookData.title} />

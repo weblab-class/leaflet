@@ -72,7 +72,7 @@ const BookSuggest = ({ onBookSelect, title }) => {
 
   return (
     <div className="book-suggest">
-      {loading && <div className="loading">Loading...Please wait up to 10 sec</div>}
+      {loading && <div className="loading">Loading...Please allow up to 10 sec</div>}
       <ul className="suggestions">
         {suggestions.map((book, index) => (
           <li key={index} onClick={() => handleSelect(book)} className="book-list-item">
