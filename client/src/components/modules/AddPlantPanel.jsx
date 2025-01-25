@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 // **************** TODO *************** // Custom icons
 import { Search } from "lucide-react"; // Use lucide-react for icons
 
@@ -8,8 +8,29 @@ import Booksuggest from "./BookSuggest.jsx";
 // parentOnSubmitFunction is submitAddPlant in Shelf.jsx
 const AddPlantPanel = ({ parentOnSubmitFunction, onCancelFunction }) => {
   // ============ MONITOR RENDERING ============ //
+  const overlayRef = useRef(null);
+  const panelRef = useRef(null);
+
+  // Handle click outside of the EditPlantPanel to trigger the cancel function
   useEffect(() => {
     console.info("Add Plant Panel rendering");
+    const handleClickOutside = (event) => {
+      if (
+        overlayRef.current &&
+        overlayRef.current.contains(event.target) &&
+        panelRef.current &&
+        !panelRef.current.contains(event.target)
+      ) {
+        console.log("Clicked outside");
+        onCancelFunction(); // Trigger cancel function if clicked outside
+      }
+    };
+
+    document.addEventListener("click", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("click", handleClickOutside);
+    };
   });
 
   // ============ BOOK REPRESENTATION ============ //
@@ -42,10 +63,12 @@ const AddPlantPanel = ({ parentOnSubmitFunction, onCancelFunction }) => {
     const newTitle = event.target.value; // Extract the value from the event
     setBookData((prev) => ({ ...prev, title: newTitle }));
     if (newTitle) setTitleError(false);
+    setShowSuggestions(false);
   };
 
   // ============ BOOK SEARCH ============ //
   const [showSuggestions, setShowSuggestions] = useState(false);
+  const searchButtonRef = useRef(null);
 
   const handleSearchToggle = () => {
     setShowSuggestions(true);
@@ -69,6 +92,15 @@ const AddPlantPanel = ({ parentOnSubmitFunction, onCancelFunction }) => {
     setShowSuggestions(false);
   };
 
+  // triggers when user hits 'Enter' key
+  const handleKeyDown = (event) => {
+    if (event.key === "Enter" && searchButtonRef.current) {
+      event.preventDefault();
+      event.target.blur();
+      searchButtonRef.current.click();
+    }
+  };
+
   // ============ BOOK UPLOAD ============ //
   const [fileError, setFileError] = useState(false); // Tracks whether the file error message is displayed
   const [titleError, setTitleError] = useState(false); // Tracks whether the title error message is displayed
@@ -82,16 +114,6 @@ const AddPlantPanel = ({ parentOnSubmitFunction, onCancelFunction }) => {
     setBookType("upload");
     setFileError(false);
   };
-
-  // function getTextFromFile(fileEvent) {
-  //   return new Promise((resolve, reject) => {
-  //     const file = fileEvent.target.files[0];
-  //     const reader = new FileReader();
-  //     reader.onload = (e) => resolve(e.target.result);
-  //     reader.onerror = reject;
-  //     reader.readAsText(file);
-  //   });
-  // }
 
   // ============ PHYSICAL BOOK ============ //
   const [physicalBookError, setPhysicalBookError] = useState(false); // Tracks whether physical book fields are missing
@@ -148,8 +170,8 @@ const AddPlantPanel = ({ parentOnSubmitFunction, onCancelFunction }) => {
   };
 
   return (
-    <div className="disable-outside-clicks">
-      <div className="EditPlantPanel">
+    <div className="disable-outside-clicks" ref={overlayRef}>
+      <div className="EditPlantPanel" ref={panelRef}>
         <form
           className="EditPlantPanel-form"
           onSubmit={localOnSubmitFunction}
@@ -166,6 +188,7 @@ const AddPlantPanel = ({ parentOnSubmitFunction, onCancelFunction }) => {
               placeholder="Search for a book..."
               value={bookData.title}
               onChange={handleTitleChange}
+              onKeyDown={handleKeyDown}
               onBlur={handleBlur}
               style={{ flex: 1 }}
             />
@@ -173,6 +196,7 @@ const AddPlantPanel = ({ parentOnSubmitFunction, onCancelFunction }) => {
               className="bookTitleInput-search-icon"
               type="button"
               onClick={handleSearchToggle}
+              ref={searchButtonRef}
             >
               <Search size={24} />
             </button>
@@ -197,7 +221,7 @@ const AddPlantPanel = ({ parentOnSubmitFunction, onCancelFunction }) => {
               />
               Use Book from Project Gutenberg
               {bookType === "search" && !bookData.url && (
-                <span className="warning">No book selected.</span>
+                <div className="warning">No book selected.</div>
               )}
               {/* Displays selected book */}
               <div className="selected-book-display">
@@ -237,8 +261,8 @@ const AddPlantPanel = ({ parentOnSubmitFunction, onCancelFunction }) => {
                     style={{ display: "block", marginTop: "8px" }}
                   />
                   {/* Display error if no file uploaded */}
-                  {fileError && <span className="warning">No file uploaded.</span>}
-                  {titleError && <span className="warning">Title not uploaded.</span>}
+                  {fileError && <div className="warning">No file uploaded.</div>}
+                  {titleError && <div className="warning">Title not uploaded.</div>}
                 </>
               )}
             </label>
@@ -277,7 +301,7 @@ const AddPlantPanel = ({ parentOnSubmitFunction, onCancelFunction }) => {
                   />
                 </label>
 
-                {physicalBookError && <span className="warning">Please fill in both fields.</span>}
+                {physicalBookError && <div className="warning">Please fill in both fields.</div>}
               </div>
             )}
           </div>

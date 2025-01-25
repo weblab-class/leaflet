@@ -5,12 +5,11 @@
   gap: 0px; /* Space between items */
   padding: 0px;
   border: 0px solid var(--chestnut-brown);
-  border-radius: 0px;
-  position: fixed;
+  position: absolute;
   margin: 0px;
-  top: 18%;
+  top: 20%;
   left: 30%;
-  height: 60%; /* Adjust as needed */
+  height: 55%; /* Adjust as needed */
   width: 48%; /* Adjust as needed */
 }
 
@@ -23,7 +22,6 @@
   border: 0px solid var(--chestnut-brown);
   border-radius: 0px;
   box-sizing: border-box; /* Include borders in size calculations */
-  overflow: hidden; /* Prevent content from overflowing */
   display: flex; /* Use flexbox to center content */
   justify-content: center; /* Center child elements horizontally */
   align-items: center; /* Center child elements vertically */

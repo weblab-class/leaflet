@@ -190,7 +190,7 @@ a:hover {
 }
 
 .background {
-  position: relative;
+  position: fixed;
   background-image: url("../assets/background.png");
   background-size: cover;
   background-position: center;
