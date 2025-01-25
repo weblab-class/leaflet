@@ -72,13 +72,6 @@ const Shelf = () => {
     formData.append("curPage", curPage);
     formData.append("totalPages", totalPages);
 
-    // Log the FormData object to ensure it's created correctly
-    console.group("FormData Object");
-    for (const pair of formData.entries()) {
-      console.log(`${pair[0]}:`, pair[1]);
-    }
-    console.groupEnd();
-
     // Can't use get/post from utilities because formdata is passed in
     fetch("/api/createbook", {
       method: "POST",
@@ -87,8 +80,7 @@ const Shelf = () => {
       .then((response) => response.json())
       .then(({ newPlant }) => {
         setPlants((prevPlants) => [...prevPlants, newPlant]); // Update UI with the new book
-      })
-      .catch((error) => console.error("Error creating book:", error));
+      });
   };
 
   // ============ DELETING PLANTS ============ //
