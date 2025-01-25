@@ -45,7 +45,7 @@ const fetchSuggestions = (searchTitle, setSuggestions, setLoading, signal) =>
 
 // ============ BOOK SUGGESTION COMPONENT ============ //
 // onBookSelect is handleBookSearchSelect from AddPlantPanel.jsx
-const BookSuggest = ({ onBookSelect, title }) => {
+const BookSuggest = ({ onBookSelect, title, isVisible }) => {
   const [suggestions, setSuggestions] = useState([]);
   const [loading, setLoading] = useState(false);
 
@@ -71,8 +71,14 @@ const BookSuggest = ({ onBookSelect, title }) => {
   };
 
   return (
-    <div className="book-suggest">
+    <div
+      className="book-suggest"
+      style={{
+        display: isVisible ? "block" : "none", // Toggles visibility based on `isVisible`
+      }}
+    >
       {loading && <div className="loading">Loading...Please allow up to 10 sec</div>}
+      {!loading && suggestions.length === 0 && <div className="no-results">No books found</div>}
       <ul className="suggestions">
         {suggestions.map((book, index) => (
           <li key={index} onClick={() => handleSelect(book)} className="book-list-item">

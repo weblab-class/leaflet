@@ -42,11 +42,14 @@ const AddPlantPanel = ({ parentOnSubmitFunction, onCancelFunction }) => {
     const newTitle = event.target.value; // Extract the value from the event
     setBookData((prev) => ({ ...prev, title: newTitle }));
     if (newTitle) setTitleError(false);
-    setShowSuggestions(true);
   };
 
   // ============ BOOK SEARCH ============ //
   const [showSuggestions, setShowSuggestions] = useState(false);
+
+  const handleSearchToggle = () => {
+    setShowSuggestions(true);
+  };
 
   const handleBookSearchSelect = (book) => {
     console.info("Book selected from search panel");
@@ -57,15 +60,13 @@ const AddPlantPanel = ({ parentOnSubmitFunction, onCancelFunction }) => {
       cover: book.cover,
     }));
     setBookType("search");
+    setShowSuggestions(false);
   };
 
   // triggers when user clicks out of title input field
   const handleBlur = () => {
-    // Introduce a small delay before hiding the suggestions
-    setTimeout(() => {
-      console.log("User clicked out of suggestion mode");
-      setShowSuggestions(false); // Hide suggestions on blur
-    }, 200); // Adjust delay as needed
+    console.log("User clicked out of suggestion mode");
+    setShowSuggestions(false);
   };
 
   // ============ BOOK UPLOAD ============ //
@@ -171,15 +172,17 @@ const AddPlantPanel = ({ parentOnSubmitFunction, onCancelFunction }) => {
             <button
               className="bookTitleInput-search-icon"
               type="button"
-              // onClick={handleSearchToggle}
+              onClick={handleSearchToggle}
             >
               <Search size={24} />
             </button>
           </div>
           {/****************** BOOK SEARCH ******************/}
-          {showSuggestions && (
-            <Booksuggest onBookSelect={handleBookSearchSelect} title={bookData.title} />
-          )}
+          <Booksuggest
+            onBookSelect={handleBookSearchSelect}
+            title={bookData.title}
+            isVisible={showSuggestions}
+          />
 
           {/****************** BOOK TYPE BAR SELECTION ******************/}
           <div className="upload-options">
