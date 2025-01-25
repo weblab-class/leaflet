@@ -1,11 +1,15 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./EditPlantPanel.css";
-import BookSearcher from "./BookSearcher.jsx";
+import Booksuggest from "./BookSuggest.jsx";
 
 // parentOnSubmitFunction is submitAddPlant in Shelf.jsx
 const AddPlantPanel = ({ parentOnSubmitFunction, onCancelFunction }) => {
-  // ============ BOOK REPRESENTATION ============ //
+  // ============ MONITOR RENDERING ============ //
+  useEffect(() => {
+    console.info("Add Plant Panel rendering");
+  });
 
+  // ============ BOOK REPRESENTATION ============ //
   // *Lightweight* (*cough*) frontend representation of Book schema
   const [bookType, setBookType] = useState("physical"); // "search", "upload", "physical"
   const [bookData, setBookData] = useState({
@@ -160,7 +164,7 @@ const AddPlantPanel = ({ parentOnSubmitFunction, onCancelFunction }) => {
           />
           {/****************** BOOK SEARCH ******************/}
           {showSuggestions && (
-            <BookSearcher onBookSelect={handleBookSearchSelect} title={bookData.title} />
+            <Booksuggest onBookSelect={handleBookSearchSelect} title={bookData.title} />
           )}
 
           {/****************** BOOK TYPE BAR SELECTION ******************/}
