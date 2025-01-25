@@ -1,6 +1,6 @@
 .NavBarHome-container {
   padding: var(--l) var(--s); /* top/bot, left/right */
-  z-index: 10000;
+  z-index: 20;
   position: fixed;
   top: 0;
   left: 0;
@@ -17,7 +17,6 @@
   color: var(--bright-green);
   font-size: var(--xxl);
   font-family: var(--font-fancy);
-  z-index: 10;
 }
 
 .NavBarHome-link {

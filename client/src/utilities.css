@@ -223,7 +223,7 @@ a:hover {
   color: white;
   font-size: 2rem; /* Adjust as needed */
   font-weight: bold;
-  z-index: 1; /* Ensure it stays above the background overlay */
+  z-index: 2; /* Ensure it stays above the background overlay */
 }
 
 /* Center the content (shelf) in the middle */

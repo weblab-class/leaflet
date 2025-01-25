@@ -1,25 +1,25 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import "./BookSearcher.css";
 
-const BookSearcher = ({ onBookSelect, onTitleChange }) => {
-  const [title, setTitle] = useState("");
+// onBookSelect is handleBookSearchSelect from AddPlantPanel.jsx
+const BookSearcher = ({ onBookSelect, title }) => {
   const [suggestions, setSuggestions] = useState([]);
   const [loading, setLoading] = useState(false);
 
-  // triggers when user enters/deletes something in search bar
-  const handleSearchChange = async (inputChangeEvent) => {
-    const titleInput = inputChangeEvent.target.value;
-    setTitle(titleInput);
-    onTitleChange(titleInput);
-
-    if (!titleInput) {
+  // Fetch books directly without debouncing
+  const fetchBooks = useCallback(async (searchTitle) => {
+    if (!searchTitle.trim()) {
       setSuggestions([]);
+      setLoading(false);
       return;
     }
-
     setLoading(true);
+    console.log("Loading book results");
     try {
-      const response = await fetch(`https://gutendex.com/books?search=${title}`);
+      console.debug("Searhing for book titled ", searchTitle);
+      const response = await fetch(
+        `https://gutendex.com/books?search=${encodeURIComponent(searchTitle)}`
+      );
       const data = await response.json();
       const bookOptions = data.results
         .map((book) => ({
@@ -32,37 +32,29 @@ const BookSearcher = ({ onBookSelect, onTitleChange }) => {
       setSuggestions(bookOptions);
     } catch (error) {
       console.error("Error fetching book data:", error);
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
-  };
+  }, []);
 
+  // Trigger the search when the title changes
+  useEffect(() => {
+    fetchBooks(title);
+  }, [title, fetchBooks]);
+
+  // Handle book selection
   const handleSelect = (book) => {
-    if (onBookSelect) onBookSelect(book);
-    setTitle(book.title);
-    setSuggestions([]);
-  };
-
-  // triggers when user clicks out of title input field
-  const handleBlur = () => {
-    setSuggestions([]); // Hide suggestions on blur
+    console.info("Sending selected book");
+    onBookSelect(book); // Pass the selected book to the parent
+    setSuggestions([]); // Clear suggestions after selection
   };
 
   return (
     <div className="book-searcher">
-      <label htmlFor="bookTitleInput">Book Title:</label>
-      <input
-        id="bookTitleInput"
-        type="text"
-        placeholder="Search for a book..."
-        value={title}
-        onChange={handleSearchChange}
-        onBlur={handleBlur} // Hide suggestions on blur
-      />
       {loading && <div className="loading">Loading...</div>}
       <ul className="suggestions">
         {suggestions.map((book, index) => (
           <li key={index} onClick={() => handleSelect(book)} className="book-list-item">
-            {book.cover && <img src={book.cover} alt={book.title} className="book-cover" />}
             <strong>{book.title}</strong> by {book.author}
           </li>
         ))}

@@ -11,7 +11,7 @@
   display: none; /* Initially hidden */
   cursor: pointer;
   transition: background-color 0.2s ease, transform 0.2s ease;
-  z-index: 1; /* Ensure the button appears above other content */
+  z-index: 2; /* Ensure the button appears above other content */
 }
 
 .Shelf-item:hover .DeletePlantButton {

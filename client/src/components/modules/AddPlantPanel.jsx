@@ -16,6 +16,7 @@ const AddPlantPanel = ({ parentOnSubmitFunction, onCancelFunction }) => {
     curPage: 0,
     totalPages: 0,
   });
+
   // ============ BOOK INPUT TYPE SELECT ============ //
   const handleBookTypeChange = (selectedType) => {
     setBookType(selectedType);
@@ -29,8 +30,19 @@ const AddPlantPanel = ({ parentOnSubmitFunction, onCancelFunction }) => {
     }
   };
 
+  // ============ BOOK TITLE ============ //
+  const handleTitleChange = (event) => {
+    const newTitle = event.target.value; // Extract the value from the event
+    setBookData((prev) => ({ ...prev, title: newTitle }));
+    if (newTitle) setTitleError(false);
+    setShowSuggestions(true);
+  };
+
   // ============ BOOK SEARCH ============ //
+  const [showSuggestions, setShowSuggestions] = useState(false);
+
   const handleBookSearchSelect = (book) => {
+    console.info("Book selected from search panel");
     setBookData((prev) => ({
       ...prev,
       title: book.title,
@@ -40,8 +52,16 @@ const AddPlantPanel = ({ parentOnSubmitFunction, onCancelFunction }) => {
     setBookType("search");
   };
 
-  // ============ BOOK UPLOAD ============ //
+  // triggers when user clicks out of title input field
+  const handleBlur = () => {
+    // Introduce a small delay before hiding the suggestions
+    setTimeout(() => {
+      console.log("User clicked out of suggestion mode");
+      setShowSuggestions(false); // Hide suggestions on blur
+    }, 200); // Adjust delay as needed
+  };
 
+  // ============ BOOK UPLOAD ============ //
   const [fileError, setFileError] = useState(false); // Tracks whether the file error message is displayed
   const [titleError, setTitleError] = useState(false); // Tracks whether the title error message is displayed
 
@@ -55,11 +75,6 @@ const AddPlantPanel = ({ parentOnSubmitFunction, onCancelFunction }) => {
     setFileError(false);
   };
 
-  const handleTitleChange = (newTitle) => {
-    setBookData((prev) => ({ ...prev, title: newTitle }));
-    if (titleError) setTitleError(false);
-  };
-
   // function getTextFromFile(fileEvent) {
   //   return new Promise((resolve, reject) => {
   //     const file = fileEvent.target.files[0];
@@ -71,7 +86,6 @@ const AddPlantPanel = ({ parentOnSubmitFunction, onCancelFunction }) => {
   // }
 
   // ============ PHYSICAL BOOK ============ //
-
   const [physicalBookError, setPhysicalBookError] = useState(false); // Tracks whether physical book fields are missing
 
   const handlePhysicalInputChange = (field, value) => {
@@ -80,7 +94,6 @@ const AddPlantPanel = ({ parentOnSubmitFunction, onCancelFunction }) => {
   };
 
   // ============ BOOK SUBMIT ============ //
-
   const localOnSubmitFunction = async (event) => {
     event.preventDefault();
     console.info("Submitting new book...");
@@ -114,14 +127,7 @@ const AddPlantPanel = ({ parentOnSubmitFunction, onCancelFunction }) => {
     }
 
     // Log the submission payload
-    console.info("Book data to be submitted:", {
-      title: bookData.title,
-      file: bookData.file,
-      url: bookData.url,
-      bookType: bookType,
-      curPage: bookData.curPage,
-      totalPages: bookData.totalPages,
-    });
+    console.info("Book data to be submitted:", bookData);
 
     parentOnSubmitFunction({
       title: bookData.title,
@@ -141,10 +147,21 @@ const AddPlantPanel = ({ parentOnSubmitFunction, onCancelFunction }) => {
           onSubmit={localOnSubmitFunction}
           encType="multipart/form-data"
         >
+          {/****************** BOOK TITLE INPUT ******************/}
           <h3>Add a New Plant</h3>
-
-          {/****************** BOOK SEARCH/TITLE INPUT ******************/}
-          <BookSearcher onBookSelect={handleBookSearchSelect} onTitleChange={handleTitleChange} />
+          <label htmlFor="bookTitleInput">Book Title:</label>
+          <input
+            id="bookTitleInput"
+            type="text"
+            placeholder="Search for a book..."
+            value={bookData.title}
+            onChange={handleTitleChange}
+            onBlur={handleBlur} // Hide suggestions on blur
+          />
+          {/****************** BOOK SEARCH ******************/}
+          {showSuggestions && (
+            <BookSearcher onBookSelect={handleBookSearchSelect} title={bookData.title} />
+          )}
 
           {/****************** BOOK TYPE BAR SELECTION ******************/}
           <div className="upload-options">
@@ -165,10 +182,12 @@ const AddPlantPanel = ({ parentOnSubmitFunction, onCancelFunction }) => {
               <div className="selected-book-display">
                 {bookData.title && (
                   <div className="selected-book-info">
-                    <img src={bookData.cover} alt={bookData.title} className="book-cover" />
+                    {bookData.cover && (
+                      <img src={bookData.cover} alt="Book Cover" className="book-cover" />
+                    )}
                     <div className="book-details">
                       <strong>{bookData.title}</strong>
-                      <p>{bookData.author}</p>
+                      {bookData.author && <p>{bookData.author}</p>}
                     </div>
                   </div>
                 )}
@@ -215,7 +234,7 @@ const AddPlantPanel = ({ parentOnSubmitFunction, onCancelFunction }) => {
               I Have a Physical Book (No Upload)
             </label>
             {bookType === "physical" && (
-              <div style={{ marginTop: "8px" }}>
+              <div>
                 <label className="EditPlantPanel-page-label">
                   Current Page:
                   <input

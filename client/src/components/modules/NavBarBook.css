@@ -2,7 +2,7 @@
   box-sizing: border-box;
   margin: 0;
   padding: var(--m) var(--m);
-  z-index: 10000;
+  z-index: 20;
   position: fixed;
   top: 0;
   left: 0;
