@@ -8,10 +8,9 @@
 }
 
 .EditPlantPanel {
-  position: fixed; /* Ensure the panel is positioned above other elements */
+  position: fixed;
   top: 50%;
   left: 50%;
-  margin-top: 10px;
   transform: translate(-50%, -50%);
   background-color: var(--cream);
   border: 5px solid var(--cotton-pink);

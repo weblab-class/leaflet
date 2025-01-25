@@ -3,7 +3,7 @@ import "./Booksuggest.css";
 
 const fetchSuggestions = (searchTitle, setSuggestions, setLoading, signal) =>
   new Promise((resolve, reject) => {
-    if (!searchTitle.trim()) {
+    if (!searchTitle || !searchTitle.trim()) {
       setSuggestions([]);
       setLoading(false);
       return;

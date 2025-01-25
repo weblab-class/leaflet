@@ -1,10 +1,33 @@
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import "./EditPlantPanel.css";
 
 const DeletePlantPanel = ({ onConfirmDelete, onCancelDelete }) => {
+  // ============ MONITOR RENDERING ============ //
+  const overlayRef = useRef(null);
+  const panelRef = useRef(null);
+
+  useEffect(() => {
+    console.info("Delete Plant Panel rendering");
+    const handleClickOutside = (event) => {
+      if (
+        overlayRef.current &&
+        overlayRef.current.contains(event.target) &&
+        panelRef.current &&
+        !panelRef.current.contains(event.target)
+      ) {
+        console.log("Clicked outside");
+        onCancelDelete(); // Trigger cancel function if clicked outside
+      }
+    };
+    document.addEventListener("click", handleClickOutside);
+    return () => {
+      document.removeEventListener("click", handleClickOutside);
+    };
+  });
+
   return (
-    <div className="disable-outside-clicks">
-      <div className="EditPlantPanel">
+    <div className="disable-outside-clicks" ref={overlayRef}>
+      <div className="EditPlantPanel" ref={panelRef}>
         <div className="EditPlantPanel-content">
           <h3>Are you sure you want to delete this plant?</h3>
           <div className="EditPlantPanel-buttons">

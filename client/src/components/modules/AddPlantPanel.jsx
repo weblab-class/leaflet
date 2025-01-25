@@ -25,9 +25,7 @@ const AddPlantPanel = ({ parentOnSubmitFunction, onCancelFunction }) => {
         onCancelFunction(); // Trigger cancel function if clicked outside
       }
     };
-
     document.addEventListener("click", handleClickOutside);
-
     return () => {
       document.removeEventListener("click", handleClickOutside);
     };
