@@ -1,58 +1,33 @@
 import React, { useEffect, useState } from "react";
 import "./Book.css";
 
-const Book = ({ bookWindow, flipDirection, boolFlippedPage }) => {
-  // const [leftFlipping, setLeftFlipping] = useState(false);
-  // const [rightFlipping, setRightFlipping] = useState(false);
+const Book = ({ prevSpread, nextSpread, flipDirection, boolFlippedPage }) => {
+  const [flipping, setFlipping] = useState(false);
 
   // useEffect(() => {
-  //   console.info("Book component rendered");
-  //   if (flippedPage == -1) {
-  //     return;
-  //   } else if (flippedPage === 0) {
-  //     console.log("Left page flips");
-  //     // setLeftFlipping(true);
-  //     // const timer = setTimeout(() => setLeftFlipping(false), 500); // Animation duration
-  //     return () => {
-  //       // clearTimeout(timer);
-  //       setLeftFlipping(false);
-  //     };
-  //   } else if (flippedPage === 1) {
-  //     console.log("Right page flips");
-  //     // setRightFlipping(true);
-  //     // const timer = setTimeout(() => setRightFlipping(false), 500); // Animation duration
-  //     return () => {
-  //       // clearTimeout(timer);
-  //       setLeftFlipping(false);
-  //       setRightFlipping(false);
-  //     };
+  //   if (flipDirection !== -1) {
+  //     setFlipping(true); // Trigger flip animation
+  //     const timeout = setTimeout(() => {
+  //       setFlipping(false); // Reset after animation
+  //     }, 1000); // Match animation duration
+  //     return () => clearTimeout(timeout);
   //   }
-  // }, []);
-
-  // // const leftStyle = {
-  // //   zIndex: leftFlipping ? 2 : 1, // Higher z-index when flipping
-  // // };
-
-  // // const rightStyle = {
-  // //   zIndex: rightFlipping ? 2 : 1, // Higher z-index when flipping
-  // // };
+  // }, [flipDirection]);
 
   return (
     <div className="Book-container">
-      <div
-        className={`Book-page Book-left`} //${leftFlipping ? "flipping-left" : ""}
-        // style={leftStyle}
-      >
-        <p>{bookWindow[2]}</p>
+      {/* Left Page */}
+      <div className={`Book-page Book-left `}>
+        <p>{nextSpread[0]}</p>
       </div>
-      <div
-        className={`Book-page Book-right`} //${rightFlipping ? "flipping-right" : ""}
-        // style={rightStyle}
-      >
-        <p>{bookWindow[3]}</p>
+      {/* Right Page */}
+      <div className={`Book-page Book-right`}>
+        <p>{nextSpread[1]}</p>
       </div>
     </div>
   );
 };
 
+// {flipping && flipDirection === 0 ? "flip-left" : ""}
+// {flipping && flipDirection === 1 ? "flip-right" : ""}
 export default Book;

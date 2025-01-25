@@ -15,7 +15,7 @@ const BookReader = () => {
   const bookID = location.state?.bookID; // Retrieve the book from state
   const [curPage, setCurPage] = useState(0);
   const [totalPages, setTotalPages] = useState(2);
-  const [bookWindow, setBookWindow] = useState(["left page", "right page"]);
+  const [bookWindow, setBookWindow] = useState(["", ""]);
   // NEW: -1 = no flip, 0 = left page, 1 = right page
   const [flipDirection, setFlipDirection] = useState(-1);
   // Apparently, react is having issues detecting changes to cur, prev, and next spread...
@@ -84,13 +84,14 @@ const BookReader = () => {
 
   return (
     <div className="BookReader-container">
-      <div className="BookReader-overlay"></div> {/* Add this div for the dark overlay */}
+      <div className="BookReader-overlay"></div>
       <NavBarBook />
-      <button className="BookReader-button" onClick={flipBackward} disabled={curPage == 0}>
+      <button className="BookReader-button" onClick={flipBackward} disabled={curPage === 0}>
         ◀
       </button>
       <Book
-        bookWindow={bookWindow}
+        prevSpread={flipDirection === 1 ? bookWindow.slice(0, 2) : bookWindow.slice(4, 6)}
+        nextSpread={bookWindow.slice(2, 4)}
         flipDirection={flipDirection}
         boolFlippedPage={boolFlippedPage}
       />

@@ -254,7 +254,6 @@ router.post("/getpagerange", async (req, res) => {
   fetchedPages.forEach((page, index) => {
     textArray[relativeStart + index] = page;
   });
-  console.log("Final textArray:", textArray);
 
   // Send the response
   res.status(200).json({

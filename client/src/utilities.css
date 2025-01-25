@@ -18,7 +18,7 @@
 @import url("https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,600;0,700;1,400;1,600;1,700&family=Nunito:ital,wght@0,200..1000;1,200..1000&family=Playwrite+VN:wght@100..400&display=swap");
 :root {
   /* Theme Colors */
-  --bright-green: #d4f9b8;
+  --bright-green: #cbefb0;
   --spring-green: #95cf82;
   --aloe-green: #6cb78a;
   --cotton-pink: #fbc5d0;
@@ -133,6 +133,7 @@ form {
 
 .u-link:hover {
   color: var(--caramel-orange);
+  cursor: pointer;
 }
 
 .u-bg-aloeGreen {
@@ -185,6 +186,7 @@ a {
 
 a:hover {
   color: var(--caramel-orange);
+  cursor: pointer;
 }
 
 .background {
