@@ -195,80 +195,148 @@ router.post("/deletebook", (req, res) => {
 //=========== GETTING PAGES ============//
 // **************** TODO *************** //
 // Instead of retrieving whole book, get & return specific pages of book
-router.post("/spreads", async (req, res) => {
-  console.log("Getting current spread");
-  const bookID = req.body._id;
-  const cursor = Book.find({ _id: bookID }, { curPage: 1, totalPages: 1 }).cursor();
-  const pageInfo = await cursor.next();
-  console.log("Page Info:", pageInfo);
-  if (!pageInfo) {
-    console.log("Can't find current book");
-    return res.status(404).json({ message: "Book not found" });
-  }
-  const curPage = pageInfo.curPage;
-  const totalPages = pageInfo.totalPages;
 
-  // use curPage and totalPages to find needed spreads
-  console.log("Searching database for current two pages");
-  const curSpread = (
-    await Book.find({ _id: bookID }, { curPage: 0, content: { $slice: [curPage, 2] } })
-  )[0].content;
-  console.info("curSpread: ", curSpread[0].substring(0, 10), curSpread[1].substring(0, 10));
-  let prevSpread = [];
-  console.log("Searching database for previous two pages");
-  if (curPage >= 2) {
-    prevSpread = (
-      await Book.find({ _id: bookID }, { curPage: 0, content: { $slice: [curPage - 2, 2] } })
-    )[0].content;
-    console.log("prevSpread: ", prevSpread[0].substring(0, 10), prevSpread[1].substring(0, 10));
-  }
-  let nextSpread = [];
-  console.log("Searching database for next two pages");
-  if (curPage <= totalPages - 4) {
-    nextSpread = (
-      await Book.find({ _id: bookID }, { curPage: 0, content: { $slice: [curPage + 2, 2] } })
-    )[0].content;
-  }
-  console.info("nextSpread: ", nextSpread[0].substring(0, 10), nextSpread[1].substring(0, 10));
+async function getPage(bookID, page) {
+  const result = await Book.findOne(
+    { _id: bookID },
+    { content: { $slice: [page, 1] } } // Use $slice to fetch one page
+  ).exec(); // Ensure to use exec for a promise
+  return result?.content?.[0] || ""; // Safely return the first item of content or an empty string
+}
+
+router.post("/getpageinfo", async (req, res) => {
+  console.log("Getting page info ");
+  const bookID = req.body.bookID;
+  const pageInfo = await Book.findOne({ _id: bookID }, { curPage: 1, totalPages: 1 }).exec();
   res.status(200).json({
-    message: "Pages retrieved successfully",
-    curPage: curPage,
-    totalPages: totalPages,
-    prevSpread: prevSpread,
-    curSpread: curSpread,
-    nextSpread: nextSpread,
+    message: "Page information retrieved successfully",
+    curPage: pageInfo?.curPage || 0,
+    totalPages: pageInfo?.totalPages || 2,
   });
 });
 
-router.post("/nextspread", async (req, res) => {
-  console.log("request for next spread received");
-  const bookID = req.body._id;
-  const curPage = req.body.curPage;
-  const totalPages = req.body.totalPages;
-  if (curPage > totalPages - 4) {
-    res.status(400).json({ message: "Next spread doesn't exist" });
+router.post("/getpagerange", async (req, res) => {
+  let { bookID, startPage, totalPages, numPages } = req.body;
+
+  // Log input variables
+  console.log("Request received with:", { bookID, startPage, totalPages, numPages });
+
+  // Validate required fields
+  if (!bookID || startPage === undefined || totalPages === undefined) {
+    console.warn("Missing required fields:", { bookID, startPage, totalPages });
+    return res
+      .status(400)
+      .json({ message: "Missing required fields: bookID, curPage, or totalPages" });
   }
-  const nextSpread = (
-    await Book.find({ _id: bookID }, { curPage: 0, content: { $slice: [curPage + 2, 2] } })
-  )[0].content;
-  Book.updateOne({ _id: bookID }, { $set: { curPage: curPage + 2 } });
-  res.status(200).json({ message: "Next spread retrieved successfully", nextSpread });
+
+  // Calculate the range to fetch
+  const startIndex = Math.max(startPage, 0);
+  console.log("startIndex: ", startIndex);
+  const endIndex = Math.min(startPage + numPages, totalPages); // Exclusive
+  console.log("endIndex: ", endIndex);
+  console.log("Calculated range to fetch:", { startIndex, endIndex });
+
+  // Initialize textArray with blank entries
+  const textArray = Array(numPages).fill("");
+  console.log("Initialized textArray:", textArray);
+
+  // Fetch pages from the database
+  console.log("Querying database with bookID:", bookID);
+  const book = await Book.findOne(
+    { _id: bookID },
+    { content: { $slice: [startIndex, endIndex - startIndex] } }
+  ).exec();
+  const fetchedPages = book?.content || [];
+
+  // Populate the `textArray` based on the fetched pages
+  const relativeStart = Math.abs(Math.min(startPage, 0)); // Offset for blank prefix
+  console.log("Relative start index in textArray:", relativeStart);
+  fetchedPages.forEach((page, index) => {
+    textArray[relativeStart + index] = page;
+  });
+  console.log("Final textArray:", textArray);
+
+  // Send the response
+  res.status(200).json({
+    message: "Pages retrieved successfully",
+    textArray,
+  });
 });
 
-router.post("/prevspread", async (req, res) => {
-  console.log("request for previous spread received");
-  const bookID = req.body._id;
-  const curPage = req.body.curPage;
+// router.post("/spreads", async (req, res) => {
+//   console.log("Getting current spread");
+//   const bookID = req.body._id;
+//   const cursor = Book.find({ _id: bookID }, { curPage: 1, totalPages: 1 }).cursor();
+//   const pageInfo = await cursor.next();
+//   console.log("Page Info:", pageInfo);
+//   if (!pageInfo) {
+//     console.log("Can't find current book");
+//     return res.status(404).json({ message: "Book not found" });
+//   }
+//   const curPage = pageInfo.curPage;
+//   const totalPages = pageInfo.totalPages;
 
-  if (curPage < 2) {
-    return res.status(400).json({ message: "Previous spread doesn't exist" });
-  }
-  const prevSpread = (
-    await Book.find({ _id: bookID }, { curPage: 0, content: { $slice: [curPage - 2, 2] } })
-  )[0].content;
-  Book.updateOne({ _id: bookID }, { $set: { curPage: curPage - 2 } });
-  res.status(200).json({ message: "Previous spread retrieved successfully", prevSpread });
-});
+// use curPage and totalPages to find needed spreads
+//   console.log("Searching database for current two pages");
+//   const curSpread = (
+//     await Book.find({ _id: bookID }, { curPage: 0, content: { $slice: [curPage, 2] } })
+//   )[0].content;
+//   console.info("curSpread: ", curSpread[0].substring(0, 10), curSpread[1].substring(0, 10));
+//   let prevSpread = [];
+//   console.log("Searching database for previous two pages");
+//   if (curPage >= 2) {
+//     prevSpread = (
+//       await Book.find({ _id: bookID }, { curPage: 0, content: { $slice: [curPage - 2, 2] } })
+//     )[0].content;
+//     console.log("prevSpread: ", prevSpread[0].substring(0, 10), prevSpread[1].substring(0, 10));
+//   }
+//   let nextSpread = [];
+//   console.log("Searching database for next two pages");
+//   if (curPage <= totalPages - 4) {
+//     nextSpread = (
+//       await Book.find({ _id: bookID }, { curPage: 0, content: { $slice: [curPage + 2, 2] } })
+//     )[0].content;
+//   }
+//   console.info("nextSpread: ", nextSpread[0].substring(0, 10), nextSpread[1].substring(0, 10));
+//   res.status(200).json({
+//     message: "Pages retrieved successfully",
+//     curPage: curPage,
+//     totalPages: totalPages,
+//     prevSpread: prevSpread,
+//     curSpread: curSpread,
+//     nextSpread: nextSpread,
+//   });
+// });
+
+// router.post("/nextspread", async (req, res) => {
+//   console.log("request for next spread received");
+//   const bookID = req.body._id;
+//   const curPage = req.body.curPage;
+//   const totalPages = req.body.totalPages;
+//   if (curPage > totalPages - 4) {
+//     res.status(400).json({ message: "Next spread doesn't exist" });
+//   }
+//   const nextSpread = (
+//     await Book.find({ _id: bookID }, { curPage: 0, content: { $slice: [curPage + 2, 2] } })
+//   )[0].content;
+//   Book.updateOne({ _id: bookID }, { $set: { curPage: curPage + 2 } });
+//   res.status(200).json({ message: "Next spread retrieved successfully", nextSpread });
+// });
+
+// router.post("/prevspread", async (req, res) => {
+//   console.log("request for previous spread received");
+//   const bookID = req.body._id;
+//   const curPage = req.body.curPage;
+
+//   if (curPage < 2) {
+//     return res.status(400).json({ message: "Previous spread doesn't exist" });
+//   }
+//   const prevSpread = (
+//     await Book.find({ _id: bookID }, { curPage: 0, content: { $slice: [curPage - 2, 2] } })
+//   )[0].content;
+//   Book.updateOne({ _id: bookID }, { $set: { curPage: curPage - 2 } });
+//   res.status(200).json({ message: "Previous spread retrieved successfully", prevSpread });
+// });
 
 // anything else falls to this "not found" case
 router.all("*", (req, res) => {
