@@ -3,8 +3,8 @@ import { get, post } from "../../utilities";
 import Plant from "./Plant.jsx";
 import AddPlantPanel from "./AddPlantPanel.jsx";
 import DeletePlantPanel from "./DeletePlantPanel.jsx";
-import DeletePlantButton from "./DeletePlantButton.jsx";
 import { useNavigate } from "react-router-dom";
+import { Pencil } from "lucide-react"; // Use lucide-react for icons
 import "./Shelf.css";
 
 const Shelf = () => {
@@ -16,9 +16,6 @@ const Shelf = () => {
   // totalPages: Number
   // plantType: "testPlant"
   const [plants, setPlants] = useState([]);
-  const [showAddPlantPanel, setShowAddPlantPanel] = useState(false);
-  const [plantToDelete, setPlantToDelete] = useState(null);
-  const [showDeletePlantPanel, setShowDeletePlantPanel] = useState(false);
   const navigate = useNavigate();
   const addPlantButton = {
     title: "",
@@ -34,6 +31,8 @@ const Shelf = () => {
   }, []);
 
   // ============ ADDING PLANTS ============ //
+  const [showAddPlantPanel, setShowAddPlantPanel] = useState(false);
+
   // Function called on when user clicks on "Add Plant" button,
   // pops up panel/form to add plant (book)
   const addPlant = () => {
@@ -56,17 +55,14 @@ const Shelf = () => {
     if (bookType === "search" && !url) {
       console.error("Validation Error: 'search' book type requires a non-empty 'url'.");
     }
-
     if (bookType === "upload" && !file) {
       console.error("Validation Error: 'upload' book type requires a file to be uploaded.");
     }
-
     if (bookType === "physical" && !totalPages) {
       console.error(
         "Validation Error: 'physical' book type requires 'totalPages' to be specified."
       );
     }
-
     setShowAddPlantPanel(false);
     const formData = new FormData();
     formData.append("title", title);
@@ -88,6 +84,8 @@ const Shelf = () => {
   };
 
   // ============ DELETING PLANTS ============ //
+  const [plantToDelete, setPlantToDelete] = useState(null);
+  const [showDeletePlantPanel, setShowDeletePlantPanel] = useState(false);
   const deletePlant = (plant) => {
     setPlantToDelete(plant);
     setShowDeletePlantPanel(true);
@@ -105,8 +103,14 @@ const Shelf = () => {
     setShowDeletePlantPanel(false);
   };
 
+  // ============ EDITING PLANTS ============ //
+
+  const [showEditPlantPanel, setShowEditPlantPanel] = useState(false);
+  const editPlant = (plant) => {
+    setShowEditPlantPanel(true);
+  };
+
   // ============ OPENING BOOK ============ //
-  // **************** NEWLY ADDED *************** //
   const openBook = (plant) => {
     if (plant.plantType === "addPlantButton") {
       addPlant();
@@ -115,8 +119,6 @@ const Shelf = () => {
       return;
     } else {
       navigate("/BookReader", {
-        // **************** TODO *************** // (Regan)
-        // Consider passing in more props than _id, (like curPage, totalPages)
         state: { _id: plant._id },
       });
     }
@@ -130,8 +132,6 @@ const Shelf = () => {
     for (let i = 0; i < numVisibleShelfItems; i++) {
       if (i < plants.length) {
         shelfItems.push(
-          // **************** NEWLY ADDED *************** //
-          // Make sure it doesn't open book when delete button is clicked
           <div className="Shelf-item" key={`shelf-item-${i}`}>
             <div className="column left"></div>
             <div className="column middle">
@@ -142,7 +142,13 @@ const Shelf = () => {
               </div>
             </div>
             <div className="column right">
-              <DeletePlantButton onDelete={() => deletePlant(plants[i])} />
+              <button className="EditPlantButton" onClick={editPlant}>
+                <Pencil size={20} />
+              </button>
+              <button className="DeletePlantButton" onClick={deletePlant}>
+                {" "}
+                X{" "}
+              </button>
             </div>
           </div>
         );
@@ -168,6 +174,7 @@ const Shelf = () => {
       {showDeletePlantPanel && (
         <DeletePlantPanel onConfirmDelete={confirmDeletePlant} onCancelDelete={cancelDeletePlant} />
       )}
+      {showEditPlantPanel && <EditPlantPanel />}
     </div>
   );
 };

@@ -3,6 +3,11 @@
   z-index: 2;
 }
 
+.Plant-image:hover {
+  cursor: pointer;
+  transform: scale(1.1);
+}
+
 .Plant-book-title {
   white-space: nowrap; /* Prevent text from wrapping */
   overflow: hidden; /* Hide any text that overflows */
@@ -10,11 +15,34 @@
   max-width: 175px; /* Limit width */
   background-color: var(--peach);
   box-sizing: border-box;
-  border: 0px solid var(--caramel-orange);
+  border: 2px solid var(--caramel-orange);
   margin: 0;
   z-index: 3;
   font-size: 1em;
-  padding: 5px;
-  border: 1px solid #ccc;
+  padding: 1px;
+  border-radius: 10px;
+}
+
+.Plant-book-title:hover {
+  cursor: text;
+  transform: scale(1.05);
+}
+
+/* New class for the input field */
+.Plant-book-title-input {
+  max-width: 175px; /* Match the width of the title */
+  background-color: var(--cream); /* Different background color */
+  border: 2px solid var(--caramel-orange); /* Highlight border */
   border-radius: 4px;
+  font-size: 1em;
+  padding: 5px;
+  box-sizing: border-box;
+  outline: none; /* Remove default focus outline */
+  font-family: var(--font-small);
+  color: var(--chestnut-brown);
+}
+
+.Plant-book-title-input:focus {
+  border-color: var(--caramel-orange); /* Highlight border on focus */
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.1); /* Add a subtle shadow */
 }

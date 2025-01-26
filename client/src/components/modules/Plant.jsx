@@ -47,17 +47,19 @@ const Plant = ({ plant, openBook }) => {
           value={plantData.title}
           onChange={handleChange}
           onBlur={handleBlur}
-          className="Plant-title-input"
+          className="Plant-book-title-input"
           onKeyDown={handleKeyDown}
           autoFocus
         />
       ) : (
-        <p
-          className="Plant-book-title"
-          onClick={() => setIsEditing(true)} // Switch to editing mode on click
-        >
-          {plantData.title}
-        </p>
+        plant.title && (
+          <p
+            className="Plant-book-title"
+            onClick={() => setIsEditing(true)} // Switch to editing mode on click
+          >
+            {plantData.title}
+          </p>
+        )
       )}
     </div>
   );

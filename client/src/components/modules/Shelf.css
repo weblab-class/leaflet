@@ -60,3 +60,55 @@
 .plant-container {
   text-align: center; /* Ensure the plant content is centered within its container */
 }
+
+.DeletePlantButton {
+  position: absolute; /* Position relative to .Shelf-item */
+  top: 5px;
+  right: 5px;
+  background-color: var(--sunset-pink);
+  color: var(--chestnut-brown);
+  border: 0px;
+  border-radius: 50%;
+  font-weight: bold;
+  width: 25px;
+  height: 25px;
+  display: none; /* Initially hidden */
+  cursor: pointer;
+  z-index: 2; /* Ensure the button appears above other content */
+}
+
+.DeletePlantButton:hover {
+  background-color: var(--error-red);
+  border: 2px solid white;
+  transform: scale(1.1);
+  color: white;
+}
+
+.EditPlantButton {
+  position: absolute; /* Position relative to .Shelf-item */
+  top: 40px;
+  right: 7px;
+  display: none;
+  background-color: var(--bright-green);
+  color: var(--chestnut-brown);
+  border: none;
+  border-radius: 10%;
+  width: 24px;
+  height: 24px;
+  cursor: pointer;
+  z-index: 2;
+  padding: 0;
+  /* border: 2px solid var(--aloe-green); */
+}
+
+.EditPlantButton:hover {
+  background-color: var(--spring-green);
+  color: white;
+  border: 2px solid white;
+  transform: scale(1.05);
+}
+
+.Shelf-item:hover .DeletePlantButton,
+.Shelf-item:hover .EditPlantButton {
+  display: block; /* Show button when hovering over a shelf item */
+}
