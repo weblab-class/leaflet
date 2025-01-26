@@ -14,12 +14,16 @@ const Shelf = () => {
   // bookType: String among ["search", "upload", "physical"]
   // curPage: Number
   // totalPages: Number
+  // plantType: "testPlant"
   const [plants, setPlants] = useState([]);
   const [showAddPlantPanel, setShowAddPlantPanel] = useState(false);
   const [plantToDelete, setPlantToDelete] = useState(null);
   const [showDeletePlantPanel, setShowDeletePlantPanel] = useState(false);
-  const addPlantButton = "addPlantButton";
   const navigate = useNavigate();
+  const addPlantButton = {
+    title: "",
+    plantType: "addPlantButton",
+  };
 
   // Display user's existing plants in shelf
   useEffect(() => {
@@ -104,16 +108,24 @@ const Shelf = () => {
   // ============ OPENING BOOK ============ //
   // **************** NEWLY ADDED *************** //
   const openBook = (plant) => {
-    navigate("/BookReader", {
-      // **************** TODO *************** // (Regan)
-      // Consider passing in more props than bookID, (like curPage, totalPages)
-      state: { bookID: plant._id },
-    });
+    if (plant.plantType === "addPlantButton") {
+      addPlant();
+      return;
+    } else if (plant.bookType === "physical") {
+      return;
+    } else {
+      navigate("/BookReader", {
+        // **************** TODO *************** // (Regan)
+        // Consider passing in more props than _id, (like curPage, totalPages)
+        state: { _id: plant._id },
+      });
+    }
   };
 
   //=========== RENDERING ============//
   // Dynamically generate shelf items, based on 'plants' state array
   const generateShelfItems = (numVisibleShelfItems) => {
+    console.info("open Book 1: ", openBook);
     const shelfItems = [];
     for (let i = 0; i < numVisibleShelfItems; i++) {
       if (i < plants.length) {
@@ -122,9 +134,11 @@ const Shelf = () => {
           // Make sure it doesn't open book when delete button is clicked
           <div className="Shelf-item" key={`shelf-item-${i}`}>
             <div className="column left"></div>
-            <div className="column middle" onClick={() => openBook(plants[i])}>
+            <div className="column middle">
               <div className="plant-container">
-                <Plant plantType={plants[i].plantType} title={plants[i].title} />
+                {console.info("generating current plant: ", JSON.stringify(plants[i]))}
+                {console.info("open Book 2: ", openBook)}
+                <Plant plant={plants[i]} openBook={openBook} />
               </div>
             </div>
             <div className="column right">
@@ -135,7 +149,7 @@ const Shelf = () => {
       } else if (i === plants.length) {
         shelfItems.push(
           <div className="Shelf-item" onClick={addPlant} key={`shelf-item-${i}`}>
-            <Plant plantType={addPlantButton} title="" />
+            <Plant plant={addPlantButton} openBook={openBook} />
           </div>
         );
       } else {

@@ -8,11 +8,13 @@ import NavBarBook from "../modules/NavBarBook";
 import "./BookReader.css";
 
 // **************** NEWLY ADDED *************** //
+
+// From openBook in Shelf.jsx
 const BookReader = () => {
   const { userId } = useContext(UserContext);
   const navigate = useNavigate();
   const location = useLocation();
-  const bookID = location.state?.bookID; // Retrieve the book from state
+  const _id = location.state?._id; // Retrieve the book from state
   const [curPage, setCurPage] = useState(0);
   const [totalPages, setTotalPages] = useState(2);
   const [bookWindow, setBookWindow] = useState(["", ""]);
@@ -30,12 +32,13 @@ const BookReader = () => {
 
   useEffect(() => {
     const fetchPageData = async () => {
-      const { curPage, totalPages } = await post("/api/getpageinfo", { bookID });
+      console.log("_id: ", _id);
+      const { curPage, totalPages } = await post("/api/getpageinfo", { _id });
       console.info("Got page info: curPage = ", curPage, "totalPages = ", totalPages);
       setCurPage(curPage);
       setTotalPages(totalPages);
       const response = await post("/api/getpagerange", {
-        bookID,
+        _id,
         startPage: curPage - 2,
         totalPages,
         numPages: 6,
@@ -50,7 +53,7 @@ const BookReader = () => {
     if (curPage < totalPages - 2) {
       console.log("Getting next two pages");
       const response = await post("/api/getpagerange", {
-        bookID,
+        _id,
         startPage: curPage,
         totalPages,
         numPages: 6,
@@ -68,7 +71,7 @@ const BookReader = () => {
     if (curPage >= 2) {
       console.log("Getting previous two pages");
       const response = await post("/api/getpagerange", {
-        bookID,
+        _id,
         startPage: curPage - 4,
         totalPages,
         numPages: 6,
