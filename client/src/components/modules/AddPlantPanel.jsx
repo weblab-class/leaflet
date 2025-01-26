@@ -55,12 +55,6 @@ const AddPlantPanel = ({ parentOnSubmitFunction, onCancelFunction }) => {
     setBookType(selectedType);
     setFileError(false);
     setPhysicalBookError(false);
-    if (selectedType === "upload") {
-      setBookData({ url: "" });
-    }
-    if (selectedType === "physical") {
-      setBookData({ url: "", file: null });
-    }
   };
 
   // ============ BOOK TITLE ============ //

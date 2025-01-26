@@ -2,6 +2,7 @@
 .Shelf-container {
   display: grid;
   grid-template-columns: repeat(3, 1fr); /* 3 equal columns */
+  grid-auto-rows: 1fr;
   gap: 0px; /* Space between items */
   padding: 0px;
   border: 0px solid var(--chestnut-brown);
@@ -17,7 +18,6 @@
 .Shelf-item {
   position: relative;
   width: 100%; /* Full width of grid cell */
-  aspect-ratio: 4 / 3; /* Maintain the 4:3 aspect ratio */
   padding: 0px;
   border: 0px solid var(--chestnut-brown);
   border-radius: 0px;
