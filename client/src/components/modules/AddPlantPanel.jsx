@@ -46,15 +46,14 @@ const AddPlantPanel = ({ parentOnSubmitFunction, onCancelFunction }) => {
     url: "",
     cover: "",
     file: null,
-    curPage: 0,
-    totalPages: 0,
+    curPage: 1,
+    totalPages: 2,
   });
 
   // ============ BOOK INPUT TYPE SELECT ============ //
   const handleBookTypeChange = (selectedType) => {
     setBookType(selectedType);
     setFileError(false);
-    setPhysicalBookError(false);
   };
 
   // ============ BOOK TITLE ============ //
@@ -121,11 +120,9 @@ const AddPlantPanel = ({ parentOnSubmitFunction, onCancelFunction }) => {
   };
 
   // ============ PHYSICAL BOOK ============ //
-  const [physicalBookError, setPhysicalBookError] = useState(false); // Tracks whether physical book fields are missing
 
   const handlePhysicalInputChange = (field, value) => {
     setBookData((prev) => ({ ...prev, [field]: value }));
-    setPhysicalBookError(false);
   };
 
   // ============ BOOK SUBMIT ============ //
@@ -145,20 +142,6 @@ const AddPlantPanel = ({ parentOnSubmitFunction, onCancelFunction }) => {
       } else {
         console.info("File uploaded:", bookData.file.name);
       }
-    } else if (bookType === "physical") {
-      if (!bookData.curPage || !bookData.totalPages) {
-        console.warn("Missing required fields for 'physical' book type:", {
-          curPage: bookData.curPage,
-          totalPages: bookData.totalPages,
-        });
-        setPhysicalBookError(true);
-        return;
-      }
-    }
-
-    if (!bookData.title || !bookType) {
-      console.error("Missing required fields 'title' or 'bookType'.");
-      return;
     }
 
     // Log the submission payload
@@ -317,8 +300,6 @@ const AddPlantPanel = ({ parentOnSubmitFunction, onCancelFunction }) => {
                     onChange={(e) => handlePhysicalInputChange("totalPages", e.target.value)}
                   />
                 </label>
-
-                {physicalBookError && <div className="warning">Please fill in both fields.</div>}
               </div>
             )}
           </div>
