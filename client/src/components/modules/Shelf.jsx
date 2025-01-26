@@ -3,6 +3,7 @@ import { get, post } from "../../utilities";
 import Plant from "./Plant.jsx";
 import AddPlantPanel from "./AddPlantPanel.jsx";
 import DeletePlantPanel from "./DeletePlantPanel.jsx";
+import EditPlantPanel from "./EditPlantPanel.jsx";
 import { useNavigate } from "react-router-dom";
 import { Pencil } from "lucide-react"; // Use lucide-react for icons
 import "./Shelf.css";
@@ -106,8 +107,34 @@ const Shelf = () => {
   // ============ EDITING PLANTS ============ //
 
   const [showEditPlantPanel, setShowEditPlantPanel] = useState(false);
+  const [plantToEdit, setPlantToEdit] = useState(null);
+
   const editPlant = (plant) => {
+    setPlantToEdit(plant); // Set the plant to be edited
     setShowEditPlantPanel(true);
+  };
+
+  const cancelEditPlant = () => {
+    setPlantToEdit(null);
+    setShowEditPlantPanel(false);
+  };
+
+  const saveEditPlant = (updatedPlant) => {
+    // Update plant details in the state
+    setPlants((prevPlants) =>
+      prevPlants.map((plant) =>
+        plant._id === plantToEdit._id ? { ...plant, ...updatedPlant } : plant
+      )
+    );
+
+    // Send updated data to the backend
+    post("/api/updatebook", { _id: plantToEdit._id, ...updatedPlant }).then(() => {
+      console.log("Plant updated successfully");
+    });
+
+    // Close the edit panel
+    setPlantToEdit(null);
+    setShowEditPlantPanel(false);
   };
 
   // ============ OPENING BOOK ============ //
@@ -142,7 +169,7 @@ const Shelf = () => {
               </div>
             </div>
             <div className="column right">
-              <button className="EditPlantButton" onClick={editPlant}>
+              <button className="EditPlantButton" onClick={() => editPlant(plants[i])}>
                 <Pencil size={20} />
               </button>
               <button className="DeletePlantButton" onClick={deletePlant}>
@@ -174,7 +201,9 @@ const Shelf = () => {
       {showDeletePlantPanel && (
         <DeletePlantPanel onConfirmDelete={confirmDeletePlant} onCancelDelete={cancelDeletePlant} />
       )}
-      {showEditPlantPanel && <EditPlantPanel />}
+      {showEditPlantPanel && (
+        <EditPlantPanel plant={plantToEdit} onSave={saveEditPlant} onCancel={cancelEditPlant} />
+      )}
     </div>
   );
 };

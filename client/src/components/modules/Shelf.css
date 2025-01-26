@@ -98,6 +98,7 @@
   cursor: pointer;
   z-index: 2;
   padding: 0;
+  padding-top: 1.5px;
   /* border: 2px solid var(--aloe-green); */
 }
 

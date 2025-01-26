@@ -216,3 +216,93 @@
   color: red;
   font-size: 12px;
 }
+
+.disable-outside-clicks {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 10;
+}
+
+.Panel {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: var(--cream);
+  border: 5px solid var(--cotton-pink);
+  border-radius: 10px;
+  padding: 20px;
+  width: 300px;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.2);
+  max-height: 40%;
+  overflow-y: auto;
+  z-index: 11;
+}
+
+.Panel-content {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.Panel-title {
+  margin-bottom: 16px;
+  text-align: center;
+  color: var(--aloe-green);
+  font-family: var(--font-fancy);
+  font-size: 1.5rem;
+}
+
+.Panel-form label {
+  font-family: var(--font-formal);
+  color: var(--chestnut-brown);
+  margin-bottom: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.Panel-form input,
+.Panel-form select {
+  padding: 8px;
+  border: 1px solid var(--medgrey);
+  border-radius: 4px;
+  font-size: 1rem;
+  font-family: var(--font-fancy);
+}
+
+.Panel-buttons {
+  display: flex;
+  justify-content: space-between;
+}
+
+.Panel-button {
+  padding: 8px 16px;
+  font-size: 1rem;
+  font-family: var(--font-fancy);
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.Panel-button.save {
+  background-color: var(--aloe-green);
+  color: var(--white);
+}
+
+.Panel-button.save:hover {
+  background-color: var(--darkgrey);
+}
+
+.Panel-button.cancel {
+  background-color: var(--cotton-pink);
+  color: var(--white);
+}
+
+.Panel-button.cancel:hover {
+  background-color: var(--darkgrey);
+}
