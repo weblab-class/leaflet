@@ -136,7 +136,6 @@
 .bookTitleInput-search-icon {
   box-sizing: border-box;
   color: white;
-  cursor: pointer;
   flex: 2;
   background: var(--cotton-pink);
   width: 50px;
@@ -144,6 +143,36 @@
   border-radius: 50%;
   border: none;
   justify-self: end;
+  transition: background-color 0.3s, transform 0.1s;
+}
+
+.bookTitleInput-search-icon:hover {
+  cursor: pointer;
+  background: white;
+  color: var(--bright-green);
+}
+
+.bookTitleInput-search-icon:active {
+  background: var(--darkgrey);
+  transform: scale(0.95);
+}
+
+.selected-book-info {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 20px; /* Space between image and details */
+}
+
+.book-cover {
+  width: 80px; /* Set a fixed width */
+  height: auto; /* Maintain the aspect ratio */
+}
+
+.book-details {
+  font-size: 16px;
+  display: flex;
+  flex-direction: column;
 }
 
 .upload-options {

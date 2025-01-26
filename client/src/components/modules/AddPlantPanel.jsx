@@ -3,7 +3,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { Search } from "lucide-react"; // Use lucide-react for icons
 
 import "./EditPlantPanel.css";
-import Booksuggest from "./BookSuggest.jsx";
+import BookSuggest from "./BookSuggest.jsx";
 
 // parentOnSubmitFunction is submitAddPlant in Shelf.jsx
 const AddPlantPanel = ({ parentOnSubmitFunction, onCancelFunction }) => {
@@ -22,7 +22,14 @@ const AddPlantPanel = ({ parentOnSubmitFunction, onCancelFunction }) => {
         !panelRef.current.contains(event.target)
       ) {
         console.log("Clicked outside");
-        onCancelFunction(); // Trigger cancel function if clicked outside
+        onCancelFunction();
+      } else if (
+        bookSuggestionsWrapperRef.current &&
+        !bookSuggestionsWrapperRef.current.contains(event.target) &&
+        searchButtonRef.current &&
+        !searchButtonRef.current.contains(event.target)
+      ) {
+        setShowSuggestions(false);
       }
     };
     document.addEventListener("click", handleClickOutside);
@@ -66,9 +73,12 @@ const AddPlantPanel = ({ parentOnSubmitFunction, onCancelFunction }) => {
 
   // ============ BOOK SEARCH ============ //
   const [showSuggestions, setShowSuggestions] = useState(false);
+  const [searchedBook, setSearchedBook] = useState(false);
   const searchButtonRef = useRef(null);
+  const bookSuggestionsWrapperRef = useRef(null);
 
   const handleSearchToggle = () => {
+    console.info("Search icon clicked, showing suggestions");
     setShowSuggestions(true);
   };
 
@@ -76,18 +86,21 @@ const AddPlantPanel = ({ parentOnSubmitFunction, onCancelFunction }) => {
     console.info("Book selected from search panel");
     setBookData((prev) => ({
       ...prev,
-      title: book.title,
       url: book.link,
       cover: book.cover,
     }));
     setBookType("search");
+    console.info("User selected a book, setting suggestions invisible");
     setShowSuggestions(false);
+    setSearchedBook(true);
   };
 
   // triggers when user clicks out of title input field
-  const handleBlur = () => {
+  const handleBlur = (event) => {
     console.log("User clicked out of suggestion mode");
-    setShowSuggestions(false);
+    if (!searchButtonRef.current || searchButtonRef.current.contains(event.target)) {
+      setShowSuggestions(false);
+    }
   };
 
   // triggers when user hits 'Enter' key
@@ -196,15 +209,27 @@ const AddPlantPanel = ({ parentOnSubmitFunction, onCancelFunction }) => {
               onClick={handleSearchToggle}
               ref={searchButtonRef}
             >
-              <Search size={24} />
+              <Search size={24} strokeWidth={4} />
             </button>
           </div>
           {/****************** BOOK SEARCH ******************/}
-          <Booksuggest
-            onBookSelect={handleBookSearchSelect}
-            title={bookData.title}
-            isVisible={showSuggestions}
-          />
+          <div
+            className="suggestions-wrapper"
+            ref={bookSuggestionsWrapperRef}
+            style={{
+              display: showSuggestions ? "block" : "none",
+              overflow: "hidden",
+              position: "relative",
+            }}
+          >
+            <BookSuggest
+              onBookSelect={handleBookSearchSelect}
+              title={bookData.title}
+              style={{
+                display: showSuggestions ? "block" : "none",
+              }}
+            />
+          </div>
 
           {/****************** BOOK TYPE BAR SELECTION ******************/}
           <div className="upload-options">
@@ -222,19 +247,19 @@ const AddPlantPanel = ({ parentOnSubmitFunction, onCancelFunction }) => {
                 <div className="warning">No book selected.</div>
               )}
               {/* Displays selected book */}
-              <div className="selected-book-display">
-                {bookData.title && (
+              {searchedBook && (
+                <div className="selected-book-display">
                   <div className="selected-book-info">
                     {bookData.cover && (
                       <img src={bookData.cover} alt="Book Cover" className="book-cover" />
                     )}
                     <div className="book-details">
-                      <strong>{bookData.title}</strong>
-                      {bookData.author && <p>{bookData.author}</p>}
+                      <strong className="book-details-title">{bookData.title}</strong>
+                      {bookData.author && <p className="book-details-author">{bookData.author}</p>}
                     </div>
                   </div>
-                )}
-              </div>
+                </div>
+              )}
             </label>
 
             {/* UPLOAD BOOK OPTION */}

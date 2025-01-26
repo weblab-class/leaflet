@@ -1,5 +1,18 @@
 .book-suggest {
-  position: relative;
+  position: fixed;
+  top: 170px; /* Adjust based on your title input height */
+  left: 20px;
+  width: 295px;
+  z-index: 10; /* Make sure it's above other elements */
+  background-color: white;
+  font-family: var(--font-formal);
+}
+
+.book-suggest ul {
+  padding: 0;
+  margin: 0;
+  max-height: 200px; /* Optional: to add a scroll if there are too many suggestions */
+  overflow-y: auto;
 }
 
 .suggestions {
@@ -13,28 +26,19 @@
   align-items: center;
   cursor: pointer;
   padding: 8px;
-  background-color: #f9f9f9;
   transition: background-color 0.2s;
 }
 
-.book-list-item:hover {
-  background-color: #f1f1f1;
-  cursor: pointer;
-}
-
-.book-list-item img {
-  max-width: 40px;
-  margin-right: 8px;
-}
-
 .loading {
-  text-align: center;
+  align-items: center;
+  padding: 8px;
+}
+.no-results {
+  align-items: center;
   padding: 8px;
 }
 
-.no-results {
-  text-align: center;
-  padding: 8px;
-  color: gray;
-  font-style: italic;
+.book-list-item:hover {
+  background-color: var(--peach);
+  cursor: pointer;
 }

@@ -11,7 +11,7 @@ const fetchSuggestions = (searchTitle, setSuggestions, setLoading, signal) =>
     setLoading(true);
     console.log("Loading book results for title ", searchTitle);
     // Time-costly asynchronous function call:
-    fetch(`https://gutendex.com/books?search=${encodeURIComponent(searchTitle)}&limit=5`, {
+    fetch(`https://gutendex.com/books?search=${encodeURIComponent(searchTitle)}&limit=10`, {
       signal,
     })
       .then((response) => {
@@ -32,6 +32,7 @@ const fetchSuggestions = (searchTitle, setSuggestions, setLoading, signal) =>
             .filter((book) => book.link); // Ensure we have a txt link
           console.info("Book options: ", bookOptions);
           setSuggestions(bookOptions);
+          setTriedFetchingSuggestions(true);
         }
       })
       .catch((error) => {
@@ -45,13 +46,13 @@ const fetchSuggestions = (searchTitle, setSuggestions, setLoading, signal) =>
 
 // ============ BOOK SUGGESTION COMPONENT ============ //
 // onBookSelect is handleBookSearchSelect from AddPlantPanel.jsx
-const BookSuggest = ({ onBookSelect, title, isVisible }) => {
+const BookSuggest = ({ onBookSelect, title }) => {
   const [suggestions, setSuggestions] = useState([]);
   const [loading, setLoading] = useState(false);
 
   // Trigger upon re-mount
   useEffect(() => {
-    console.log("Book suggestions rendering");
+    console.info("Book suggestions rendering for book titled ", title);
     const controller = new AbortController();
     const { signal } = controller;
 
@@ -61,9 +62,8 @@ const BookSuggest = ({ onBookSelect, title, isVisible }) => {
     return () => {
       controller.abort();
     };
-  }, [title]); // Re-run whenever the title changes
+  }, [title]);
 
-  // Handle book selection
   const handleSelect = (book) => {
     console.info("Sending selected book");
     onBookSelect(book); // Pass the selected book to the parent
@@ -71,12 +71,7 @@ const BookSuggest = ({ onBookSelect, title, isVisible }) => {
   };
 
   return (
-    <div
-      className="book-suggest"
-      style={{
-        display: isVisible ? "block" : "none", // Toggles visibility based on `isVisible`
-      }}
-    >
+    <div className="book-suggest">
       {loading && <div className="loading">Loading...Please allow up to 10 sec</div>}
       {!loading && suggestions.length === 0 && <div className="no-results">No books found</div>}
       <ul className="suggestions">
