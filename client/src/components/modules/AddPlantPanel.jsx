@@ -4,6 +4,7 @@ import { Search } from "lucide-react"; // Use lucide-react for icons
 
 import "./EditPlantPanel.css";
 import BookSuggest from "./BookSuggest.jsx";
+import { plantTypes } from "./Shelf.jsx";
 
 // parentOnSubmitFunction is submitAddPlant in Shelf.jsx
 const AddPlantPanel = ({ parentOnSubmitFunction, onCancelFunction }) => {
@@ -48,6 +49,7 @@ const AddPlantPanel = ({ parentOnSubmitFunction, onCancelFunction }) => {
     file: null,
     curPage: 1,
     totalPages: 2,
+    plantType: "Default",
   });
 
   // ============ BOOK INPUT TYPE SELECT ============ //
@@ -125,6 +127,15 @@ const AddPlantPanel = ({ parentOnSubmitFunction, onCancelFunction }) => {
     setBookData((prev) => ({ ...prev, [field]: value }));
   };
 
+  // ============ PLANT TYPE ============ //
+
+  const [selectedPlantType, setSelectedPlantType] = useState("default");
+
+  const handlePlantTypeSelect = (type) => {
+    setSelectedPlantType(type.name);
+    setBookData((prev) => ({ ...prev, plantType: type.name }));
+  };
+
   // ============ BOOK SUBMIT ============ //
   const localOnSubmitFunction = async (event) => {
     event.preventDefault();
@@ -154,6 +165,7 @@ const AddPlantPanel = ({ parentOnSubmitFunction, onCancelFunction }) => {
       bookType: bookType,
       curPage: bookData.curPage - 1,
       totalPages: bookData.totalPages,
+      plantType: bookData.plantType,
     });
   };
 
@@ -280,7 +292,7 @@ const AddPlantPanel = ({ parentOnSubmitFunction, onCancelFunction }) => {
               I Have a Physical Book (No Upload)
             </label>
             {bookType === "physical" && (
-              <div>
+              <div className="page-input-wrapper">
                 <label className="EditPlantPanel-page-label">
                   Current Page:
                   <input
@@ -303,6 +315,20 @@ const AddPlantPanel = ({ parentOnSubmitFunction, onCancelFunction }) => {
                 </label>
               </div>
             )}
+          </div>
+          {/****************** SELECT PLANT TYPE ******************/}
+          <h3 className="plant-type-header">Select a Plant Type:</h3>
+          <div className="plant-type-grid">
+            {plantTypes.map((plant) => (
+              <div
+                key={plant.name}
+                className={`plant-type-card ${selectedPlantType === plant.name ? "selected" : ""}`}
+                onClick={() => handlePlantTypeSelect(plant)}
+              >
+                <img src={plant.src + "4.png"} alt={plant.name} />
+                <span>{plant.name}</span>
+              </div>
+            ))}
           </div>
 
           {/****************** SUBMIT/CANCEL BUTTONS ******************/}

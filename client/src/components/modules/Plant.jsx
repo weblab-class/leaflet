@@ -9,6 +9,7 @@ const Plant = ({ plant, openBook }) => {
   // Sync plantData with plant prop when plant changes
   useEffect(() => {
     setPlantData(plant);
+    console.log("plantData: ", plantData);
   }, [plant]);
 
   const handleChange = (e) => {
@@ -33,10 +34,23 @@ const Plant = ({ plant, openBook }) => {
     }
   };
 
+  const plantImageSrc = () => {
+    console.log("plantData.plantType: ", plantData.plantType);
+    if (plantData.plantType === "addPlantButton") return "/assets/addPlantButton.png";
+    if (!plantData.totalPages || plantData.plantType === "default") return "/assets/testPlant.png";
+    console.log("not a default plant or button!");
+    return (
+      "/assets/" +
+      plantData.plantType +
+      Math.floor((4 * plantData.curPage) / plantData.totalPages).toString() +
+      ".png"
+    );
+  };
+
   return (
     <div>
       <img
-        src={`/assets/${plantData.plantType}.png`}
+        src={plantImageSrc()}
         alt="Plant"
         className="Plant-image"
         onClick={() => openBook(plantData)}

@@ -8,6 +8,12 @@ import { useNavigate } from "react-router-dom";
 import { Pencil } from "lucide-react"; // Use lucide-react for icons
 import "./Shelf.css";
 
+export const plantTypes = [
+  { name: "default", src: "/assets/testPlant" },
+  { name: "tulip", src: "/assets/tulip" },
+  { name: "stephania erecta", src: "/assets/stephania_erecta" },
+];
+
 const Shelf = () => {
   const [plants, setPlants] = useState([]);
   const [currentPage, setCurrentPage] = useState(0); // Track the current page of plants
@@ -35,7 +41,7 @@ const Shelf = () => {
     setShowAddPlantPanel(false);
   };
 
-  const submitAddPlant = ({ title, bookType, file, url, curPage, totalPages }) => {
+  const submitAddPlant = ({ title, bookType, file, url, curPage, totalPages, plantType }) => {
     console.info("Adding new plant");
 
     // Validate input based on bookType
@@ -46,8 +52,11 @@ const Shelf = () => {
       console.error("Validation Error: 'upload' book type requires a file to be uploaded.");
     }
     if (bookType === "physical" && !totalPages) {
-      console.error("Validation Error: 'physical' book type requires 'totalPages' to be specified.");
+      console.error(
+        "Validation Error: 'physical' book type requires 'totalPages' to be specified."
+      );
     }
+    console.log("plantType: ", plantType);
     setShowAddPlantPanel(false);
     const formData = new FormData();
     formData.append("title", title);
@@ -56,6 +65,7 @@ const Shelf = () => {
     formData.append("url", url);
     formData.append("curPage", curPage);
     formData.append("totalPages", totalPages);
+    formData.append("plantType", plantType);
 
     fetch("/api/createbook", {
       method: "POST",

@@ -104,6 +104,13 @@
   color: var(--white);
 }
 
+.page-input-wrapper {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 20px;
+}
+
 .EditPlantPanel-page-label {
   box-sizing: border-box;
   display: block;
@@ -309,4 +316,49 @@
 
 .Panel-button.cancel:hover {
   background-color: var(--darkgrey);
+}
+
+.plant-type-header {
+  margin-top: 40px;
+}
+
+.plant-type-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  margin: 16px 0;
+}
+
+.plant-type-card {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 8px;
+  border: 2px solid transparent;
+  border-radius: 12px;
+  background-color: var(--cream);
+  cursor: pointer;
+  transition: transform 0.3s, border-color 0.3s;
+}
+
+.plant-type-card img {
+  width: 70px;
+}
+
+.plant-type-card span {
+  margin-top: 8px;
+  font-size: 0.9rem;
+  color: var(--chestnut-brown);
+}
+
+.plant-type-card:hover {
+  transform: scale(1.05);
+  border-color: var(--cotton-pink);
+}
+
+.plant-type-card.selected {
+  border-color: var(--cotton-pink);
+  background-color: rgba(255, 192, 203, 0.2);
 }
