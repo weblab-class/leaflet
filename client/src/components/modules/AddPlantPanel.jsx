@@ -129,7 +129,7 @@ const AddPlantPanel = ({ parentOnSubmitFunction, onCancelFunction }) => {
 
   // ============ PLANT TYPE ============ //
 
-  const [selectedPlantType, setSelectedPlantType] = useState("default");
+  const [selectedPlantType, setSelectedPlantType] = useState("Default");
 
   const handlePlantTypeSelect = (type) => {
     setSelectedPlantType(type.name);
