@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { get, post } from "../../utilities";
 import "./Plant.css";
+import { plantTypes } from "./Shelf.jsx";
 
 const Plant = ({ plant, openBook }) => {
   const [isEditing, setIsEditing] = useState(false);
@@ -35,16 +36,20 @@ const Plant = ({ plant, openBook }) => {
   };
 
   const plantImageSrc = () => {
-    console.log("plantData.plantType: ", plantData.plantType);
-    if (plantData.plantType === "addPlantButton") return "/assets/addPlantButton.png";
-    if (!plantData.totalPages || plantData.plantType === "default") return "/assets/testPlant.png";
-    console.log("not a default plant or button!");
-    return (
-      "/assets/" +
-      plantData.plantType +
-      Math.floor((4 * plantData.curPage) / plantData.totalPages).toString() +
-      ".png"
+    if (plantData.plantType === "addPlantButton") {
+      return "/assets/addPlantButton.png"; // Special case for "add plant" button
+    }
+    if (plantData.plantType === "Default") {
+      return "/assets/testPlant4.png"; // Special case for "add plant" button
+    }
+    const stage = Math.min(
+      4,
+      Math.max(1, Math.ceil((4 * plantData.curPage) / plantData.totalPages))
     );
+    const plantTypePartialPath = plantTypes.find(
+      (plantType) => plantType.name === plantData.plantType
+    );
+    return plantTypePartialPath.src + stage.toString() + ".png";
   };
 
   return (
