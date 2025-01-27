@@ -9,7 +9,7 @@
   border: 0px solid var(--chestnut-brown);
   position: absolute;
   margin: 0px;
-  top: 22%;
+  top: 20%;
   left: 30%;
   height: 55%; /* Adjust as needed */
   width: 48%; /* Adjust as needed */
@@ -31,7 +31,8 @@
   opacity: 0.5;
   transform: scale(1.05);
 }
-.ShowPreviousButton, .ShowMoreButton {
+.ShowPreviousButton,
+.ShowMoreButton {
   padding: 10px 20px;
   margin: 0 10px;
   cursor: pointer;
