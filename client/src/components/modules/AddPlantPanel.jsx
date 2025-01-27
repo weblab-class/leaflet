@@ -252,6 +252,7 @@ const AddPlantPanel = ({ parentOnSubmitFunction, onCancelFunction }) => {
               {bookType === "upload" && (
                 <>
                   <input
+                    className="upload-button"
                     id="file_upload_input"
                     type="file"
                     accept=".txt"

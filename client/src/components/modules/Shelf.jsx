@@ -88,6 +88,7 @@ const Shelf = () => {
   const [plantToDelete, setPlantToDelete] = useState(null);
   const [showDeletePlantPanel, setShowDeletePlantPanel] = useState(false);
   const deletePlant = (plant) => {
+    console.log("Plant set to delete: ", plant);
     setPlantToDelete(plant);
     setShowDeletePlantPanel(true);
   };
@@ -98,7 +99,9 @@ const Shelf = () => {
   };
 
   const confirmDeletePlant = () => {
-    setPlants((prevPlants) => prevPlants.filter((p) => p !== plantToDelete));
+    console.info("About to delete plant: ", plantToDelete);
+    setPlants((prevPlants) => prevPlants.filter((p) => p._id !== plantToDelete._id));
+    console.info("Remaining plants: ", plants);
     post("/api/deletebook", plantToDelete);
     setPlantToDelete(null);
     setShowDeletePlantPanel(false);
@@ -121,6 +124,11 @@ const Shelf = () => {
 
   const saveEditPlant = (updatedPlant) => {
     // Update plant details in the state
+    if (updatedPlant.curPage != 0 && (updatedPlant.curPage - 1) % 2 == 0) {
+      updatedPlant.curPage -= 2;
+    } else {
+      updatedPlant.curPage -= 1;
+    }
     setPlants((prevPlants) =>
       prevPlants.map((plant) =>
         plant._id === plantToEdit._id ? { ...plant, ...updatedPlant } : plant
@@ -154,7 +162,6 @@ const Shelf = () => {
   //=========== RENDERING ============//
   // Dynamically generate shelf items, based on 'plants' state array
   const generateShelfItems = (numVisibleShelfItems) => {
-    console.info("open Book 1: ", openBook);
     const shelfItems = [];
     for (let i = 0; i < numVisibleShelfItems; i++) {
       if (i < plants.length) {
@@ -163,18 +170,17 @@ const Shelf = () => {
             <div className="column left"></div>
             <div className="column middle">
               <div className="plant-container">
-                {console.info("generating current plant: ", JSON.stringify(plants[i]))}
-                {console.info("open Book 2: ", openBook)}
+                {console.info("generating current plant: ", plants[i])}
                 <Plant plant={plants[i]} openBook={openBook} />
               </div>
             </div>
             <div className="column right">
-              <button className="EditPlantButton" onClick={() => editPlant(plants[i])}>
-                <Pencil size={20} />
-              </button>
-              <button className="DeletePlantButton" onClick={deletePlant}>
+              <button className="DeletePlantButton" onClick={() => deletePlant(plants[i])}>
                 {" "}
                 X{" "}
+              </button>
+              <button className="EditPlantButton" onClick={() => editPlant(plants[i])}>
+                <Pencil size={20} />
               </button>
             </div>
           </div>

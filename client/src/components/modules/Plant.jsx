@@ -6,8 +6,9 @@ const Plant = ({ plant, openBook }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [plantData, setPlantData] = useState(plant);
 
+  // Sync plantData with plant prop when plant changes
   useEffect(() => {
-    console.log("Plant prop: ", plant);
+    setPlantData(plant);
   }, [plant]);
 
   const handleChange = (e) => {
@@ -52,7 +53,7 @@ const Plant = ({ plant, openBook }) => {
           autoFocus
         />
       ) : (
-        plant.title && (
+        plantData.title && (
           <p
             className="Plant-book-title"
             onClick={() => setIsEditing(true)} // Switch to editing mode on click

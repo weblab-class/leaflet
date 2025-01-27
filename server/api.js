@@ -187,6 +187,7 @@ function parseBook(contentString) {
 // Delete a book
 router.post("/deletebook", (req, res) => {
   Book.findByIdAndDelete(req.body._id).then((deletedBook) => {
+    console.log("Deleted book ", req.body);
     res.status(200).json({ message: "Book deleted successfully", book: deletedBook });
   });
 });
