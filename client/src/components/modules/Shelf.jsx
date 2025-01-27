@@ -9,21 +9,15 @@ import { Pencil } from "lucide-react"; // Use lucide-react for icons
 import "./Shelf.css";
 
 const Shelf = () => {
-  // Plant = lightweight representation of Book schema/object:
-  // _id: corresponding book id
-  // title: String
-  // bookType: String among ["search", "upload", "physical"]
-  // curPage: Number
-  // totalPages: Number
-  // plantType: "testPlant"
   const [plants, setPlants] = useState([]);
+  const [currentPage, setCurrentPage] = useState(0); // Track the current page of plants
   const navigate = useNavigate();
   const addPlantButton = {
     title: "",
     plantType: "addPlantButton",
   };
 
-  // Display user's existing plants in shelf
+  // Fetch plants from the server
   useEffect(() => {
     console.log("Sending get all books request");
     get("/api/getallbooks").then(({ books: books }) => {
@@ -33,22 +27,14 @@ const Shelf = () => {
 
   // ============ ADDING PLANTS ============ //
   const [showAddPlantPanel, setShowAddPlantPanel] = useState(false);
-
-  // Function called on when user clicks on "Add Plant" button,
-  // pops up panel/form to add plant (book)
   const addPlant = () => {
     setShowAddPlantPanel(true);
   };
 
-  // Function called on when user decides not to create a plant after all
   const cancelAddPlant = () => {
     setShowAddPlantPanel(false);
   };
 
-  // Function called on when user finishes filling out add Plant
-  // (book) form and submits it
-
-  // Arguments passed in from AddPlantPanel.jsx --> localOnSubmitFunction
   const submitAddPlant = ({ title, bookType, file, url, curPage, totalPages }) => {
     console.info("Adding new plant");
 
@@ -60,9 +46,7 @@ const Shelf = () => {
       console.error("Validation Error: 'upload' book type requires a file to be uploaded.");
     }
     if (bookType === "physical" && !totalPages) {
-      console.error(
-        "Validation Error: 'physical' book type requires 'totalPages' to be specified."
-      );
+      console.error("Validation Error: 'physical' book type requires 'totalPages' to be specified.");
     }
     setShowAddPlantPanel(false);
     const formData = new FormData();
@@ -73,14 +57,13 @@ const Shelf = () => {
     formData.append("curPage", curPage);
     formData.append("totalPages", totalPages);
 
-    // Can't use get/post from utilities because formdata is passed in
     fetch("/api/createbook", {
       method: "POST",
-      body: formData, // Send FormData directly
+      body: formData,
     })
       .then((response) => response.json())
       .then(({ newPlant }) => {
-        setPlants((prevPlants) => [...prevPlants, newPlant]); // Update UI with the new book
+        setPlants((prevPlants) => [...prevPlants, newPlant]); // Update UI with the new plant
       });
   };
 
@@ -101,19 +84,17 @@ const Shelf = () => {
   const confirmDeletePlant = () => {
     console.info("About to delete plant: ", plantToDelete);
     setPlants((prevPlants) => prevPlants.filter((p) => p._id !== plantToDelete._id));
-    console.info("Remaining plants: ", plants);
     post("/api/deletebook", plantToDelete);
     setPlantToDelete(null);
     setShowDeletePlantPanel(false);
   };
 
   // ============ EDITING PLANTS ============ //
-
   const [showEditPlantPanel, setShowEditPlantPanel] = useState(false);
   const [plantToEdit, setPlantToEdit] = useState(null);
 
   const editPlant = (plant) => {
-    setPlantToEdit(plant); // Set the plant to be edited
+    setPlantToEdit(plant);
     setShowEditPlantPanel(true);
   };
 
@@ -123,24 +104,12 @@ const Shelf = () => {
   };
 
   const saveEditPlant = (updatedPlant) => {
-    // Update plant details in the state
-    if (updatedPlant.curPage != 0 && (updatedPlant.curPage - 1) % 2 == 0) {
-      updatedPlant.curPage -= 2;
-    } else {
-      updatedPlant.curPage -= 1;
-    }
     setPlants((prevPlants) =>
       prevPlants.map((plant) =>
         plant._id === plantToEdit._id ? { ...plant, ...updatedPlant } : plant
       )
     );
-
-    // Send updated data to the backend
-    post("/api/updatebook", { _id: plantToEdit._id, ...updatedPlant }).then(() => {
-      console.log("Plant updated successfully");
-    });
-
-    // Close the edit panel
+    post("/api/updatebook", { _id: plantToEdit._id, ...updatedPlant });
     setPlantToEdit(null);
     setShowEditPlantPanel(false);
   };
@@ -160,17 +129,19 @@ const Shelf = () => {
   };
 
   //=========== RENDERING ============//
-  // Dynamically generate shelf items, based on 'plants' state array
-  const generateShelfItems = (numVisibleShelfItems) => {
+
+  const generateShelfItems = () => {
     const shelfItems = [];
-    for (let i = 0; i < numVisibleShelfItems; i++) {
+    const startIndex = currentPage * 9;
+    const endIndex = startIndex + 9;
+
+    for (let i = startIndex; i < endIndex; i++) {
       if (i < plants.length) {
         shelfItems.push(
           <div className="Shelf-item" key={`shelf-item-${i}`}>
             <div className="column left"></div>
             <div className="column middle">
               <div className="plant-container">
-                {console.info("generating current plant: ", plants[i])}
                 <Plant plant={plants[i]} openBook={openBook} />
               </div>
             </div>
@@ -195,12 +166,27 @@ const Shelf = () => {
         shelfItems.push(<div className="Shelf-item" key={`shelf-item-${i}`}></div>);
       }
     }
+
     return shelfItems;
   };
 
   return (
     <div className="Shelf-container">
-      {generateShelfItems(9)}
+      {generateShelfItems()}
+
+      <div className="navigation-buttons">
+        {currentPage > 0 && (
+          <button className="ShowPreviousButton" onClick={() => setCurrentPage(currentPage - 1)}>
+            Show Previous Plants
+          </button>
+        )}
+        {currentPage * 9 + 9 < plants.length && (
+          <button className="ShowMoreButton" onClick={() => setCurrentPage(currentPage + 1)}>
+            Show More Plants
+          </button>
+        )}
+      </div>
+
       {showAddPlantPanel && (
         <AddPlantPanel parentOnSubmitFunction={submitAddPlant} onCancelFunction={cancelAddPlant} />
       )}

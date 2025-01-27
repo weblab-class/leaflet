@@ -1,17 +1,40 @@
 /* Shelf Container */
+
 .Shelf-container {
   display: grid;
   grid-template-columns: repeat(3, 1fr); /* 3 equal columns */
-  grid-auto-rows: 1fr;
+  grid-template-rows: repeat(3, 135px); /* 3 rows of fixed height */
   gap: 0px; /* Space between items */
   padding: 0px;
   border: 0px solid var(--chestnut-brown);
   position: absolute;
   margin: 0px;
-  top: 20%;
+  top: 22%;
   left: 30%;
   height: 55%; /* Adjust as needed */
   width: 48%; /* Adjust as needed */
+}
+
+.navigation-buttons {
+  padding: var(--xl) var(--m);
+  font-size: var(--xl); /* Larger text for arrows */
+  cursor: pointer;
+  background-color: var(--cotton-pink);
+  border-radius: var(--m); /* Circular buttons */
+  color: white;
+  transition: background-color 0.1s ease, transform 0.1s ease; /* Smooth hover effect */
+  z-index: 2;
+  border: 4px solid var(--sunset-pink);
+}
+
+.navigation-buttons:hover {
+  opacity: 0.5;
+  transform: scale(1.05);
+}
+.ShowPreviousButton, .ShowMoreButton {
+  padding: 10px 20px;
+  margin: 0 10px;
+  cursor: pointer;
 }
 
 /* Shelf Item */
