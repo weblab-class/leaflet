@@ -68,7 +68,7 @@ const BookReader = () => {
   };
 
   const flipBackward = async () => {
-    if (curPage >= 2) {
+    if (curPage > 0) {
       console.log("Getting previous two pages");
       const response = await post("/api/getpagerange", {
         _id,
@@ -79,6 +79,7 @@ const BookReader = () => {
       console.log("Page range response from API call: ", response.textArray[2]?.substring(0, 10));
       setBookWindow(response.textArray);
       setCurPage(curPage - 2);
+      console.log("Flip Back Page Number: " + curPage);
       setFlipDirection(0);
       setBoolFlippedPage(!boolFlippedPage);
       console.log("Finished setting states for flipping forward");
@@ -89,7 +90,7 @@ const BookReader = () => {
     <div className="BookReader-container">
       <div className="BookReader-overlay"></div>
       <NavBarBook />
-      <button className="BookReader-button" onClick={flipBackward} disabled={curPage === 0}>
+      <button className="BookReader-button" onClick={flipBackward} disabled={curPage < 0}>
         ◀
       </button>
       <Book

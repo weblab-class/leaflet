@@ -62,6 +62,7 @@ const EditPlantPanel = ({ plant, onSave, onCancel }) => {
   const handleSave = () => {
     if (isFormValid()) {
       onSave(formData); // Pass updated data to parent
+      console.log("Current Page from form: " + formData.curPage);
     }
   };
 
@@ -85,17 +86,6 @@ const EditPlantPanel = ({ plant, onSave, onCancel }) => {
                 min="1"
               />
               {errors.curPage && <div className="warning">{errors.curPage}</div>}
-            </label>
-            <label>
-              Total Pages:
-              <input
-                type="number"
-                name="totalPages"
-                value={formData.totalPages}
-                onChange={handleInputChange}
-                min="2"
-              />
-              {errors.totalPages && <div className="warning">{errors.totalPages}</div>}
             </label>
           </form>
           <div className="Panel-buttons">
