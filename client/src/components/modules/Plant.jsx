@@ -36,7 +36,7 @@ const Plant = ({ plant, openBook }) => {
   return (
     <div>
       <img
-        src={`../../../assets/${plantData.plantType}.png`}
+        src={`/assets/${plantData.plantType}.png`}
         alt="Plant"
         className="Plant-image"
         onClick={() => openBook(plantData)}
