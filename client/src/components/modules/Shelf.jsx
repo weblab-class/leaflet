@@ -9,9 +9,9 @@ import { Pencil } from "lucide-react"; // Use lucide-react for icons
 import "./Shelf.css";
 
 export const plantTypes = [
-  { name: "default", src: "/assets/testPlant" },
-  { name: "tulip", src: "/assets/tulip" },
-  { name: "stephania erecta", src: "/assets/stephania_erecta" },
+  { name: "Default", src: "/assets/testPlant" },
+  { name: "Tulip", src: "/assets/tulip" },
+  { name: "Stephania Erecta", src: "/assets/stephania_erecta" },
 ];
 
 const Shelf = () => {
