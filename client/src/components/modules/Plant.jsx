@@ -72,14 +72,12 @@ const Plant = ({ plant, openBook }) => {
           autoFocus
         />
       ) : (
-        plantData.title && (
-          <p
-            className="Plant-book-title"
-            onClick={() => setIsEditing(true)} // Switch to editing mode on click
-          >
-            {plantData.title}
-          </p>
-        )
+        <p
+          className={`Plant-book-title ${!plantData.title ? "hidden-title" : ""}`}
+          onClick={() => setIsEditing(true)} // Switch to editing mode on click
+        >
+          {plantData.title || " "} {/* Use a space to reserve height */}
+        </p>
       )}
     </div>
   );
