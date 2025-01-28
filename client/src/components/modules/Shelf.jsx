@@ -126,10 +126,12 @@ const Shelf = () => {
 
   // ============ OPENING BOOK ============ //
   const openBook = (plant) => {
+    console.log("Opening plant: ", plant);
     if (plant.plantType === "addPlantButton") {
       addPlant();
       return;
     } else if (plant.bookType === "physical") {
+      console.log("physical book");
       return;
     } else {
       navigate("/BookReader", {

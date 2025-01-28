@@ -141,6 +141,7 @@ router.post("/createbook", upload.single("file"), async (req, res) => {
     curPage: savedBook.curPage,
     totalPages: savedBook.totalPages,
     plantType: savedBook.plantType,
+    bookType: savedBook.bookType,
   };
 
   console.log("newPlant: ", newPlant);

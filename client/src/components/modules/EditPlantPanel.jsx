@@ -6,7 +6,6 @@ const EditPlantPanel = ({ plant, onSave, onCancel }) => {
     title: plant?.title || "",
     bookType: plant?.bookType || "",
     curPage: plant?.curPage + 1 || 1,
-    totalPages: plant?.totalPages || 2,
   });
 
   const [errors, setErrors] = useState({});
@@ -84,6 +83,7 @@ const EditPlantPanel = ({ plant, onSave, onCancel }) => {
                 value={formData.curPage}
                 onChange={handleInputChange}
                 min="1"
+                max={plant.totalPages}
               />
               {errors.curPage && <div className="warning">{errors.curPage}</div>}
             </label>

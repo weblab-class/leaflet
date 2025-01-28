@@ -48,7 +48,7 @@ const AddPlantPanel = ({ parentOnSubmitFunction, onCancelFunction }) => {
     cover: "",
     file: null,
     curPage: 1,
-    totalPages: 2,
+    totalPages: 10,
     plantType: "Default",
   });
 
@@ -122,8 +122,10 @@ const AddPlantPanel = ({ parentOnSubmitFunction, onCancelFunction }) => {
   };
 
   // ============ PHYSICAL BOOK ============ //
+  const [pageError, setPageError] = useState(false);
 
   const handlePhysicalInputChange = (field, value) => {
+    setPageError(false);
     setBookData((prev) => ({ ...prev, [field]: value }));
   };
 
@@ -153,6 +155,14 @@ const AddPlantPanel = ({ parentOnSubmitFunction, onCancelFunction }) => {
       } else {
         console.info("File uploaded:", bookData.file.name);
       }
+    }
+
+    if (parseInt(bookData.curPage) > parseInt(bookData.totalPages)) {
+      console.warn("Current page exceeds total pages.");
+      setPageError(true);
+      return;
+    } else {
+      setPageError(false);
     }
 
     // Log the submission payload
@@ -314,6 +324,9 @@ const AddPlantPanel = ({ parentOnSubmitFunction, onCancelFunction }) => {
                   />
                 </label>
               </div>
+            )}
+            {bookType === "physical" && pageError && (
+              <div className="warning">Current page cannot be past total pages.</div>
             )}
           </div>
           {/****************** SELECT PLANT TYPE ******************/}
