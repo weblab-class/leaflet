@@ -1,16 +1,20 @@
 import React, { useState, useEffect, useRef } from "react";
 import "./EditPlantPanel.css";
+import { plantTypes } from "./Shelf.jsx";
 
 const EditPlantPanel = ({ plant, onSave, onCancel }) => {
   const [formData, setFormData] = useState({
     title: plant?.title || "",
     bookType: plant?.bookType || "",
     curPage: plant?.curPage + 1 || 1,
+    plantType: plant?.plantType || "Default",
   });
 
   const [errors, setErrors] = useState({});
   const overlayRef = useRef(null);
   const panelRef = useRef(null);
+
+  const [selectedPlantType, setSelectedPlantType] = useState(plant?.plantType || "Default");
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -20,7 +24,7 @@ const EditPlantPanel = ({ plant, onSave, onCancel }) => {
         panelRef.current &&
         !panelRef.current.contains(event.target)
       ) {
-        onCancel(); // Close panel if clicked outside
+        onCancel();
       }
     };
     document.addEventListener("click", handleClickOutside);
@@ -33,15 +37,13 @@ const EditPlantPanel = ({ plant, onSave, onCancel }) => {
     let error = "";
     if (name === "curPage" && (value < 1 || isNaN(value))) {
       error = "Current page must be at least 1.";
-    } else if (name === "totalPages" && (value < 2 || isNaN(value))) {
-      error = "Total pages must be at least 2.";
     }
     return error;
   };
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    const numericValue = name === "curPage" || name === "totalPages" ? Number(value) : value;
+    const numericValue = name === "curPage" ? Number(value) : value;
 
     const error = validateField(name, numericValue);
     setErrors((prev) => ({ ...prev, [name]: error }));
@@ -52,16 +54,18 @@ const EditPlantPanel = ({ plant, onSave, onCancel }) => {
     }));
   };
 
+  const handlePlantTypeSelect = (type) => {
+    setSelectedPlantType(type.name);
+    setFormData((prev) => ({ ...prev, plantType: type.name }));
+  };
+
   const isFormValid = () => {
-    return (
-      !errors.curPage && !errors.totalPages && formData.curPage >= 1 && formData.totalPages >= 2
-    );
+    return !errors.curPage && formData.curPage >= 1;
   };
 
   const handleSave = () => {
     if (isFormValid()) {
-      onSave(formData); // Pass updated data to parent
-      console.log("Current Page from form: " + formData.curPage);
+      onSave(formData);
     }
   };
 
@@ -77,23 +81,41 @@ const EditPlantPanel = ({ plant, onSave, onCancel }) => {
             </label>
             <label>
               Current Page:
-              <input
-                type="number"
-                name="curPage"
-                value={formData.curPage}
-                onChange={handleInputChange}
-                min="1"
-                max={plant.totalPages}
-              />
+              <div className="current-page-container">
+                <input
+                  type="number"
+                  name="curPage"
+                  value={formData.curPage}
+                  onChange={handleInputChange}
+                  min="1"
+                  max={plant.totalPages}
+                />
+                <p className="total-pages">/ {plant.totalPages || "N/A"}</p>
+              </div>
               {errors.curPage && <div className="warning">{errors.curPage}</div>}
             </label>
+            <h3 className="plant-type-header">Change Plant Type:</h3>
+            <div className="plant-type-grid">
+              {plantTypes.map((plantType) => (
+                <div
+                  key={plantType.name}
+                  className={`plant-type-card ${
+                    selectedPlantType === plantType.name ? "selected" : ""
+                  }`}
+                  onClick={() => handlePlantTypeSelect(plantType)}
+                >
+                  <img src={plantType.src + "4.png"} alt={plantType.name} />
+                  <span>{plantType.name}</span>
+                </div>
+              ))}
+            </div>
           </form>
           <div className="Panel-buttons">
             <button
               type="button"
               className="Panel-button save"
               onClick={handleSave}
-              disabled={!isFormValid()} // Disable Save button if form is invalid
+              disabled={!isFormValid()}
             >
               Save
             </button>

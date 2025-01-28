@@ -362,3 +362,14 @@
   border-color: var(--cotton-pink);
   background-color: rgba(255, 192, 203, 0.2);
 }
+
+.current-page-container {
+  display: flex;
+  gap: 4px;
+  align-items: stretch;
+}
+
+.total-pages {
+  font-size: var(--xl);
+  color: #555;
+}
