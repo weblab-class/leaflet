@@ -16,7 +16,7 @@ const BookReader = () => {
   const location = useLocation();
   const _id = location.state?._id; // Retrieve the book from state
   const [curPage, setCurPage] = useState(0);
-  const [totalPages, setTotalPages] = useState(2);
+  const [totalPages, setTotalPages] = useState(10);
   const [bookWindow, setBookWindow] = useState(["", ""]);
   // NEW: -1 = no flip, 0 = left page, 1 = right page
   const [flipDirection, setFlipDirection] = useState(-1);
