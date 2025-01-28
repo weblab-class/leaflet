@@ -3,8 +3,16 @@ import { Link } from "react-router-dom";
 import { UserContext } from "../App";
 import "./NavBarBook.css";
 
-const NavBarBook = (props) => {
+const NavBarBook = ({ curPage, totalPages, flipToPage }) => {
   const { userId, handleLogout } = useContext(UserContext);
+
+  const progress = ((curPage + 1) / totalPages) * 100; // Calculate progress as percentage
+
+  // Handle slider change
+  const handleSliderChange = (event) => {
+    const newPage = Math.round((event.target.value / 100) * totalPages);
+    flipToPage(newPage); // Call flipToPage function when slider is adjusted
+  };
 
   return (
     <nav className="NavBarBook-container">
@@ -15,6 +23,19 @@ const NavBarBook = (props) => {
       <button onClick={handleLogout} className="NavBarBook-link">
         Sign out
       </button>
+
+      {/* Progress Bar */}
+      <div className="progress-container">
+        <input
+          type="range"
+          min="0"
+          max="100"
+          value={progress}
+          className="progress-slider"
+          onChange={handleSliderChange}
+        />
+        <div className="progress-bar" style={{ width: `${progress}%` }} />
+      </div>
     </nav>
   );
 };

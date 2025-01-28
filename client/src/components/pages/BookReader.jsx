@@ -91,7 +91,7 @@ const BookReader = () => {
   return (
     <div className="BookReader-container">
       <div className="BookReader-overlay"></div>
-      <NavBarBook />
+      <NavBarBook curPage={curPage} totalPages={totalPages} />
       <button className="BookReader-button" onClick={flipBackward} disabled={curPage <= 0}>
         ◀
       </button>
