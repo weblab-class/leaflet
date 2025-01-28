@@ -88,10 +88,32 @@ const BookReader = () => {
     }
   };
 
+  const flipToPage = async (newPage) => {
+    setCurPage(newPage);
+    console.log("Using slider to flip to new page: ", newPage);
+    const response = await post("/api/getpagerange", {
+      _id,
+      startPage: newPage - 2,
+      totalPages,
+      numPages: 6,
+    });
+    console.log("Page range response from API call: ", response.textArray[2]?.substring(0, 10));
+    setBookWindow(response.textArray);
+    post("/api/savecurpage", { _id, curPage: newPage });
+    if (newPage > curPage) {
+      setFlipDirection(0);
+    } else {
+      setFlipDirection(1);
+    }
+    setCurPage(newPage);
+    setBoolFlippedPage(!boolFlippedPage);
+    console.log("Finished setting states for flipping forward");
+  };
+
   return (
     <div className="BookReader-container">
       <div className="BookReader-overlay"></div>
-      <NavBarBook curPage={curPage} totalPages={totalPages} />
+      <NavBarBook curPage={curPage} totalPages={totalPages} flipToPage={flipToPage} />
       <button className="BookReader-button" onClick={flipBackward} disabled={curPage <= 0}>
         ◀
       </button>

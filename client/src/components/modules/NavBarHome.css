@@ -61,7 +61,6 @@ button.NavBarBook-link {
   height: 100%;
   background-color: var(--spring-green); /* Color of the progress bar */
   border-radius: 5px;
-  transition: width 0.3s ease;
 }
 
 .progress-slider {
