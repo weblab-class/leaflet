@@ -37,7 +37,7 @@ const Plant = ({ plant, openBook }) => {
 
   const plantImageSrc = () => {
     if (plantData.plantType === "addPlantButton") {
-      return "/assets/addPlantButton.png"; // Special case for "add plant" button
+      return "../../../public/assets/addPlantButton.png"; // Special case for "add plant" button
     }
     if (plantData.plantType === "Default") {
       return "/assets/testPlant4.png"; // Special case for "add plant" button
