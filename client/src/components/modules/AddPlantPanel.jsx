@@ -155,22 +155,22 @@ const AddPlantPanel = ({ parentOnSubmitFunction, onCancelFunction }) => {
         console.info("File uploaded:", bookData.file.name);
       }
     }
-
-    if (parseInt(bookData.curPage) > parseInt(bookData.totalPages)) {
-      console.warn("Current page exceeds total pages.");
-      setPageError(true);
-      return;
-    } else {
-      setPageError(false);
+    bookData.curPage -= 1;
+    if (bookType === "physical") {
+      if (parseInt(bookData.curPage) > parseInt(bookData.totalPages)) {
+        console.warn("Current page exceeds total pages.");
+        setPageError(true);
+        return;
+      } else {
+        setPageError(false);
+      }
+      if (bookData.curPage % 2 == 1) {
+        bookData.curPage -= 1;
+      }
     }
 
     // Log the submission payload
     console.info("Book data to be submitted:", bookData);
-    bookData.curPage -= 1;
-
-    if (bookData.curPage % 2 == 1) {
-      bookData.curPage -= 1;
-    }
 
     parentOnSubmitFunction({
       title: bookData.title,

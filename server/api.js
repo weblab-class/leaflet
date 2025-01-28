@@ -98,7 +98,7 @@ router.post("/createbook", upload.single("file"), async (req, res) => {
     title,
     bookType,
     curPage: parseInt(curPage, 10) || 0,
-    totalPages: parseInt(totalPages, 10) || 2,
+    totalPages: parseInt(totalPages, 10) || 10,
     content: [],
     plantType,
   });
@@ -211,7 +211,7 @@ router.post("/getpageinfo", async (req, res) => {
   const pageInfo = await Book.findOne({ _id: _id }, { curPage: 1, totalPages: 1 }).exec();
   res.status(200).json({
     message: "Page information retrieved successfully",
-    curPage,
+    curPage: pageInfo?.curPage || 0,
     totalPages: pageInfo?.totalPages || 10,
   });
 });

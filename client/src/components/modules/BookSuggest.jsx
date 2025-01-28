@@ -32,7 +32,6 @@ const fetchSuggestions = (searchTitle, setSuggestions, setLoading, signal) =>
             .filter((book) => book.link); // Ensure we have a txt link
           console.info("Book options: ", bookOptions);
           setSuggestions(bookOptions);
-          setTriedFetchingSuggestions(true);
         }
       })
       .catch((error) => {
