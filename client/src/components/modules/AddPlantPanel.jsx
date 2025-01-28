@@ -167,13 +167,18 @@ const AddPlantPanel = ({ parentOnSubmitFunction, onCancelFunction }) => {
 
     // Log the submission payload
     console.info("Book data to be submitted:", bookData);
+    bookData.curPage -= 1;
+
+    if (bookData.curPage % 2 == 1) {
+      bookData.curPage -= 1;
+    }
 
     parentOnSubmitFunction({
       title: bookData.title,
       file: bookData.file,
       url: bookData.url,
       bookType: bookType,
-      curPage: bookData.curPage - 1,
+      curPage: bookData.curPage,
       totalPages: bookData.totalPages,
       plantType: bookData.plantType,
     });

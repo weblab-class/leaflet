@@ -211,8 +211,8 @@ router.post("/getpageinfo", async (req, res) => {
   const pageInfo = await Book.findOne({ _id: _id }, { curPage: 1, totalPages: 1 }).exec();
   res.status(200).json({
     message: "Page information retrieved successfully",
-    curPage: pageInfo?.curPage || 0,
-    totalPages: pageInfo?.totalPages || 2,
+    curPage,
+    totalPages: pageInfo?.totalPages || 10,
   });
 });
 

@@ -45,7 +45,7 @@ const Plant = ({ plant, openBook }) => {
 
     const stage = Math.min(
       4,
-      Math.max(1, Math.ceil((4 * plantData.curPage) / plantData.totalPages))
+      Math.max(1, Math.ceil((4 * (plantData.curPage + 1)) / plantData.totalPages))
     );
     const plantTypePartialPath = plantTypes.find(
       (plantType) => plantType.name === plantData.plantType

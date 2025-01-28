@@ -225,7 +225,7 @@
 
 .warning {
   color: red;
-  font-size: 12px;
+  font-size: var(--m);
 }
 
 .disable-outside-clicks {
@@ -365,11 +365,16 @@
 
 .current-page-container {
   display: flex;
-  gap: 4px;
-  align-items: stretch;
+  align-items: center;
+  gap: 8px;
+  width: 100%; /* Ensures it takes up full width */
+}
+
+.current-page-container input {
+  flex: 1; /* Allows the input field to stretch */
 }
 
 .total-pages {
+  white-space: nowrap;
   font-size: var(--xl);
-  color: #555;
 }

@@ -6,7 +6,7 @@ const EditPlantPanel = ({ plant, onSave, onCancel }) => {
   const [formData, setFormData] = useState({
     title: plant?.title || "",
     bookType: plant?.bookType || "",
-    curPage: plant?.curPage + 1 || 1,
+    curPage: plant?.curPage + 1,
     plantType: plant?.plantType || "Default",
   });
 
@@ -35,15 +35,20 @@ const EditPlantPanel = ({ plant, onSave, onCancel }) => {
 
   const validateField = (name, value) => {
     let error = "";
-    if (name === "curPage" && (value < 1 || isNaN(value))) {
-      error = "Current page must be at least 1.";
+    if (name === "curPage") {
+      if (isNaN(value) || value < 1) {
+        error = "Current page must be at least 1.";
+      } else if (value > plant.totalPages) {
+        error = `Page cannot exceed ${plant.totalPages}.`;
+      }
     }
     return error;
   };
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    const numericValue = name === "curPage" ? Number(value) : value;
+
+    const numericValue = name === "curPage" && value !== "" ? Number(value) : value;
 
     const error = validateField(name, numericValue);
     setErrors((prev) => ({ ...prev, [name]: error }));
@@ -60,12 +65,23 @@ const EditPlantPanel = ({ plant, onSave, onCancel }) => {
   };
 
   const isFormValid = () => {
-    return !errors.curPage && formData.curPage >= 1;
+    return !errors.curPage && formData.curPage >= 1 && formData.curPage <= plant.totalPages;
   };
 
   const handleSave = () => {
     if (isFormValid()) {
+      formData.curPage -= 1;
+      if (formData.curPage % 2 == 1) {
+        formData.curPage -= 1;
+      }
+      console.log("formData.curPage: ", formData.curPage);
       onSave(formData);
+    }
+  };
+
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter") {
+      e.target.blur(); // Remove focus from the input field
     }
   };
 
@@ -87,6 +103,7 @@ const EditPlantPanel = ({ plant, onSave, onCancel }) => {
                   name="curPage"
                   value={formData.curPage}
                   onChange={handleInputChange}
+                  onKeyDown={handleKeyDown}
                   min="1"
                   max={plant.totalPages}
                 />
