@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import "./EditPlantPanel.css";
+import "./Panel.css";
 import { plantTypes } from "./Shelf.jsx";
 
 const EditPlantPanel = ({ plant, onSave, onCancel }) => {

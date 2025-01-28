@@ -1,8 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
-// **************** TODO *************** // Custom icons
 import { Search } from "lucide-react"; // Use lucide-react for icons
 
-import "./EditPlantPanel.css";
+import "./Panel.css";
 import BookSuggest from "./BookSuggest.jsx";
 import { plantTypes } from "./Shelf.jsx";
 

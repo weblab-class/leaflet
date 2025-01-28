@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from "react";
-import "./EditPlantPanel.css";
+import "./Panel.css";
 
 const DeletePlantPanel = ({ onConfirmDelete, onCancelDelete }) => {
   // ============ MONITOR RENDERING ============ //
