@@ -59,6 +59,7 @@ const BookReader = () => {
         numPages: 6,
       });
       console.log("Page range response from API call: ", response.textArray[2]?.substring(0, 10));
+      post("/api/savecurpage", { _id, curPage: curPage + 2 });
       setCurPage(curPage + 2);
       setBookWindow(response.textArray);
       setFlipDirection(1);
@@ -78,6 +79,7 @@ const BookReader = () => {
       });
       console.log("Page range response from API call: ", response.textArray[2]?.substring(0, 10));
       setBookWindow(response.textArray);
+      post("/api/savecurpage", { _id, curPage: curPage - 2 });
       setCurPage(curPage - 2);
       console.log("Flip Back Page Number: " + curPage);
       setFlipDirection(0);

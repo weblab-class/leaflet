@@ -216,6 +216,18 @@ router.post("/getpageinfo", async (req, res) => {
   });
 });
 
+router.post("/savecurpage", async (req, res) => {
+  const updatedBook = await Book.findByIdAndUpdate(
+    { _id: req.body._id },
+    { curPage: req.body.curPage },
+    { new: true } // return the updated document
+  );
+  if (!updatedBook) {
+    return res.status(404).json({ message: "Book not found" });
+  }
+  res.status(200).json(updatedBook);
+});
+
 router.post("/getpagerange", async (req, res) => {
   let { _id, startPage, totalPages, numPages } = req.body;
 
