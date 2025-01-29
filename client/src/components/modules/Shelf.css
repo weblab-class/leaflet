@@ -2,18 +2,18 @@
 
 .Shelf-container {
   display: grid;
-  grid-template-columns: repeat(3, 1fr); /* 3 equal columns */
-  grid-template-rows: repeat(3, 135px); /* 3 rows of fixed height */
+  grid-template-columns: repeat(3, 233px); /* Fixed column width */
+  grid-template-rows: repeat(3, 138px); /* Fixed row height */
   gap: 0px; /* Space between items */
-  padding: 0px;
-  border: 0px solid var(--chestnut-brown);
   position: absolute;
-  margin: 0px;
   top: 20%;
-  left: 30%;
-  height: 55%; /* Adjust as needed */
-  width: 48%; /* Adjust as needed */
+  left: 50%;
+  transform: translateX(-50%);
+  width: 500px; /* Fixed width */
+  height: 450px; /* Fixed height */
 }
+
+
 
 .Shelf-navigation-buttons {
   padding: var(--xl) var(--m);
@@ -41,24 +41,23 @@
 /* Shelf Item */
 .Shelf-item {
   position: relative;
-  width: 100%; /* Full width of grid cell */
+  width: 150px; /* Fixed size */
+  height: 135px; /* Match grid row height */
   padding: 0px;
   border: 0px solid var(--chestnut-brown);
-  border-radius: 0px;
-  box-sizing: border-box; /* Include borders in size calculations */
-  display: flex; /* Use flexbox to center content */
-  justify-content: center; /* Center child elements horizontally */
-  align-items: center; /* Center child elements vertically */
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
+
 
 /* Image inside Shelf Item */
 .Shelf-item img {
-  max-width: 50%; /* Set the image to be smaller than the container (80% of the container width) */
-  max-height: 50%; /* Ensure the image does not exceed 80% of the container height */
-  object-fit: contain; /* Maintain the image aspect ratio */
-  display: block; /* Remove any inline block spacing issues */
-  margin: 0 auto; /* Ensure the image is centered within the container */
+  width: 90px; /* Fixed width */
+  height: auto; /* Maintain aspect ratio */
+  object-fit: contain; /* Prevents distortion */
 }
+
 
 /* Column Layout */
 .column {
@@ -159,6 +158,7 @@
   margin: 0px;
   z-index: 3;
   color: var(--chestnut-brown);
+  width: 40px;  /* Set fixed button size */
 }
 
 .Shelf-button.left {
