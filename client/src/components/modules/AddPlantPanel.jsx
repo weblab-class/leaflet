@@ -278,7 +278,7 @@ const AddPlantPanel = ({ parentOnSubmitFunction, onCancelFunction }) => {
                 checked={bookType === "upload"}
                 onChange={() => handleBookTypeChange("upload")}
               />
-              Upload Your Own TXT File
+              Upload Your Own TXT or PDF File
               {bookType === "upload" && (
                 <>
                   <input
