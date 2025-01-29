@@ -71,6 +71,11 @@ const BookReader = () => {
     console.log("Finished setting states for flipping forward");
   };
 
+  let pageTurnSound = new Audio("../../../public/assets/pageturn-102978.mp3");
+  const playSound = () => {
+    pageTurnSound.play();
+  };
+
   return (
     <div className="BookReader-container">
       <div className="BookReader-overlay"></div>
@@ -79,6 +84,7 @@ const BookReader = () => {
         className="BookReader-button"
         onClick={() => {
           flipToPage(curPage - 2);
+          playSound();
         }}
         disabled={curPage <= 0}
       >
@@ -94,6 +100,7 @@ const BookReader = () => {
         className="BookReader-button"
         onClick={() => {
           flipToPage(curPage + 2);
+          playSound();
         }}
         disabled={curPage >= totalPages - 2}
       >
