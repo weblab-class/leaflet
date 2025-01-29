@@ -124,6 +124,7 @@ const Shelf = () => {
   };
 
   // ============ OPENING BOOK ============ //
+  const [messagePlantId, setMessagePlantId] = useState(null);
   const openBook = (plant) => {
     console.log("Opening plant: ", plant);
     if (plant.plantType === "addPlantButton") {
@@ -131,12 +132,13 @@ const Shelf = () => {
       return;
     } else if (plant.bookType === "physical") {
       console.log("physical book");
+      setMessagePlantId(plant._id);
+      setTimeout(() => setMessagePlantId(null), 800);
       return;
-    } else {
-      navigate("/BookReader", {
-        state: { _id: plant._id },
-      });
     }
+    navigate("/BookReader", {
+      state: { _id: plant._id },
+    });
   };
 
   //=========== RENDERING ============//
@@ -150,6 +152,7 @@ const Shelf = () => {
 
     for (let i = startIndex; i < endIndex; i++) {
       if (i < plants.length) {
+        const isMessageVisible = messagePlantId === plants[i]._id;
         shelfItems.push(
           <div className="Shelf-item" key={`shelf-item-${i}`}>
             <div className="column left"></div>
@@ -166,6 +169,7 @@ const Shelf = () => {
               <button className="EditPlantButton" onClick={() => editPlant(plants[i])}>
                 <Pencil size={20} />
               </button>
+              {isMessageVisible && <div className="message-box fade-in">I'm a physical book!</div>}
             </div>
           </div>
         );
