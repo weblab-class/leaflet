@@ -10,7 +10,7 @@ const Plant = ({ plant, openBook }) => {
   // Sync plantData with plant prop when plant changes
   useEffect(() => {
     setPlantData(plant);
-    console.log("plantData: ", plantData);
+    // console.log("plantData: ", plantData);
   }, [plant]);
 
   const handleChange = (e) => {
@@ -40,7 +40,7 @@ const Plant = ({ plant, openBook }) => {
       return "/assets/addPlantButton.png"; // Special case for "add plant" button
     }
     if (!plantData.plantType || plantData.plantType === "Default") {
-      return "/assets/testPlant4.png"; // Special case for "add plant" button
+      return "/assets/testPlant4.png"; // Special case for "default plant"
     }
 
     const stage = Math.min(

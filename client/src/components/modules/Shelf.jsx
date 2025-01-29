@@ -5,7 +5,7 @@ import AddPlantPanel from "./AddPlantPanel.jsx";
 import DeletePlantPanel from "./DeletePlantPanel.jsx";
 import EditPlantPanel from "./EditPlantPanel.jsx";
 import { useNavigate } from "react-router-dom";
-import { Pencil } from "lucide-react"; // Use lucide-react for icons
+import { Pencil, ChevronLeft, ChevronRight } from "lucide-react";
 import "./Shelf.css";
 
 export const plantTypes = [
@@ -16,7 +16,6 @@ export const plantTypes = [
 
 const Shelf = () => {
   const [plants, setPlants] = useState([]);
-  const [currentPage, setCurrentPage] = useState(0); // Track the current page of plants
   const navigate = useNavigate();
   const addPlantButton = {
     title: "",
@@ -142,9 +141,11 @@ const Shelf = () => {
 
   //=========== RENDERING ============//
 
+  const [curShelfPage, setCurShelfPage] = useState(0); // Track the current page of plants
+
   const generateShelfItems = () => {
     const shelfItems = [];
-    const startIndex = currentPage * 9;
+    const startIndex = curShelfPage * 9;
     const endIndex = startIndex + 9;
 
     for (let i = startIndex; i < endIndex; i++) {
@@ -183,22 +184,26 @@ const Shelf = () => {
   };
 
   return (
-    <div className="Shelf-container">
-      {generateShelfItems()}
-
-      <div className="navigation-buttons">
-        {currentPage > 0 && (
-          <button className="ShowPreviousButton" onClick={() => setCurrentPage(currentPage - 1)}>
-            Show Previous Plants
-          </button>
-        )}
-        {currentPage * 9 + 9 < plants.length && (
-          <button className="ShowMoreButton" onClick={() => setCurrentPage(currentPage + 1)}>
-            Show More Plants
-          </button>
-        )}
-      </div>
-
+    <>
+      {curShelfPage > 0 && (
+        <button
+          className="Shelf-button left"
+          onClick={() => setCurShelfPage(curShelfPage - 1)}
+          aria-label="Previous"
+        >
+          <ChevronLeft size={24} />
+        </button>
+      )}
+      <div className="Shelf-container">{generateShelfItems()}</div>
+      {curShelfPage * 9 + 9 < plants.length + 1 && (
+        <button
+          className="Shelf-button right"
+          onClick={() => setCurShelfPage(curShelfPage + 1)}
+          aria-label="Next"
+        >
+          <ChevronRight size={24} />
+        </button>
+      )}
       {showAddPlantPanel && (
         <AddPlantPanel parentOnSubmitFunction={submitAddPlant} onCancelFunction={cancelAddPlant} />
       )}
@@ -208,7 +213,7 @@ const Shelf = () => {
       {showEditPlantPanel && (
         <EditPlantPanel plant={plantToEdit} onSave={saveEditPlant} onCancel={cancelEditPlant} />
       )}
-    </div>
+    </>
   );
 };
 

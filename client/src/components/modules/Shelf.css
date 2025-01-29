@@ -15,7 +15,7 @@
   width: 48%; /* Adjust as needed */
 }
 
-.navigation-buttons {
+.Shelf-navigation-buttons {
   padding: var(--xl) var(--m);
   font-size: var(--xl); /* Larger text for arrows */
   cursor: pointer;
@@ -88,7 +88,7 @@
 .DeletePlantButton {
   position: absolute; /* Position relative to .Shelf-item */
   top: 5px;
-  right: 5px;
+  right: 28px;
   background-color: var(--sunset-pink);
   color: var(--chestnut-brown);
   border: 0px;
@@ -111,7 +111,7 @@
 .EditPlantButton {
   position: absolute; /* Position relative to .Shelf-item */
   top: 40px;
-  right: 7px;
+  right: 30px;
   display: none;
   background-color: var(--bright-green);
   color: var(--chestnut-brown);
@@ -136,4 +136,45 @@
 .Shelf-item:hover .DeletePlantButton,
 .Shelf-item:hover .EditPlantButton {
   display: block; /* Show button when hovering over a shelf item */
+}
+
+.Shelf-navigation-buttons {
+  display: flex;
+  justify-content: center;
+  margin: 16px 0;
+  gap: 8px;
+}
+
+.Shelf-button {
+  background-color: var(--peach);
+  border: none;
+  border-radius: 15%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+  position: absolute;
+  margin: 0px;
+  z-index: 3;
+}
+
+.Shelf-button.left {
+  top: 40%;
+  left: 29%;
+}
+
+.Shelf-button.right {
+  top: 40%;
+  left: 77%;
+}
+
+.Shelf-button:hover {
+  transform: scale(1.1);
+}
+
+.Shelf-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
 }
