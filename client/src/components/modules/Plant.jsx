@@ -39,10 +39,6 @@ const Plant = ({ plant, openBook }) => {
     if (plantData.plantType === "addPlantButton") {
       return "/assets/addPlantButton.png"; // Special case for "add plant" button
     }
-    if (!plantData.plantType || plantData.plantType === "Default") {
-      return "/assets/testPlant4.png"; // Special case for "default plant"
-    }
-
     const stage = Math.min(
       4,
       Math.max(1, Math.ceil((4 * (plantData.curPage + 1)) / plantData.totalPages))

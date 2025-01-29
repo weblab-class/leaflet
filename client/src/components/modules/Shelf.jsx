@@ -10,7 +10,7 @@ import { Pencil, ChevronLeft, ChevronRight } from "lucide-react";
 import "./Shelf.css";
 
 export const plantTypes = [
-  { name: "Default", src: "/assets/testPlant" },
+  { name: "Garden Strawberry", src: "/assets/garden_strawberry" },
   { name: "Tulip", src: "/assets/tulip" },
   { name: "Stephania Erecta", src: "/assets/stephania_erecta" },
   { name: "African Violet", src: "/assets/african_violet" },
