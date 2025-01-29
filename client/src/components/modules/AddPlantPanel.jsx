@@ -138,6 +138,8 @@ const AddPlantPanel = ({ parentOnSubmitFunction, onCancelFunction }) => {
   };
 
   // ============ BOOK SUBMIT ============ //
+  const [formError, setFormError] = useState(false);
+
   const localOnSubmitFunction = async (event) => {
     event.preventDefault();
     console.info("Submitting new book...");
@@ -146,10 +148,12 @@ const AddPlantPanel = ({ parentOnSubmitFunction, onCancelFunction }) => {
       if (!bookData.file) {
         console.warn("No file uploaded for 'upload' book type.");
         setFileError(true);
+        setFormError(true);
         return;
       } else if (!bookData.title) {
         console.warn("Title empty for 'upload' book type.");
         setTitleError(true);
+        setFormError(true);
         return;
       } else {
         console.info("File uploaded:", bookData.file.name);
@@ -160,18 +164,18 @@ const AddPlantPanel = ({ parentOnSubmitFunction, onCancelFunction }) => {
       if (parseInt(bookData.curPage) > parseInt(bookData.totalPages)) {
         console.warn("Current page exceeds total pages.");
         setPageError(true);
+        setFormError(true);
         return;
       } else {
         setPageError(false);
       }
+      setFormError(false);
       if (bookData.curPage % 2 == 1) {
         bookData.curPage -= 1;
       }
     }
-
     // Log the submission payload
     console.info("Book data to be submitted:", bookData);
-
     parentOnSubmitFunction({
       title: bookData.title,
       file: bookData.file,
@@ -356,6 +360,9 @@ const AddPlantPanel = ({ parentOnSubmitFunction, onCancelFunction }) => {
             <button type="button" className="EditPlantPanel-cancel" onClick={onCancelFunction}>
               Cancel
             </button>
+            {formError && (
+              <div className="EditPlantPanel-message-box">Something is missing up there!</div>
+            )}
           </div>
         </form>
       </div>
