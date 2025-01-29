@@ -1,17 +1,21 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { Link } from "react-router-dom";
 import { UserContext } from "../App";
 import "./NavBarBook.css";
 
 const NavBarBook = ({ curPage, totalPages, flipToPage }) => {
   const { userId, handleLogout } = useContext(UserContext);
+  const [tempProgress, setTempProgress] = useState(((curPage + 1) / totalPages) * 100);
 
-  const progress = ((curPage + 1) / totalPages) * 100; // Calculate progress as percentage
-
-  // Handle slider change
+  // Handle slider change without snapping
   const handleSliderChange = (event) => {
-    const newPage = Math.round((event.target.value / 100) * totalPages);
-    flipToPage(newPage); // Call flipToPage function when slider is adjusted
+    setTempProgress(event.target.value);
+  };
+
+  // Update the actual page when user releases the slider
+  const handleSliderRelease = () => {
+    const newPage = Math.round((tempProgress / 100) * totalPages);
+    flipToPage(newPage);
   };
 
   return (
@@ -30,11 +34,13 @@ const NavBarBook = ({ curPage, totalPages, flipToPage }) => {
           type="range"
           min="0"
           max="100"
-          value={progress}
+          value={tempProgress}
           className="progress-slider"
           onChange={handleSliderChange}
+          onMouseUp={handleSliderRelease} // For desktop
+          onTouchEnd={handleSliderRelease} // For mobile
         />
-        <div className="progress-bar" style={{ width: `${progress}%` }} />
+        <div className="progress-bar" style={{ width: `${tempProgress}%` }} />
       </div>
     </nav>
   );
