@@ -199,12 +199,12 @@ const AddPlantPanel = ({ parentOnSubmitFunction, onCancelFunction }) => {
               className="bookTitleInput"
               id="AddPlantPanel-bookTitleInput"
               type="text"
-              placeholder="Search for a book..."
+              placeholder="Search for an old book..."
               value={bookData.title}
               onChange={handleTitleChange}
               onKeyDown={handleKeyDown}
               onBlur={handleBlur}
-              style={{ flex: 1 }}
+              style={{ flex: 1, fontFamily: "var(--font-small)" }}
             />
             <button
               className="bookTitleInput-search-icon"
