@@ -168,33 +168,39 @@ router.post("/createbook", upload.single("file"), async (req, res) => {
 // **************** TODO: Format pages nicely? (REGAN)                       //
 // ****************       Like, if line contains 'chapter', skip to new page //
 function parseBook(contentString) {
+  const maxLineLength = 50; // Maximum characters per line
+  const maxLinesPerPage = 23; // Maximum lines per page
+  const words = contentString.split(/\s+/); // Split by whitespace
+  let currentLine = "";
+  let currentPage = [];
   const pageArray = [];
-  const chunkSize = 1375; // Desired chunk size
-  let charIndex = 0;
 
-  while (charIndex < contentString.length) {
-    let endIndex = charIndex + chunkSize;
-    // Ensure we don't exceed the content length
-    if (endIndex > contentString.length) {
-      endIndex = contentString.length;
+  words.forEach((word) => {
+    if (currentLine.length + word.length + 1 <= maxLineLength) {
+      // Add word to the current line
+      currentLine += (currentLine.length === 0 ? "" : " ") + word;
     } else {
-      // Find the nearest space before the chunk ends
-      while (endIndex > charIndex && contentString[endIndex] !== " ") {
-        endIndex--;
-      }
-      // If no space is found, just break at chunkSize
-      if (endIndex === charIndex) {
-        endIndex = charIndex + chunkSize;
+      // Push the completed line and start a new one
+      currentPage.push(currentLine);
+      currentLine = word;
+
+      // If the page is full, push it to pageArray
+      if (currentPage.length >= maxLinesPerPage) {
+        pageArray.push(currentPage.join("\n"));
+        currentPage = [];
       }
     }
-    // Add the chunk to the page array
-    pageArray.push(contentString.slice(charIndex, endIndex).trim());
-    charIndex = endIndex;
-  }
+  });
+
+  // Push the last line
+  if (currentLine) currentPage.push(currentLine);
+
+  // Push the last page if not empty
+  if (currentPage.length > 0) pageArray.push(currentPage.join("\n"));
+
   // Ensure an even number of pages by adding a blank page if needed
-  if (pageArray.length % 2 !== 0) {
-    pageArray.push("");
-  }
+  if (pageArray.length % 2 !== 0) pageArray.push("");
+
   return pageArray;
 }
 
