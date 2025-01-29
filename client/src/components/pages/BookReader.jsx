@@ -73,7 +73,7 @@ const BookReader = () => {
   };
 
   //page turn audio
-  let pageTurnSound = new Audio("../../../public/assets/pageturn-102978.mp3");
+  let pageTurnSound = new Audio("../../../public/assets/pageTurn.mp3");
 
   const playSound = () => {
     if (isSoundOn) {

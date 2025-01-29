@@ -12,6 +12,8 @@ export const plantTypes = [
   { name: "Default", src: "/assets/testPlant" },
   { name: "Tulip", src: "/assets/tulip" },
   { name: "Stephania Erecta", src: "/assets/stephania_erecta" },
+  { name: "African Violet", src: "/assets/african_violet" },
+  { name: "Lilies of the Valley", src: "/assets/lilies_of_valley" },
 ];
 
 const Shelf = () => {
