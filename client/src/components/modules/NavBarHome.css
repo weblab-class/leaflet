@@ -12,13 +12,6 @@
   gap: var(--l);
 }
 
-.NavBarHome-title {
-  font-weight: bold;
-  color: var(--bright-green);
-  font-size: var(--xxl);
-  font-family: var(--font-fancy);
-}
-
 .NavBarHome-link {
   all: unset; /* Reset all styles */
   display: inline-flex; /* Consistent with flex behavior */
@@ -27,7 +20,7 @@
   height: 30px;
   color: #ffffff;
   text-decoration: none;
-  font-size: var(--ml);
+  font-size: var(--l);
   cursor: pointer;
   transition: opacity 0.3s ease, color 0.3s ease;
   box-sizing: border-box;

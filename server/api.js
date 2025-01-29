@@ -43,16 +43,48 @@ router.post("/initsocket", (req, res) => {
 // |------------------------------|
 
 // Get all books belonging to a user
-router.get("/getallbooks", (req, res) => {
-  Book.find({ userId: req.user._id })
-    .select("_id title bookType curPage totalPages plantType") // Only include these fields
-    .then((books) => {
-      res.status(200).json({ message: "Books fetched successfully", books });
-    })
-    .catch((err) => {
-      console.error("Error fetching books:", err);
-      res.status(500).json({ message: "Failed to fetch books", error: err });
-    });
+router.get("/getallbooks", async (req, res) => {
+  try {
+    const userId = req.user._id; // Get the user ID from request
+
+    // Fetch books that belong to the user
+    let books = await Book.find({ userId }).select(
+      "_id title bookType curPage totalPages plantType"
+    );
+
+    // Check if this is the user's first time logging in
+    const user = await User.findOne({ _id: userId }, { firstTimeLoggingIn: 1 });
+
+    if (user?.firstTimeLoggingIn) {
+      // Fetch public books
+      const publicBooks = await Book.find({ userId: "public" });
+
+      // Create copies of public books but assign userId = req.user._id
+      const copiedBooks = publicBooks.map((book) => ({
+        userId, // Assign new userId
+        title: book.title,
+        bookType: book.bookType,
+        curPage: book.curPage,
+        totalPages: book.totalPages,
+        plantType: book.plantType,
+        content: book.content,
+      }));
+
+      // Save copied books to the database
+      await Book.insertMany(copiedBooks);
+
+      // Fetch the newly added books
+      books = [...books, ...copiedBooks];
+
+      // Update user's firstTimeLoggingIn field to false
+      await User.updateOne({ _id: userId }, { firstTimeLoggingIn: false });
+    }
+
+    res.status(200).json({ message: "Books fetched successfully", books });
+  } catch (err) {
+    console.error("Error fetching books:", err);
+    res.status(500).json({ message: "Failed to fetch books", error: err });
+  }
 });
 
 router.post("/updatebook", async (req, res) => {

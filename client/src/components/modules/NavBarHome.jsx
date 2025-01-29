@@ -9,10 +9,12 @@ const NavBarHome = (props) => {
   return (
     <nav className="NavBarHome-container">
       <div className="NavBarHome-background"></div>
-      <div className="NavBarHome-title">Leaflet</div>
-      <Link to="/Home" className="NavBarHome-link">
-        Home
-      </Link>
+      <div className="NavBarHome-title">
+        <img
+          src="/assets/leaflet_title.png"
+          style={{ width: "230px", padding: "10px", marginTop: "30px" }}
+        />
+      </div>
       <button onClick={handleLogout} className="NavBarHome-link">
         Sign out
       </button>
