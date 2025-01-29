@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import "./Booksuggest.css";
+import "./BookSuggest.css";
 
 const fetchSuggestions = (searchTitle, setSuggestions, setLoading, signal) =>
   new Promise((resolve, reject) => {
