@@ -192,7 +192,7 @@ const AddPlantPanel = ({ parentOnSubmitFunction, onCancelFunction }) => {
           encType="multipart/form-data"
         >
           {/****************** BOOK TITLE INPUT ******************/}
-          <h3>Add a New Plant</h3>
+          <h3 className="Panel-title">Add a New Plant</h3>
           <label htmlFor="AddPlantPanel-bookTitleInput">Book Title:</label>
           <div className="bookTitleInput-wrapper">
             <input

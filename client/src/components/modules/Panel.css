@@ -259,11 +259,10 @@
 }
 
 .Panel-title {
-  margin-bottom: 16px;
   text-align: center;
   color: var(--aloe-green);
   font-family: var(--font-fancy);
-  font-size: 1.5rem;
+  font-size: var(--ml);
 }
 
 .Panel-form label {
@@ -281,7 +280,7 @@
   border: 1px solid var(--medgrey);
   border-radius: 4px;
   font-size: 1rem;
-  font-family: var(--font-fancy);
+  font-family: var(--font-small);
 }
 
 .Panel-buttons {
