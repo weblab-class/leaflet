@@ -1,11 +1,13 @@
 import React, { useContext, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useOutletContext } from "react-router-dom";
 import { UserContext } from "../App";
+import { VolumeOff, Volume2 } from "lucide-react";
 import "./NavBarBook.css";
 
 const NavBarBook = ({ curPage, totalPages, flipToPage }) => {
   const { userId, handleLogout } = useContext(UserContext);
   const [tempProgress, setTempProgress] = useState(((curPage + 1) / totalPages) * 100);
+  const { isSoundOn, setIsSoundOn } = useOutletContext();
 
   // Handle slider change without snapping
   const handleSliderChange = (event) => {
@@ -16,6 +18,14 @@ const NavBarBook = ({ curPage, totalPages, flipToPage }) => {
   const handleSliderRelease = () => {
     const newPage = Math.round((tempProgress / 100) * totalPages);
     flipToPage(newPage);
+  };
+
+  const handleSoundToggle = () => {
+    if (soundOn) {
+      soundOn = False;
+    } else {
+      soundOn = True;
+    }
   };
 
   return (
@@ -41,6 +51,12 @@ const NavBarBook = ({ curPage, totalPages, flipToPage }) => {
           onTouchEnd={handleSliderRelease} // For mobile
         />
         <div className="progress-bar" style={{ width: `${tempProgress}%` }} />
+      </div>
+
+      <div>
+        <button onClick={() => setIsSoundOn((prev) => !prev)} className="VolumeToggle-button">
+          {isSoundOn ? <Volume2 /> : <VolumeOff />}
+        </button>
       </div>
     </nav>
   );

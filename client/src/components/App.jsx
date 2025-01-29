@@ -18,6 +18,7 @@ export const UserContext = createContext(null);
 const App = () => {
   const [userId, setUserId] = useState(undefined);
   const navigate = useNavigate();
+  const [isSoundOn, setIsSoundOn] = useState(false);
 
   // **************** TODO *************** //
   // It seems that you get 'logged out' after a while on the website
@@ -57,7 +58,7 @@ const App = () => {
 
   return (
     <UserContext.Provider value={authContextValue}>
-      <Outlet />
+      <Outlet context={{ isSoundOn, setIsSoundOn }} />
     </UserContext.Provider>
   );
 };

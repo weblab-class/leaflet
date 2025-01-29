@@ -1,7 +1,7 @@
 import React, { useContext, useState, useEffect } from "react";
 import { get, post } from "../../utilities";
 import { UserContext } from "../App";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useOutletContext } from "react-router-dom";
 import { useLocation } from "react-router-dom";
 import Book from "../modules/Book";
 import NavBarBook from "../modules/NavBarBook";
@@ -22,6 +22,7 @@ const BookReader = () => {
   const [flipDirection, setFlipDirection] = useState(-1);
   // Apparently, react is having issues detecting changes to cur, prev, and next spread...
   const [boolFlippedPage, setBoolFlippedPage] = useState(false);
+  const { isSoundOn, setIsSoundOn } = useOutletContext();
 
   useEffect(() => {
     if (!userId) {
@@ -71,9 +72,16 @@ const BookReader = () => {
     console.log("Finished setting states for flipping forward");
   };
 
+  //page turn audio
   let pageTurnSound = new Audio("../../../public/assets/pageturn-102978.mp3");
+
   const playSound = () => {
-    pageTurnSound.play();
+    if (isSoundOn) {
+      console.log("sound is on");
+      pageTurnSound.play();
+    } else {
+      console.log("sound is off");
+    }
   };
 
   return (
