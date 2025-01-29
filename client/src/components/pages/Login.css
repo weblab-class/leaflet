@@ -1,3 +1,9 @@
+.Login-website-title {
+  position: absolute;
+  width: 400px;
+  top: 10%;
+}
+
 .Login-background {
   position: relative;
   background-image: url("/assets/SampleBackground.png"); /* Update path if necessary */
@@ -12,7 +18,7 @@
   position: absolute;
   width: 100%;
   height: 100%;
-  margin: 0px;
+  margin: 0;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -24,7 +30,7 @@
   color: var(--chestnut-brown); /* Use a contrasting color for text */
   padding: var(--l);
   background: var(--cream);
-  border: 7px solid var(--cotton-pink); /* Corrected border syntax */
+  border: 7px solid var(--cotton-pink);
   border-radius: var(--m);
   max-width: 400px;
   margin-top: -100px;
@@ -42,4 +48,7 @@ h1 {
 /* Google Login Button Styling */
 .google-login {
   margin-top: var(--m);
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
 }

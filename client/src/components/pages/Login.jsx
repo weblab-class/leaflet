@@ -18,6 +18,7 @@ const Login = () => {
   return (
     <div className="Login-background">
       <div className="Login-darken-background">
+        <img src="/assets/leaflet_title.png" className="Login-website-title" />
         <div className="Login-content">
           <h1 className="Login-header">Welcome to the Login Page!</h1>
           {userId ? (
