@@ -10,7 +10,7 @@ const Login = () => {
 
   useEffect(() => {
     if (userId) {
-      console.info("Redirecting to home!");
+      ("Redirecting to home!");
       navigate("/Home");
     }
   }, [userId, navigate]);
@@ -31,7 +31,7 @@ const Login = () => {
               Logout
             </button>
           ) : (
-            <GoogleLogin onSuccess={handleLogin} onError={(err) => console.log(err)} />
+            <GoogleLogin onSuccess={handleLogin} onError={(err) => err} />
           )}
         </div>
       </div>

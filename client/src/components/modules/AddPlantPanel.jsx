@@ -13,7 +13,7 @@ const AddPlantPanel = ({ parentOnSubmitFunction, onCancelFunction }) => {
 
   // Handle click outside of the EditPlantPanel to trigger the cancel function
   useEffect(() => {
-    console.info("Add Plant Panel rendering");
+    ("Add Plant Panel rendering");
     const handleClickOutside = (event) => {
       if (
         overlayRef.current &&
@@ -21,7 +21,7 @@ const AddPlantPanel = ({ parentOnSubmitFunction, onCancelFunction }) => {
         panelRef.current &&
         !panelRef.current.contains(event.target)
       ) {
-        console.log("Clicked outside");
+        ("Clicked outside");
         onCancelFunction();
       } else if (
         bookSuggestionsWrapperRef.current &&
@@ -72,26 +72,26 @@ const AddPlantPanel = ({ parentOnSubmitFunction, onCancelFunction }) => {
   const bookSuggestionsWrapperRef = useRef(null);
 
   const handleSearchToggle = () => {
-    console.info("Search icon clicked, showing suggestions");
+    ("Search icon clicked, showing suggestions");
     setShowSuggestions(true);
   };
 
   const handleBookSearchSelect = (book) => {
-    console.info("Book selected from search panel");
+    ("Book selected from search panel");
     setBookData((prev) => ({
       ...prev,
       url: book.link,
       cover: book.cover,
     }));
     setBookType("search");
-    console.info("User selected a book, setting suggestions invisible");
+    ("User selected a book, setting suggestions invisible");
     setShowSuggestions(false);
     setSearchedBook(true);
   };
 
   // triggers when user clicks out of title input field
   const handleBlur = (event) => {
-    console.log("User clicked out of suggestion mode");
+    ("User clicked out of suggestion mode");
     if (!searchButtonRef.current || searchButtonRef.current.contains(event.target)) {
       setShowSuggestions(false);
     }
@@ -111,7 +111,7 @@ const AddPlantPanel = ({ parentOnSubmitFunction, onCancelFunction }) => {
   const [titleError, setTitleError] = useState(false); // Tracks whether the title error message is displayed
 
   const handleFileChange = (event) => {
-    console.info("Different file uploaded");
+    ("Different file uploaded");
     setBookData((prev) => ({
       ...prev,
       file: event.target.files[0],
@@ -142,7 +142,7 @@ const AddPlantPanel = ({ parentOnSubmitFunction, onCancelFunction }) => {
 
   const localOnSubmitFunction = async (event) => {
     event.preventDefault();
-    console.info("Submitting new book...");
+    ("Submitting new book...");
 
     if (bookType === "upload") {
       if (!bookData.file) {
@@ -156,7 +156,7 @@ const AddPlantPanel = ({ parentOnSubmitFunction, onCancelFunction }) => {
         setFormError(true);
         return;
       } else {
-        console.info("File uploaded:", bookData.file.name);
+        "File uploaded:", bookData.file.name;
       }
     }
     bookData.curPage -= 1;
@@ -175,7 +175,7 @@ const AddPlantPanel = ({ parentOnSubmitFunction, onCancelFunction }) => {
       }
     }
     // Log the submission payload
-    console.info("Book data to be submitted:", bookData);
+    "Book data to be submitted:", bookData;
     parentOnSubmitFunction({
       title: bookData.title,
       file: bookData.file,

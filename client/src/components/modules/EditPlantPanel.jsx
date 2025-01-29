@@ -74,7 +74,7 @@ const EditPlantPanel = ({ plant, onSave, onCancel }) => {
       if (formData.curPage % 2 == 1) {
         formData.curPage -= 1;
       }
-      console.log("formData.curPage: ", formData.curPage);
+      "formData.curPage: ", formData.curPage;
       onSave(formData);
     }
   };

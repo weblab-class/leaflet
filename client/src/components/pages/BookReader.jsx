@@ -23,16 +23,16 @@ const BookReader = () => {
 
   useEffect(() => {
     if (!userId) {
-      console.info("Redirecting to Login!");
+      ("Redirecting to Login!");
       navigate("/");
     }
   }, [userId, navigate]);
 
   useEffect(() => {
     const fetchPageData = async () => {
-      console.log("_id: ", _id);
+      "_id: ", _id;
       const { curPage, totalPages } = await post("/api/getpageinfo", { _id });
-      console.info("Got page info: curPage = ", curPage, "totalPages = ", totalPages);
+      "Got page info: curPage = ", curPage, "totalPages = ", totalPages;
       setCurPage(curPage);
       setTotalPages(totalPages);
       const response = await post("/api/getpagerange", {
@@ -41,7 +41,7 @@ const BookReader = () => {
         totalPages,
         numPages: 6,
       });
-      console.log("Page range response from API call: ", response.textArray[2]?.substring(0, 10));
+      "Page range response from API call: ", response.textArray[2]?.substring(0, 10);
       setBookWindow(response.textArray);
     };
     fetchPageData();
@@ -49,14 +49,14 @@ const BookReader = () => {
 
   const flipToPage = async (newPage) => {
     setCurPage(newPage);
-    console.log("Using slider to flip to new page: ", newPage);
+    "Using slider to flip to new page: ", newPage;
     const response = await post("/api/getpagerange", {
       _id,
       startPage: newPage - 2,
       totalPages,
       numPages: 6,
     });
-    console.log("Page range response from API call: ", response.textArray[2]?.substring(0, 10));
+    "Page range response from API call: ", response.textArray[2]?.substring(0, 10);
     setBookWindow(response.textArray);
     post("/api/savecurpage", { _id, curPage: newPage });
     if (newPage > curPage) {
@@ -66,7 +66,7 @@ const BookReader = () => {
     }
     setCurPage(newPage);
     setBoolFlippedPage(!boolFlippedPage);
-    console.log("Finished setting states for flipping forward");
+    ("Finished setting states for flipping forward");
   };
 
   //page turn audio

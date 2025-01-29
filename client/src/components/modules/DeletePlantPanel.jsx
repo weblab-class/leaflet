@@ -7,7 +7,7 @@ const DeletePlantPanel = ({ onConfirmDelete, onCancelDelete }) => {
   const panelRef = useRef(null);
 
   useEffect(() => {
-    console.info("Delete Plant Panel rendering");
+    ("Delete Plant Panel rendering");
     const handleClickOutside = (event) => {
       if (
         overlayRef.current &&
@@ -15,7 +15,7 @@ const DeletePlantPanel = ({ onConfirmDelete, onCancelDelete }) => {
         panelRef.current &&
         !panelRef.current.contains(event.target)
       ) {
-        console.log("Clicked outside");
+        ("Clicked outside");
         onCancelDelete(); // Trigger cancel function if clicked outside
       }
     };

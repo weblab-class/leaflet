@@ -9,18 +9,18 @@ const fetchSuggestions = (searchTitle, setSuggestions, setLoading, signal) =>
       return;
     }
     setLoading(true);
-    console.log("Loading book results for title ", searchTitle);
+    "Loading book results for title ", searchTitle;
     // Time-costly asynchronous function call:
     fetch(`https://gutendex.com/books?search=${encodeURIComponent(searchTitle)}&limit=10`, {
       signal,
     })
       .then((response) => {
         setLoading(false);
-        console.log("Got response for title ", searchTitle);
+        "Got response for title ", searchTitle;
         return response.json();
       })
       .then((data) => {
-        console.info("Got data from searching for book titled ", searchTitle);
+        "Got data from searching for book titled ", searchTitle;
         if (Array.isArray(data.results)) {
           const bookOptions = data.results
             .map((book) => ({
@@ -30,13 +30,13 @@ const fetchSuggestions = (searchTitle, setSuggestions, setLoading, signal) =>
               cover: book.formats["image/jpeg"] || book.formats["image/png"],
             }))
             .filter((book) => book.link); // Ensure we have a txt link
-          console.info("Book options: ", bookOptions);
+          "Book options: ", bookOptions;
           setSuggestions(bookOptions);
         }
       })
       .catch((error) => {
         if (error.name === "AbortError") {
-          console.info("Fetch request was aborted for book titled ", searchTitle);
+          "Fetch request was aborted for book titled ", searchTitle;
         } else {
           console.error("An error occurred while fetching suggestions:", error);
         }
@@ -51,7 +51,7 @@ const BookSuggest = ({ onBookSelect, title }) => {
 
   // Trigger upon re-mount
   useEffect(() => {
-    console.info("Book suggestions rendering for book titled ", title);
+    "Book suggestions rendering for book titled ", title;
     const controller = new AbortController();
     const { signal } = controller;
 
@@ -64,7 +64,7 @@ const BookSuggest = ({ onBookSelect, title }) => {
   }, [title]);
 
   const handleSelect = (book) => {
-    console.info("Sending selected book");
+    ("Sending selected book");
     onBookSelect(book); // Pass the selected book to the parent
     setSuggestions([]); // Clear suggestions after selection
   };
