@@ -160,9 +160,7 @@ const Shelf = () => {
           <div className="Shelf-item" key={`shelf-item-${i}`}>
             <div className="column left"></div>
             <div className="column middle">
-              <div className="plant-container">
-                <Plant plant={plants[i]} openBook={openBook} />
-              </div>
+              <Plant plant={plants[i]} openBook={openBook} />
             </div>
             <div className="column right">
               <button className="DeletePlantButton" onClick={() => deletePlant(plants[i])}>

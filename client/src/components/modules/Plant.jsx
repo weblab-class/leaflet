@@ -54,7 +54,7 @@ const Plant = ({ plant, openBook }) => {
   };
 
   return (
-    <div>
+    <div className="Plant-container">
       <img
         src={plantImageSrc()}
         alt="Plant"
@@ -74,7 +74,7 @@ const Plant = ({ plant, openBook }) => {
         />
       ) : (
         <p
-          className={`Plant-book-title ${!plantData.title ? "hidden-title" : ""}`}
+          className={`Plant-book-title ${!plantData.title ? "hidden-title" : " "}`}
           onClick={() => setIsEditing(true)} // Switch to editing mode on click
         >
           {plantData.title || " "} {/* Use a space to reserve height */}
