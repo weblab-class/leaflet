@@ -50,18 +50,18 @@ const NavBarBook = ({ curPage, totalPages, flipToPage }) => {
       </button>
 
       {/* Progress Bar */}
-      <div className="progress-container">
+      <div className="NavBarBook-progress-container">
         <input
           type="range"
           min="0"
           max="100"
           value={tempProgress}
-          className="progress-slider"
+          className="NavBarBook-progress-slider"
           onChange={handleSliderChange}
           onMouseUp={handleSliderRelease} // For desktop
           onTouchEnd={handleSliderRelease} // For mobile
         />
-        <div className="progress-bar" style={{ width: `${tempProgress}%` }} />
+        <div className="NavBarBook-progress-bar" style={{ width: `${tempProgress}%` }} />
       </div>
 
       {/* Stars Animation */}

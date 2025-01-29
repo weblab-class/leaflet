@@ -47,7 +47,7 @@ button.NavBarBook-link {
   padding: 0;
 }
 
-.progress-container {
+.NavBarBook-progress-container {
   position: relative;
   width: 70%;
   height: 5px;
@@ -56,7 +56,7 @@ button.NavBarBook-link {
   margin-left: 20px; /* Adjust position as needed */
 }
 
-.progress-bar {
+.NavBarBook-progress-bar {
   position: absolute;
   top: 0;
   left: 0;
@@ -65,7 +65,7 @@ button.NavBarBook-link {
   border-radius: 5px;
 }
 
-.progress-slider {
+.NavBarBook-progress-slider {
   position: absolute;
   top: 0;
   left: 0;
@@ -79,7 +79,7 @@ button.NavBarBook-link {
   z-index: 10; /* Ensures the slider is above the progress bar */
 }
 
-.progress-slider::-webkit-slider-thumb {
+.NavBarBook-progress-slider::-webkit-slider-thumb {
   -webkit-appearance: none;
   appearance: none;
   width: 15px;
@@ -89,7 +89,7 @@ button.NavBarBook-link {
   cursor: pointer;
 }
 
-.progress-slider::-moz-range-thumb {
+.NavBarBook-progress-slider::-moz-range-thumb {
   width: 15px;
   height: 15px;
   background-color: white;

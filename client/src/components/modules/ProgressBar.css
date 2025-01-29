@@ -18,12 +18,12 @@
   transition: background-color 0.3s ease-in-out;
 }
 
-.filled {
-  background-color: var(--spring-green);
+.progress-bar-segment.filled {
+  background-color: var(--aloe-green);
   opacity: 0.9;
 }
 
-.empty {
+.progress-bar-segment.empty {
   background-color: var(--cream); /* Pale white */
   opacity: 0.9;
 }
