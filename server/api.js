@@ -155,7 +155,7 @@ router.post("/createbook", upload.single("file"), async (req, res) => {
 // ****************       Like, if line contains 'chapter', skip to new page //
 function parseBook(contentString) {
   const pageArray = [];
-  const chunkSize = 1000; // Desired chunk size
+  const chunkSize = 1375; // Desired chunk size
   let charIndex = 0;
 
   while (charIndex < contentString.length) {
@@ -183,6 +183,44 @@ function parseBook(contentString) {
   }
   return pageArray;
 }
+
+// function parseBook(contentString) {
+//   const words = contentString.split(/\s+/); // Split by whitespace (spaces, newlines)
+//   let pageArray = [];
+//   let currentPage = "";
+//   let currentLine = "";
+//   let lineCount = 0;
+
+//   for (let word of words) {
+//     // If adding the word exceeds 60 chars, start a new line
+//     if ((currentLine + word).length > 55) {
+//       currentPage += currentLine.trim() + "\n"; // Add line to the page
+//       currentLine = word; // Start new line with the word
+//       lineCount++;
+
+//       // If we've hit 21 lines, start a new page
+//       if (lineCount === 21) {
+//         pageArray.push(currentPage.trim()); // Store the full page
+//         currentPage = "";
+//         lineCount = 0;
+//       }
+//     } else {
+//       // Append word to the current line
+//       currentLine += (currentLine.length === 0 ? "" : " ") + word;
+//     }
+//   }
+
+//   // Add the last line if it exists
+//   if (currentLine) {
+//     currentPage += currentLine.trim() + "\n";
+//   }
+
+//   // Add the last page if it has content
+//   if (currentPage.trim().length > 0) {
+//     pageArray.push(currentPage.trim());
+//   }
+//   return pageArray;
+// }
 
 //=========== DELETING BOOKS ============//
 // Delete a book
