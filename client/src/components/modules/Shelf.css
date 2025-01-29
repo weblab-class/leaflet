@@ -70,7 +70,7 @@
 .DeletePlantButton {
   position: absolute; /* Position relative to .Shelf-item */
   top: 5px;
-  right: 0px;
+  right: -10px;
   background-color: var(--sunset-pink);
   color: var(--chestnut-brown);
   border: 0px;
@@ -93,7 +93,7 @@
 .EditPlantButton {
   position: absolute; /* Position relative to .Shelf-item */
   top: 40px;
-  right: 2px;
+  right: -8px;
   display: none;
   background-color: var(--bright-green);
   color: var(--chestnut-brown);
@@ -118,6 +118,10 @@
 .Shelf-item:hover .DeletePlantButton,
 .Shelf-item:hover .EditPlantButton {
   display: block; /* Show button when hovering over a shelf item */
+}
+
+.Shelf-item:hover .ProgressBar-wrapper {
+  opacity: 1; /* Show button when hovering over a shelf item */
 }
 
 .Shelf-navigation-buttons {
@@ -202,7 +206,16 @@
   border-radius: 7px;
   font-size: var(--m);
   text-align: center;
-  box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.2);
+  box-shadow: 0px 2px 0px rgba(0, 0, 0, 0.2);
   opacity: 1;
   animation: popWobble 0.6s ease-out;
+}
+
+.ProgressBar-wrapper {
+  position: absolute;
+  top: 50px;
+  left: 0px;
+  min-height: 45px; /* Ensure wrapper isn't collapsing */
+  width: 30px; /* Match progress-bar width */
+  opacity: 0;
 }

@@ -5,6 +5,7 @@ import AddPlantPanel from "./AddPlantPanel.jsx";
 import DeletePlantPanel from "./DeletePlantPanel.jsx";
 import EditPlantPanel from "./EditPlantPanel.jsx";
 import { useNavigate } from "react-router-dom";
+import ProgressBar from "./ProgressBar.jsx";
 import { Pencil, ChevronLeft, ChevronRight } from "lucide-react";
 import "./Shelf.css";
 
@@ -129,12 +130,12 @@ const Shelf = () => {
   // ============ OPENING BOOK ============ //
   const [messagePlantId, setMessagePlantId] = useState(null);
   const openBook = (plant) => {
-    console.log("Opening plant: ", plant);
+    // console.log("Opening plant: ", plant);
     if (plant.plantType === "addPlantButton") {
       addPlant();
       return;
     } else if (plant.bookType === "physical") {
-      console.log("physical book");
+      // console.log("physical book");
       setMessagePlantId(plant._id);
       setTimeout(() => setMessagePlantId(null), 800);
       return;
@@ -142,6 +143,16 @@ const Shelf = () => {
     navigate("/BookReader", {
       state: { _id: plant._id },
     });
+  };
+  //=========== Progress Bar Render Control ============//
+  const [progressBarHovered, setProgressBarHovered] = useState(false);
+
+  const handleMouseEnter = () => {
+    setProgressBarHovered(true);
+  };
+
+  const handleMouseLeave = () => {
+    setProgressBarHovered(false);
   };
 
   //=========== RENDERING ============//
@@ -155,10 +166,24 @@ const Shelf = () => {
 
     for (let i = startIndex; i < endIndex; i++) {
       if (i < plants.length) {
+        const plant = plants[i];
         const isMessageVisible = messagePlantId === plants[i]._id;
         shelfItems.push(
-          <div className="Shelf-item" key={`shelf-item-${i}`}>
-            <div className="column left"></div>
+          <div
+            className="Shelf-item"
+            key={`shelf-item-${i}`}
+            onMouseEnter={handleMouseEnter}
+            onMouseLeave={handleMouseLeave}
+          >
+            <div className="column left">
+              <div className="ProgressBar-wrapper">
+                <ProgressBar
+                  curPage={plant.curPage}
+                  totalPages={plant.totalPages}
+                  progressBarHovered={progressBarHovered}
+                />
+              </div>
+            </div>
             <div className="column middle">
               <Plant plant={plants[i]} openBook={openBook} />
             </div>

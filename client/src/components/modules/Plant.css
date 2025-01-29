@@ -10,14 +10,8 @@
   width: 80px; /* Fixed width */
   height: auto; /* Maintain aspect ratio */
   object-fit: contain; /* Prevents distortion */
-  margin-top: 14px;
+  margin-top: 25px;
   z-index: 4;
-}
-.Plant-book-title {
-  margin: 0px;
-}
-.Plant-book-title-input {
-  margin: 0px;
 }
 
 @keyframes plantRock {
@@ -56,7 +50,9 @@
   z-index: 3;
   font-size: 1em;
   padding: 1px;
-  border-radius: 10px;
+  padding-left: 10px;
+  padding-right: 8px;
+  border-radius: 8px;
 }
 
 .Plant-book-title:hover {
