@@ -18,8 +18,8 @@
 }
 
 .NavBarBook-link {
-  all: unset; /* Reset all styles */
-  display: inline-flex; /* Consistent with flex behavior */
+  all: unset;
+  display: inline-flex;
   justify-content: center;
   align-items: center;
   height: 30px;
@@ -43,4 +43,54 @@
 
 button.NavBarBook-link {
   padding: 0;
+}
+
+.progress-container {
+  position: relative;
+  width: 80%;
+  height: 5px;
+  background-color: rgba(255, 255, 255, 0.39);
+  border-radius: 5px;
+  margin-left: 20px; /* Adjust position as needed */
+}
+
+.progress-bar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  background-color: var(--spring-green); /* Color of the progress bar */
+  border-radius: 5px;
+}
+
+.progress-slider {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  -webkit-appearance: none;
+  appearance: none;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  z-index: 10; /* Ensures the slider is above the progress bar */
+}
+
+.progress-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 15px;
+  height: 15px;
+  background-color: white;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.progress-slider::-moz-range-thumb {
+  width: 15px;
+  height: 15px;
+  background-color: white;
+  border-radius: 50%;
+  cursor: pointer;
 }

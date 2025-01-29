@@ -49,45 +49,6 @@ const BookReader = () => {
     fetchPageData();
   }, []);
 
-  const flipForward = async () => {
-    if (curPage < totalPages - 2) {
-      console.log("Getting next two pages");
-      const response = await post("/api/getpagerange", {
-        _id,
-        startPage: curPage,
-        totalPages,
-        numPages: 6,
-      });
-      console.log("Page range response from API call: ", response.textArray[2]?.substring(0, 10));
-      post("/api/savecurpage", { _id, curPage: curPage + 2 });
-      setCurPage(curPage + 2);
-      setBookWindow(response.textArray);
-      setFlipDirection(1);
-      setBoolFlippedPage(!boolFlippedPage);
-      console.log("Finished setting states for flipping forward");
-    }
-  };
-
-  const flipBackward = async () => {
-    if (curPage > 0) {
-      console.log("Getting previous two pages");
-      const response = await post("/api/getpagerange", {
-        _id,
-        startPage: curPage - 4,
-        totalPages,
-        numPages: 6,
-      });
-      console.log("Page range response from API call: ", response.textArray[2]?.substring(0, 10));
-      setBookWindow(response.textArray);
-      post("/api/savecurpage", { _id, curPage: curPage - 2 });
-      setCurPage(curPage - 2);
-      console.log("Flip Back Page Number: " + curPage);
-      setFlipDirection(0);
-      setBoolFlippedPage(!boolFlippedPage);
-      console.log("Finished setting states for flipping forward");
-    }
-  };
-
   const flipToPage = async (newPage) => {
     setCurPage(newPage);
     console.log("Using slider to flip to new page: ", newPage);
@@ -114,7 +75,13 @@ const BookReader = () => {
     <div className="BookReader-container">
       <div className="BookReader-overlay"></div>
       <NavBarBook curPage={curPage} totalPages={totalPages} flipToPage={flipToPage} />
-      <button className="BookReader-button" onClick={flipBackward} disabled={curPage <= 0}>
+      <button
+        className="BookReader-button"
+        onClick={() => {
+          flipToPage(curPage - 2);
+        }}
+        disabled={curPage <= 0}
+      >
         ◀
       </button>
       <Book
@@ -125,7 +92,9 @@ const BookReader = () => {
       />
       <button
         className="BookReader-button"
-        onClick={flipForward}
+        onClick={() => {
+          flipToPage(curPage + 2);
+        }}
         disabled={curPage >= totalPages - 2}
       >
         ▶
