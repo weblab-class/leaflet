@@ -4,16 +4,6 @@ import "./Book.css";
 const Book = ({ prevSpread, nextSpread, flipDirection, boolFlippedPage }) => {
   const [flipping, setFlipping] = useState(false);
 
-  // useEffect(() => {
-  //   if (flipDirection !== -1) {
-  //     setFlipping(true); // Trigger flip animation
-  //     const timeout = setTimeout(() => {
-  //       setFlipping(false); // Reset after animation
-  //     }, 1000); // Match animation duration
-  //     return () => clearTimeout(timeout);
-  //   }
-  // }, [flipDirection]);
-
   return (
     <div className="Book-container">
       {/* Left Page */}

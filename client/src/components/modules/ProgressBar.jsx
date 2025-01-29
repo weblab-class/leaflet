@@ -3,9 +3,7 @@ import "./ProgressBar.css";
 
 const ProgressBar = ({ curPage, totalPages, progressBarHovered }) => {
   const progress = Math.ceil(((curPage + 1) / totalPages) * 4);
-  useEffect(() => {
-    "Progress Bar rendered, progressBarHovered = ", progressBarHovered;
-  });
+  useEffect(() => {});
   return (
     <div>
       {progressBarHovered && (

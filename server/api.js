@@ -88,13 +88,11 @@ router.get("/getallbooks", async (req, res) => {
 });
 
 router.post("/updatebook", async (req, res) => {
-  console.log("request body: ", req.body);
   const { _id, ...updateData } = req.body; // Destructure _id and the rest of the data
   if (!_id) {
     return res.status(400).send({ error: "_id is required" });
   }
   const book = await Book.findByIdAndUpdate(_id, updateData, { new: true });
-  console.log("updated book: ", book);
   res.status(200).send({ message: "Book updated successfully", book });
 });
 
@@ -105,24 +103,18 @@ const pdfParse = require("pdf-parse");
 
 // formData fields: { title, bookType, file, url, curPage, totalPages }
 router.post("/createbook", upload.single("file"), async (req, res) => {
-  console.log("Creating a book");
-
   const { title, bookType, url, curPage, totalPages, plantType } = req.body;
   const file = req.file;
-  console.log("Extracted fields:", { title, bookType, url, curPage, totalPages, plantType });
 
   if (!bookType) {
-    console.log("Missing required field: bookType");
     return res.status(400).json({ message: "Missing required field: bookType" });
   }
 
   if (bookType === "upload" && !file) {
-    console.log("File is required for bookType 'upload'");
     return res.status(400).json({ message: "File is required for bookType 'upload'" });
   }
 
   if (bookType === "search" && !url) {
-    console.log("URL is required for bookType 'search'");
     return res.status(400).json({ message: "URL is required for bookType 'search'" });
   }
 
@@ -140,7 +132,6 @@ router.post("/createbook", upload.single("file"), async (req, res) => {
 
   // ==== BOOK URL GIVEN ==== //
   if (bookType === "search") {
-    console.log("Getting book content from url");
     // title, bookType, url fields only
     // **************** NEW: NEEDS TESTING/FIXING *************** // (REGAN)
     const response = await axios.get(url); // Fetch content from URL
@@ -152,7 +143,6 @@ router.post("/createbook", upload.single("file"), async (req, res) => {
 
   // ==== BOOK FILE GIVEN ==== //
   else if (bookType === "upload") {
-    console.log("Getting book content from uploaded file");
     let contentString = "";
 
     if (file.mimetype === "text/plain") {
@@ -190,7 +180,6 @@ router.post("/createbook", upload.single("file"), async (req, res) => {
     bookType: savedBook.bookType,
   };
 
-  console.log("newPlant: ", newPlant);
   res.status(201).json({ message: "Book created successfully", newPlant });
 });
 
@@ -236,49 +225,10 @@ function parseBook(contentString) {
   return pageArray;
 }
 
-// function parseBook(contentString) {
-//   const words = contentString.split(/\s+/); // Split by whitespace (spaces, newlines)
-//   let pageArray = [];
-//   let currentPage = "";
-//   let currentLine = "";
-//   let lineCount = 0;
-
-//   for (let word of words) {
-//     // If adding the word exceeds 60 chars, start a new line
-//     if ((currentLine + word).length > 55) {
-//       currentPage += currentLine.trim() + "\n"; // Add line to the page
-//       currentLine = word; // Start new line with the word
-//       lineCount++;
-
-//       // If we've hit 21 lines, start a new page
-//       if (lineCount === 21) {
-//         pageArray.push(currentPage.trim()); // Store the full page
-//         currentPage = "";
-//         lineCount = 0;
-//       }
-//     } else {
-//       // Append word to the current line
-//       currentLine += (currentLine.length === 0 ? "" : " ") + word;
-//     }
-//   }
-
-//   // Add the last line if it exists
-//   if (currentLine) {
-//     currentPage += currentLine.trim() + "\n";
-//   }
-
-//   // Add the last page if it has content
-//   if (currentPage.trim().length > 0) {
-//     pageArray.push(currentPage.trim());
-//   }
-//   return pageArray;
-// }
-
 //=========== DELETING BOOKS ============//
 // Delete a book
 router.post("/deletebook", (req, res) => {
   Book.findByIdAndDelete(req.body._id).then((deletedBook) => {
-    console.log("Deleted book ", req.body);
     res.status(200).json({ message: "Book deleted successfully", book: deletedBook });
   });
 });
@@ -296,7 +246,6 @@ async function getPage(_id, page) {
 }
 
 router.post("/getpageinfo", async (req, res) => {
-  console.log("Getting page info ");
   const _id = req.body._id;
   const pageInfo = await Book.findOne({ _id: _id }, { curPage: 1, totalPages: 1 }).exec();
   res.status(200).json({
@@ -322,7 +271,6 @@ router.post("/getpagerange", async (req, res) => {
   let { _id, startPage, totalPages, numPages } = req.body;
 
   // Log input variables
-  console.log("Get page range request received with:", { _id, startPage, totalPages, numPages });
 
   // Validate required fields
   if (!_id || startPage === undefined || totalPages === undefined) {
@@ -334,16 +282,12 @@ router.post("/getpagerange", async (req, res) => {
 
   // Calculate the range to fetch
   const startIndex = Math.max(startPage, 0);
-  console.log("startIndex: ", startIndex);
   const endIndex = Math.min(startPage + numPages, totalPages); // Exclusive
-  console.log("endIndex: ", endIndex);
-  console.log("Calculated range to fetch:", { startIndex, endIndex });
 
   // Initialize textArray with blank entries
   const textArray = Array(numPages).fill("");
 
   // Fetch pages from the database
-  console.log("Querying database with _id:", _id);
   const book = await Book.findOne(
     { _id: _id },
     { content: { $slice: [startIndex, endIndex - startIndex] } }
@@ -352,7 +296,6 @@ router.post("/getpagerange", async (req, res) => {
 
   // Populate the `textArray` based on the fetched pages
   const relativeStart = Math.abs(Math.min(startPage, 0)); // Offset for blank prefix
-  console.log("Relative start index in textArray:", relativeStart);
   fetchedPages.forEach((page, index) => {
     textArray[relativeStart + index] = page;
   });
@@ -366,7 +309,6 @@ router.post("/getpagerange", async (req, res) => {
 
 // anything else falls to this "not found" case
 router.all("*", (req, res) => {
-  console.log(`API route not found: ${req.method} ${req.url}`);
   res.status(404).send({ message: "API route not found" });
 });
 

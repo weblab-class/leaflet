@@ -9,18 +9,15 @@ const fetchSuggestions = (searchTitle, setSuggestions, setLoading, signal) =>
       return;
     }
     setLoading(true);
-    "Loading book results for title ", searchTitle;
     // Time-costly asynchronous function call:
     fetch(`https://gutendex.com/books?search=${encodeURIComponent(searchTitle)}&limit=10`, {
       signal,
     })
       .then((response) => {
         setLoading(false);
-        "Got response for title ", searchTitle;
         return response.json();
       })
       .then((data) => {
-        "Got data from searching for book titled ", searchTitle;
         if (Array.isArray(data.results)) {
           const bookOptions = data.results
             .map((book) => ({
@@ -30,13 +27,11 @@ const fetchSuggestions = (searchTitle, setSuggestions, setLoading, signal) =>
               cover: book.formats["image/jpeg"] || book.formats["image/png"],
             }))
             .filter((book) => book.link); // Ensure we have a txt link
-          "Book options: ", bookOptions;
           setSuggestions(bookOptions);
         }
       })
       .catch((error) => {
         if (error.name === "AbortError") {
-          "Fetch request was aborted for book titled ", searchTitle;
         } else {
           console.error("An error occurred while fetching suggestions:", error);
         }
@@ -51,7 +46,6 @@ const BookSuggest = ({ onBookSelect, title }) => {
 
   // Trigger upon re-mount
   useEffect(() => {
-    "Book suggestions rendering for book titled ", title;
     const controller = new AbortController();
     const { signal } = controller;
 
@@ -64,7 +58,6 @@ const BookSuggest = ({ onBookSelect, title }) => {
   }, [title]);
 
   const handleSelect = (book) => {
-    ("Sending selected book");
     onBookSelect(book); // Pass the selected book to the parent
     setSuggestions([]); // Clear suggestions after selection
   };

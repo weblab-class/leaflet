@@ -28,7 +28,6 @@ const Shelf = () => {
 
   // Fetch plants from the server
   useEffect(() => {
-    ("Sending get all books request");
     get("/api/getallbooks").then(({ books: books }) => {
       setPlants(books);
     });
@@ -45,8 +44,6 @@ const Shelf = () => {
   };
 
   const submitAddPlant = ({ title, bookType, file, url, curPage, totalPages, plantType }) => {
-    ("Adding new plant");
-
     // Validate input based on bookType
     if (bookType === "search" && !url) {
       console.error("Validation Error: 'search' book type requires a non-empty 'url'.");
@@ -59,7 +56,6 @@ const Shelf = () => {
         "Validation Error: 'physical' book type requires 'totalPages' to be specified."
       );
     }
-    "plantType: ", plantType;
     setShowAddPlantPanel(false);
     const formData = new FormData();
     formData.append("title", title);
@@ -84,7 +80,6 @@ const Shelf = () => {
   const [plantToDelete, setPlantToDelete] = useState(null);
   const [showDeletePlantPanel, setShowDeletePlantPanel] = useState(false);
   const deletePlant = (plant) => {
-    "Plant set to delete: ", plant;
     setPlantToDelete(plant);
     setShowDeletePlantPanel(true);
   };
@@ -95,7 +90,6 @@ const Shelf = () => {
   };
 
   const confirmDeletePlant = () => {
-    "About to delete plant: ", plantToDelete;
     setPlants((prevPlants) => prevPlants.filter((p) => p._id !== plantToDelete._id));
     post("/api/deletebook", plantToDelete);
     setPlantToDelete(null);

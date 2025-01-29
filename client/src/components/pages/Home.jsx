@@ -11,10 +11,8 @@ const Home = () => {
 
   useEffect(() => {
     if (!userId) {
-      ("Redirecting to Login!");
       navigate("/");
     }
-    ("Loading the home page");
   }, [userId, navigate]);
 
   return (

@@ -13,7 +13,6 @@ const AddPlantPanel = ({ parentOnSubmitFunction, onCancelFunction }) => {
 
   // Handle click outside of the EditPlantPanel to trigger the cancel function
   useEffect(() => {
-    ("Add Plant Panel rendering");
     const handleClickOutside = (event) => {
       if (
         overlayRef.current &&
@@ -21,7 +20,6 @@ const AddPlantPanel = ({ parentOnSubmitFunction, onCancelFunction }) => {
         panelRef.current &&
         !panelRef.current.contains(event.target)
       ) {
-        ("Clicked outside");
         onCancelFunction();
       } else if (
         bookSuggestionsWrapperRef.current &&
@@ -72,26 +70,22 @@ const AddPlantPanel = ({ parentOnSubmitFunction, onCancelFunction }) => {
   const bookSuggestionsWrapperRef = useRef(null);
 
   const handleSearchToggle = () => {
-    ("Search icon clicked, showing suggestions");
     setShowSuggestions(true);
   };
 
   const handleBookSearchSelect = (book) => {
-    ("Book selected from search panel");
     setBookData((prev) => ({
       ...prev,
       url: book.link,
       cover: book.cover,
     }));
     setBookType("search");
-    ("User selected a book, setting suggestions invisible");
     setShowSuggestions(false);
     setSearchedBook(true);
   };
 
   // triggers when user clicks out of title input field
   const handleBlur = (event) => {
-    ("User clicked out of suggestion mode");
     if (!searchButtonRef.current || searchButtonRef.current.contains(event.target)) {
       setShowSuggestions(false);
     }
@@ -111,7 +105,6 @@ const AddPlantPanel = ({ parentOnSubmitFunction, onCancelFunction }) => {
   const [titleError, setTitleError] = useState(false); // Tracks whether the title error message is displayed
 
   const handleFileChange = (event) => {
-    ("Different file uploaded");
     setBookData((prev) => ({
       ...prev,
       file: event.target.files[0],
@@ -142,7 +135,6 @@ const AddPlantPanel = ({ parentOnSubmitFunction, onCancelFunction }) => {
 
   const localOnSubmitFunction = async (event) => {
     event.preventDefault();
-    ("Submitting new book...");
 
     if (bookType === "upload") {
       if (!bookData.file) {
@@ -175,7 +167,6 @@ const AddPlantPanel = ({ parentOnSubmitFunction, onCancelFunction }) => {
       }
     }
     // Log the submission payload
-    "Book data to be submitted:", bookData;
     parentOnSubmitFunction({
       title: bookData.title,
       file: bookData.file,

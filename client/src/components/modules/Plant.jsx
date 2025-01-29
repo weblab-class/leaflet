@@ -10,7 +10,6 @@ const Plant = ({ plant, openBook }) => {
   // Sync plantData with plant prop when plant changes
   useEffect(() => {
     setPlantData(plant);
-    // ("plantData: ", plantData);
   }, [plant]);
 
   const handleChange = (e) => {
@@ -23,9 +22,7 @@ const Plant = ({ plant, openBook }) => {
 
   const handleBlur = async () => {
     setIsEditing(false);
-    "Sending plant data:", plantData;
     post("/api/updatebook", plantData);
-    "Updated plant data: ", plantData;
   };
 
   const handleKeyDown = (event) => {

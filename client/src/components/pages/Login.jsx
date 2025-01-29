@@ -10,7 +10,6 @@ const Login = () => {
 
   useEffect(() => {
     if (userId) {
-      ("Redirecting to home!");
       navigate("/Home");
     }
   }, [userId, navigate]);
