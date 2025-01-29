@@ -1,6 +1,6 @@
 .Login-background {
   position: relative;
-  background-image: url("../assets/background.png"); /* Update path if necessary */
+  background-image: url("/assets/SampleBackground.png"); /* Update path if necessary */
   background-size: cover;
   background-position: center;
   height: 100vh;
