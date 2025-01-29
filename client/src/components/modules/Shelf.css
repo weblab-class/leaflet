@@ -180,6 +180,35 @@
   opacity: 0.5;
 }
 
+@keyframes popWobble {
+  0% {
+    transform: scale(0);
+    opacity: 0;
+  }
+  20% {
+    transform: scale(1.1);
+    opacity: 1;
+  }
+  30% {
+    transform: scale(0.95) rotate(8deg);
+  }
+  45% {
+    transform: scale(1.05) rotate(-8deg);
+  }
+  60% {
+    transform: scale(1) rotate(4deg);
+  }
+  75% {
+    transform: scale(1) rotate(-4deg);
+  }
+  90% {
+    transform: scale(1) rotate(2deg);
+  }
+  100% {
+    transform: scale(1) rotate(0deg);
+  }
+}
+
 .message-box {
   position: absolute;
   background-color: var(--peach);
@@ -191,12 +220,6 @@
   font-size: var(--m);
   text-align: center;
   box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.2);
-  opacity: 0;
-  transform: translateY(10px);
-  transition: opacity 0.4s ease-out, transform 0.4s ease-out;
-}
-
-.fade-in {
   opacity: 1;
-  transform: translateY(0);
+  animation: popWobble 0.6s ease-out;
 }

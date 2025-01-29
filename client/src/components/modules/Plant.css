@@ -3,9 +3,28 @@
   z-index: 2;
 }
 
+@keyframes plantRock {
+  0% {
+    transform: scale(1.1) rotate(0deg);
+  }
+  25% {
+    transform: scale(1.1) rotate(3deg);
+  }
+  50% {
+    transform: scale(1.1) rotate(-3deg);
+  }
+  75% {
+    transform: scale(1.1) rotate(2deg);
+  }
+  100% {
+    transform: scale(1.1) rotate(0deg);
+  }
+}
+
 .Plant-image:hover {
   cursor: pointer;
   transform: scale(1.1);
+  animation: plantRock 2s ease-in-out infinite alternate;
 }
 
 .Plant-book-title {

@@ -169,7 +169,7 @@ const Shelf = () => {
               <button className="EditPlantButton" onClick={() => editPlant(plants[i])}>
                 <Pencil size={20} />
               </button>
-              {isMessageVisible && <div className="message-box fade-in">I'm a physical book!</div>}
+              {isMessageVisible && <div className="message-box">I'm a physical book!</div>}
             </div>
           </div>
         );
