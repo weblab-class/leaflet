@@ -9,13 +9,16 @@ const NavBarBook = ({ curPage, totalPages, flipToPage }) => {
   const [tempProgress, setTempProgress] = useState(((curPage + 1) / totalPages) * 100);
   const { isSoundOn, setIsSoundOn } = useOutletContext();
   const [showStars, setShowStars] = useState(false);
+  const sparkleSound = new Audio("/assets/sparkle.mp3");
 
   // Update tempProgress when curPage or totalPages changes
   useEffect(() => {
     if (curPage === totalPages - 2) {
       setTempProgress(100);
-      console.log("Sparkle!");
       setShowStars(true);
+      if (isSoundOn) {
+        sparkleSound.play();
+      }
       setTimeout(() => {
         setShowStars(false); // Hide stars after 3 seconds
       }, 3000);

@@ -9,7 +9,6 @@ import "./BookReader.css";
 
 // **************** NEWLY ADDED *************** //
 
-// From openBook in Shelf.jsx
 const BookReader = () => {
   const { userId } = useContext(UserContext);
   const navigate = useNavigate();
@@ -18,9 +17,7 @@ const BookReader = () => {
   const [curPage, setCurPage] = useState(0);
   const [totalPages, setTotalPages] = useState(10);
   const [bookWindow, setBookWindow] = useState(["", ""]);
-  // NEW: -1 = no flip, 0 = left page, 1 = right page
   const [flipDirection, setFlipDirection] = useState(-1);
-  // Apparently, react is having issues detecting changes to cur, prev, and next spread...
   const [boolFlippedPage, setBoolFlippedPage] = useState(false);
   const { isSoundOn, setIsSoundOn } = useOutletContext();
 
@@ -73,16 +70,34 @@ const BookReader = () => {
   };
 
   //page turn audio
-  let pageTurnSound = new Audio("../../../public/assets/pageTurn.mp3");
+  const pageTurnSound = new Audio("/assets/pageTurn.mp3");
 
   const playSound = () => {
     if (isSoundOn) {
-      console.log("sound is on");
       pageTurnSound.play();
-    } else {
-      console.log("sound is off");
     }
   };
+
+  // Event listener for arrow keys
+  useEffect(() => {
+    const handleKeyDown = (event) => {
+      if (event.key === "ArrowLeft" && curPage > 0) {
+        flipToPage(curPage - 2);
+        playSound();
+      }
+      if (event.key === "ArrowRight" && curPage < totalPages - 2) {
+        flipToPage(curPage + 2);
+        playSound();
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+
+    // Cleanup on component unmount
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [curPage, totalPages]);
 
   return (
     <div className="BookReader-container">
