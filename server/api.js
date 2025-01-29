@@ -69,6 +69,7 @@ router.post("/updatebook", async (req, res) => {
 const multer = require("multer");
 const upload = multer({ storage: multer.memoryStorage() }); // Stores file in memory
 const axios = require("axios"); // For fetching content from URLs if needed
+const pdfParse = require("pdf-parse");
 
 // formData fields: { title, bookType, file, url, curPage, totalPages }
 router.post("/createbook", upload.single("file"), async (req, res) => {
@@ -120,9 +121,22 @@ router.post("/createbook", upload.single("file"), async (req, res) => {
   // ==== BOOK FILE GIVEN ==== //
   else if (bookType === "upload") {
     console.log("Getting book content from uploaded file");
-    // title, bookType, file fields only
-    // **************** NEW: NEEDS TESTING/FIXING *************** // (REGAN)
-    const contentString = file.buffer.toString("utf-8"); // Convert file buffer to a string
+    let contentString = "";
+
+    if (file.mimetype === "text/plain") {
+      contentString = file.buffer.toString("utf-8");
+    } else if (file.mimetype === "application/pdf") {
+      try {
+        const pdfData = await pdfParse(file.buffer);
+        contentString = pdfData.text;
+      } catch (err) {
+        console.error("Error extracting text from PDF:", err);
+        return res.status(500).json({ message: "Error processing PDF file" });
+      }
+    } else {
+      return res.status(400).json({ message: "Unsupported file format" });
+    }
+
     newBook.content = parseBook(contentString);
     newBook.curPage = 0;
     newBook.totalPages = newBook.content.length;

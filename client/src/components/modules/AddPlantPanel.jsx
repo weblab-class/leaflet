@@ -281,7 +281,7 @@ const AddPlantPanel = ({ parentOnSubmitFunction, onCancelFunction }) => {
                     className="upload-button"
                     id="file_upload_input"
                     type="file"
-                    accept=".txt"
+                    accept=".txt, .pdf"
                     onChange={handleFileChange}
                     name="files"
                     size="10mb"

@@ -9,16 +9,16 @@
 
 .EditPlantPanel {
   position: fixed;
-  top: 50%;
+  top: 40%;
   left: 50%;
   transform: translate(-50%, -50%);
   background-color: var(--cream);
   border: 5px solid var(--cotton-pink);
   border-radius: 10px;
   padding: 20px;
-  width: 300px;
+  width: 350px;
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.2);
-  max-height: 40%;
+  max-height: 50%;
   overflow-y: scroll;
   z-index: 11;
 }
