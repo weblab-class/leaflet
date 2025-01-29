@@ -48,7 +48,7 @@ const AddPlantPanel = ({ parentOnSubmitFunction, onCancelFunction }) => {
     file: null,
     curPage: 1,
     totalPages: 10,
-    plantType: "Default",
+    plantType: "Garden Strawberry",
   });
 
   // ============ BOOK INPUT TYPE SELECT ============ //
@@ -130,7 +130,7 @@ const AddPlantPanel = ({ parentOnSubmitFunction, onCancelFunction }) => {
 
   // ============ PLANT TYPE ============ //
 
-  const [selectedPlantType, setSelectedPlantType] = useState("Default");
+  const [selectedPlantType, setSelectedPlantType] = useState("Garden Strawberry");
 
   const handlePlantTypeSelect = (type) => {
     setSelectedPlantType(type.name);
