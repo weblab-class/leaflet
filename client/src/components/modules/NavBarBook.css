@@ -10,6 +10,7 @@
   height: calc(1.2 * var(--xxl));
   display: flex;
   flex-direction: row;
+  justify-content: space-around;
   align-items: center;
   gap: var(--l);
   background-color: var(--cotton-pink);
@@ -47,7 +48,7 @@ button.NavBarBook-link {
 
 .progress-container {
   position: relative;
-  width: 80%;
+  width: 70%;
   height: 5px;
   background-color: rgba(255, 255, 255, 0.39);
   border-radius: 5px;
