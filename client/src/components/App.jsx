@@ -18,13 +18,15 @@ export const UserContext = createContext(null);
 const App = () => {
   const [userId, setUserId] = useState(undefined);
   const navigate = useNavigate();
-  const [isSoundOn, setIsSoundOn] = useState(false);
+  const [isSoundOn, setIsSoundOn] = useState(true);
+  const bgmusic = new Audio("/assets/bgmusic.mp3");
 
   // **************** TODO *************** //
   // It seems that you get 'logged out' after a while on the website
   // (idk why), for safety measures, we should 'kick out' people
   // if they're no longer logged in back onto the Login page
   useEffect(() => {
+    bgmusic.play();
     get("/api/whoami").then((user) => {
       if (user._id) {
         // they are registed in the database, and currently logged in.
